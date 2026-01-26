@@ -63,7 +63,7 @@ const MainPage = ({
       testResultTag: testResultTag,
       screeningTag: screeningTag,
       isSubmitted: isSubmitted,
-      keyword: keyword,
+      keyword: debouncedKeyword,
     },
     {
       initialData: initialData,
