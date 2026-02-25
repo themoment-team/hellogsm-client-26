@@ -1,4 +1,4 @@
-import { GraduationType } from 'types';
+import { GraduationType } from '@repo/types';
 
 const addParameters = (key: string, value: number | string | undefined) => {
   if (!value) {

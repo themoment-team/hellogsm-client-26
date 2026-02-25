@@ -1,4 +1,4 @@
-import { GraduationType } from 'types';
+import { GraduationType } from '@repo/types';
 
 export const exampleQueryKeys = {
   getExampleData: () => ['example'],
