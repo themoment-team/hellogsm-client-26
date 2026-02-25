@@ -1,7 +1,7 @@
-import { FooterGSMLogo } from 'client/assets';
+import { CURRENT_YEAR } from '@repo/constants';
+import { cn } from '@repo/utils';
 
-import { CURRENT_YEAR } from 'shared/constants';
-import { cn } from 'shared/lib/utils';
+import { FooterGSMLogo } from '@/assets';
 
 const LINKS = [
   {

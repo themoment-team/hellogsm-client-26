@@ -1,4 +1,4 @@
-import { CallbackPage } from 'client/pageContainer';
+import { CallbackPage } from '@/pageContainer';
 
 export default function Callback({
   searchParams,

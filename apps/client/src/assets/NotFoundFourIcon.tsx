@@ -1,4 +1,4 @@
-import { IconProps } from 'types';
+import { IconProps } from '@repo/types';
 
 const NotFoundFourIcon = ({ color }: IconProps) => (
   <svg

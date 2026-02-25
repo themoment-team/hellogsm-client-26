@@ -1,14 +1,11 @@
-import { OneseoStatusType } from 'types';
-
-import OneseoStatus from 'client/components/PrintPage/OneseoStatus';
-
-import { NEXT_YEAR } from 'shared/constants';
-import { cn } from 'shared/lib/utils';
-
 /* eslint-disable-next-line no-restricted-imports */
+import { NEXT_YEAR } from '@repo/constants';
+import { OneseoStatusType } from '@repo/types';
+import { cn } from '@repo/utils';
+
+import { PersonalInfoTable, OneseoStatus } from '../';
 import ApplicationPledge from '../ApplicationPledge';
 /* eslint-disable-next-line no-restricted-imports */
-import PersonalInfoTable from '../PersonalInfoTable';
 
 const ApplicationForm = ({ oneseo }: OneseoStatusType) => {
   return (

@@ -1,13 +1,11 @@
 import { useMutation } from '@tanstack/react-query';
 import type { UseMutationOptions } from '@tanstack/react-query';
-
 import type { AxiosError } from 'axios';
 
-import { memberQueryKeys } from 'client/lib';
+import { memberUrl, post } from '@repo/api/lib';
+import { MemberRegisterType } from '@repo/types';
 
-import { memberUrl, post } from 'api/libs';
-
-import type { MemberRegisterType } from 'types';
+import { memberQueryKeys } from '@/lib';
 
 export const usePostMemberRegister = (
   options?: UseMutationOptions<unknown, AxiosError, MemberRegisterType, unknown>,

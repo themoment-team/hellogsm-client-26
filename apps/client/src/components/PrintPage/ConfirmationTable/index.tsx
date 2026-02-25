@@ -1,6 +1,5 @@
-import { OneseoStatusType } from 'types';
-
-import { cn } from 'shared/lib/utils';
+import { OneseoStatusType } from '@repo/types';
+import { cn } from '@repo/utils';
 
 const ConfirmationTable = ({ oneseo }: OneseoStatusType) => {
   return (
@@ -48,7 +47,7 @@ const ConfirmationTable = ({ oneseo }: OneseoStatusType) => {
               {oneseo.privacyDetail.graduationType === 'CANDIDATE' && (
                 <>
                   {oneseo.privacyDetail.schoolTeacherName}
-                  <span className="absolute right-1 top-1/2 -translate-y-1/2">(인)</span>
+                  <span className="absolute top-1/2 right-1 -translate-y-1/2">(인)</span>
                 </>
               )}
             </td>
@@ -67,7 +66,7 @@ const ConfirmationTable = ({ oneseo }: OneseoStatusType) => {
               )}
             >
               {oneseo.privacyDetail.name}
-              <span className="absolute right-1 top-1/2 -translate-y-1/2">(인)</span>
+              <span className="absolute top-1/2 right-1 -translate-y-1/2">(인)</span>
             </td>
           </tr>
         </tbody>

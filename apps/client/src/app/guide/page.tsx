@@ -1,8 +1,9 @@
-import { getDate } from 'api';
-import { getKoreanDate, isTimeAfter, isTimeBefore } from 'shared';
+import { getDate } from '@repo/api/apis';
+import { getKoreanDate, isTimeAfter, isTimeBefore } from '@repo/utils';
 
-import { getMyOneseo } from 'client/app/apis';
-import { GuidePage } from 'client/pageContainer';
+import { GuidePage } from '@/pageContainer';
+
+import { getMyOneseo } from '../apis';
 
 export default async function Guide() {
   const [data, dateList] = await Promise.all([getMyOneseo(), getDate()]);

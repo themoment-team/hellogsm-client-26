@@ -1,10 +1,10 @@
 import Image from 'next/image';
 
-import { BlurIcon } from 'client/assets';
+import { NEXT_YEAR } from '@repo/constants';
+import { Button, Dialog, DialogContent, DialogTitle } from '@repo/ui/shadcn';
+import { cn } from '@repo/utils';
 
-import { Button, Dialog, DialogContent, DialogTitle } from 'shared/components';
-import { NEXT_YEAR } from 'shared/constants';
-import { cn } from 'shared/lib/utils';
+import { BlurIcon } from '@/assets';
 
 interface TestResultProps {
   isOpen: boolean;

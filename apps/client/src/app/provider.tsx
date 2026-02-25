@@ -1,15 +1,13 @@
 'use client';
 
-import { PropsWithChildren } from 'react';
-
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-
+import { PropsWithChildren } from 'react';
 import { ToastContainer } from 'react-toastify';
 
-import { ChannelTalk } from 'client/components';
-
 import 'react-toastify/dist/ReactToastify.css';
-import { cn } from 'shared/lib/utils';
+import { cn } from '@repo/utils';
+
+import { ChannelTalk } from '@/components';
 
 const Provider = ({ children }: PropsWithChildren) => {
   const queryClient = new QueryClient({

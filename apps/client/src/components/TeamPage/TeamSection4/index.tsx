@@ -2,9 +2,8 @@
 
 import Image from 'next/image';
 
-import { cn } from 'shared/lib/utils';
-
-import type { MemberPageData } from 'types';
+import { MemberPageData } from '@repo/types';
+import { cn } from '@repo/utils';
 
 const GITHUB_URL = 'https://github.com';
 
@@ -108,9 +107,9 @@ const TeamSection4 = ({ data }: TeamSection4Props) => {
           {memberListDoubled.map((member, index) => (
             <MemberCard
               key={index}
-              githubId={member.properties.githubId.rich_text[0].plain_text}
-              name={member.properties.name.title[0].plain_text}
-              role={member.properties.role.rich_text[0].plain_text}
+              githubId={member.properties.githubId.rich_text[0]?.plain_text || ''}
+              name={member.properties.name.title[0]?.plain_text || ''}
+              role={member.properties.role.rich_text[0]?.plain_text || ''}
             />
           ))}
         </div>
@@ -124,9 +123,9 @@ const TeamSection4 = ({ data }: TeamSection4Props) => {
           {memberListDoubled.map((member, index) => (
             <MemberCard
               key={index}
-              githubId={member.properties.githubId.rich_text[0]?.plain_text}
-              name={member.properties.name.title[0]?.plain_text}
-              role={member.properties.role.rich_text[0]?.plain_text}
+              githubId={member.properties.githubId.rich_text[0]?.plain_text || ''}
+              name={member.properties.name.title[0]?.plain_text || ''}
+              role={member.properties.role.rich_text[0]?.plain_text || ''}
             />
           ))}
         </div>
