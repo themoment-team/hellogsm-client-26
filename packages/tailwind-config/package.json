@@ -8,6 +8,9 @@
     "./postcss": "./postcss.config.js",
     "./tailwind": "./tailwind.config.ts"
   },
+  "dependencies": {
+    "tailwindcss-animate": "^1.0.7"
+  },
   "devDependencies": {
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.17",

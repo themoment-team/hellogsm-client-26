@@ -58,7 +58,7 @@ const sharedConfig: Omit<Config, 'content'> = {
       },
     },
   },
-  plugins: [],
+  plugins: [require('tailwindcss-animate')],
 };
 
 export default sharedConfig;
