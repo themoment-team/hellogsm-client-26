@@ -27,12 +27,11 @@ const Footer = () => {
     <footer
       className={cn(
         'bg-gray-100',
-        'py-15',
         'relative',
         'flex',
         'items-center',
         'justify-center',
-        'p-15',
+        'p-[3.75rem]',
         'lg:px-[6.25rem]',
         'xl:px-[15.25rem]',
         'fhd:px-80',
