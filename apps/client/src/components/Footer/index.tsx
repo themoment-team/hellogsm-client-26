@@ -1,7 +1,7 @@
-import { CURRENT_YEAR } from '@repo/constants';
-import { cn } from '@repo/utils';
+import { FooterGSMLogo } from 'client/assets';
 
-import { FooterGSMLogo } from '@/assets';
+import { CURRENT_YEAR } from 'shared/constants';
+import { cn } from 'shared/lib/utils';
 
 const LINKS = [
   {
@@ -27,11 +27,12 @@ const Footer = () => {
     <footer
       className={cn(
         'bg-gray-100',
+        'py-15',
         'relative',
         'flex',
         'items-center',
         'justify-center',
-        'p-[3.75rem]',
+        'p-15',
         'lg:px-[6.25rem]',
         'xl:px-[15.25rem]',
         'fhd:px-80',

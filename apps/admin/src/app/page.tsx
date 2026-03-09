@@ -1,9 +1,8 @@
-import { getDate } from '@repo/api/apis';
-import { getKoreanDate, isTimeAfter } from '@repo/utils';
+import { getDate } from 'api';
+import { getKoreanDate, isTimeAfter } from 'shared';
 
-import { MainPage } from '@/pageContainer';
-
-import { getOneseoList } from './apis';
+import { getOneseoList } from 'admin/app/apis/oneseo/getOneseoList';
+import { MainPage } from 'admin/pageContainer';
 
 export default async function Home() {
   const [data, dateList] = await Promise.all([

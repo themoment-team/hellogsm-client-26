@@ -2,11 +2,10 @@
 
 import { useState } from 'react';
 
-import { Table, TableBody, TableCell, TableRow } from '@repo/ui/shadcn';
-import { cn } from '@repo/utils';
+import { QuestionMark } from 'admin/assets';
 
-import { QuestionMark } from '@/assets';
-
+import { Table, TableBody, TableCell, TableRow } from 'shared/components';
+import { cn } from 'shared/lib/utils';
 
 const ApplicantTH = () => {
   const defaultStyle = cn('font-semibold', 'text-zinc-500');

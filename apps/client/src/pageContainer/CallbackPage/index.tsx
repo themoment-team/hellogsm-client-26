@@ -1,14 +1,16 @@
 'use client';
 
-import { useQueryClient } from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
-import { useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
+
+import { useQueryClient } from '@tanstack/react-query';
+
+import type { AxiosError } from 'axios';
+
+import { memberQueryKeys, useOAuthLogin } from 'api';
+import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 
-import { useOAuthLogin } from '@repo/api/hooks';
-import { memberQueryKeys } from '@repo/api/lib';
-import { cn } from '@repo/utils';
+import { cn } from 'shared/lib/utils';
 
 interface ErrorResponse {
   message?: string;

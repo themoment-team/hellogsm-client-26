@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { authUrl } from './requestUrlController';
+import { authUrl } from 'api/libs';
 
 export const axiosInstance = axios.create({
   baseURL: '/api',

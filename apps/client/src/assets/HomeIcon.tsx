@@ -1,4 +1,4 @@
-import { IconProps } from '@repo/types';
+import { IconProps } from 'types';
 
 const HomeIcon = ({ size, color }: IconProps) => (
   <svg

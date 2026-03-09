@@ -2,11 +2,12 @@
 
 import { useState } from 'react';
 
-import { useModalStore } from '@repo/store';
-import { MyMemberInfoType, MyTotalTestResultType } from '@repo/types';
-import { cn } from '@repo/utils';
+import { MyMemberInfoType, MyTotalTestResultType } from 'types';
 
-import { PassResultDialog } from '@/components';
+import { PassResultDialog } from 'client/components';
+
+import { cn } from 'shared/lib/utils';
+import { useModalStore } from 'shared/stores';
 
 const divStyle = [
   'text-gray-900',

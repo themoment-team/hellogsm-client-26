@@ -1,14 +1,12 @@
-import '@repo/ui/styles.css';
+import { ModalContainer } from 'shared';
 
-import '@/styles/globals.css';
+import { pretendardFont } from 'shared/fonts';
+
+import Provider from './provider';
 
 import type { Metadata } from 'next';
 
-import { ModalContainer } from '@repo/ui/components';
-
-import { pretendardFont } from '@/styles/pretendard';
-
-import Provider from './provider';
+import 'shared/styles/globals.css';
 
 export const metadata: Metadata = {
   title: '',

@@ -1,19 +1,12 @@
 {
-  "name": "@repo/tailwind-config",
-  "version": "0.0.0",
-  "type": "module",
-  "private": true,
-  "exports": {
-    ".": "./shared-styles.css",
-    "./postcss": "./postcss.config.js",
-    "./tailwind": "./tailwind.config.ts"
+  "name": "tailwind-config",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "dependencies": {
-    "tailwindcss-animate": "^1.0.7"
-  },
-  "devDependencies": {
-    "postcss": "^8.5.6",
-    "tailwindcss": "^3.4.17",
-    "typescript": "5.9.2"
-  }
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

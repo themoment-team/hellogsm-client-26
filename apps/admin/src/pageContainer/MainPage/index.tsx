@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from 'react';
 
-import { useGetEditability, useGetOneseoList } from '@repo/api/hooks';
-import { useDebounce } from '@repo/hooks';
-import { OneseoListType, ScreeningType, TestResultType, YesNo } from '@repo/types';
+import { YesNo, ScreeningType, TestResultType, OneseoListType } from 'types';
+
+import { SideMenu, FilterBar, ApplicantTH, ApplicantTR } from 'admin/components';
+
 import {
   Pagination,
   PaginationContent,
@@ -12,11 +13,11 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from '@repo/ui/shadcn';
-import { cn } from '@repo/utils';
+} from 'shared/components';
+import { useDebounce } from 'shared/hooks';
+import { cn } from 'shared/lib/utils';
 
-import { ApplicantTH, ApplicantTR, FilterBar, SideMenu } from '@/components';
-
+import { useGetEditability, useGetOneseoList } from 'api/hooks';
 
 interface MainPageProps {
   initialData: OneseoListType | undefined;
@@ -95,7 +96,7 @@ const MainPage = ({
     <main
       className={cn([
         isOpen && 'ml-60',
-        isOpen ? 'px-10' : 'pr-10 pl-20',
+        isOpen ? 'px-10' : 'pl-20 pr-10',
         'pt-[60px]',
         'pb-8',
         'bg-white',

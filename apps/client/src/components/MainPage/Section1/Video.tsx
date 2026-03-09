@@ -1,4 +1,4 @@
-import { cn } from '@repo/utils';
+import { cn } from 'shared/lib/utils';
 
 const Video = () => (
   <video

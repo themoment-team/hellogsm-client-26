@@ -1,6 +1,5 @@
+import { step1Schema, step2Schema, step3Schema, step4Schema } from 'shared';
 import { z } from 'zod';
-
-import { step1Schema, step2Schema, step3Schema, step4Schema } from './schemas';
 
 export type Step1FormType = z.infer<typeof step1Schema>;
 

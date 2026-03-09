@@ -1,6 +1,6 @@
-import { DateType } from '@repo/types';
+import { dateUrl } from 'api/libs';
 
-import { dateUrl } from '../../libs';
+import type { DateType } from 'types';
 
 /**
  * 접근을 막는 특정 날짜를 가져옵니다

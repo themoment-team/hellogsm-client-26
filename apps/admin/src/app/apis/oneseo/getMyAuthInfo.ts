@@ -1,8 +1,9 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-import { memberUrl } from '@repo/api/lib';
-import { MyAuthInfoType } from '@repo/types';
+import { memberUrl } from 'api/libs';
+
+import type { MyAuthInfoType } from 'types';
 
 interface GetMyAuthInfoParams {
   redirectUrl: string;

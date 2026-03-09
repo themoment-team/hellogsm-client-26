@@ -1,10 +1,14 @@
-import { getDate } from '@repo/api/apis';
-import { getKoreanDate, isTimeAfter } from '@repo/utils';
+import { getDate } from 'api';
+import { getKoreanDate, isTimeAfter } from 'shared';
 
-import { LoginNoticeDialog } from '@/components';
-import { CheckResultPage } from '@/pageContainer';
-
-import { getMyFirstTestResult, getMyMemberInfo, getMyOneseo, getMySecondTestResult } from '../apis';
+import {
+  getMyFirstTestResult,
+  getMyMemberInfo,
+  getMyOneseo,
+  getMySecondTestResult,
+} from 'client/app/apis';
+import { LoginNoticeDialog } from 'client/components';
+import { CheckResultPage } from 'client/pageContainer';
 
 export default async function CheckResult() {
   const [memberInfo, firstResultInfo, secondResultInfo, isOneseoWrite] = await Promise.all([
