@@ -1,19 +1,17 @@
 'use client';
 
-import { TicketType } from 'types';
-
-import { PrintIcon } from 'shared/assets';
-import { Button } from 'shared/components';
+import { useGetAdmissionTickets } from '@repo/api/hooks';
 import {
-  visionCampDate,
+  NEXT_YEAR,
   passedMemberAnnounceDate,
+  visionCampDate,
   심층면접시험기간,
   역량검사시험기간,
-  NEXT_YEAR,
-} from 'shared/constants';
-import { cn } from 'shared/lib/utils';
-
-import { useGetAdmissionTickets } from 'api/hooks';
+} from '@repo/constants';
+import { TicketType } from '@repo/types';
+import { PrintIcon } from '@repo/ui/icons';
+import { Button } from '@repo/ui/shadcn';
+import { cn } from '@repo/utils';
 
 interface TicketPageProps {
   initialData: TicketType[];
@@ -30,7 +28,7 @@ const TicketPage = ({ initialData }: TicketPageProps) => {
 
   return (
     <div className={cn('print:exact', 'flex', 'flex-col', 'bg-white', 'print:pt-0')}>
-      {admissionTickets?.map((ticket, i) => (
+      {admissionTickets?.map((ticket) => (
         <div
           key={ticket.oneseoSubmitCode}
           className={cn(

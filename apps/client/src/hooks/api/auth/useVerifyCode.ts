@@ -1,11 +1,10 @@
 import { useMutation } from '@tanstack/react-query';
 import type { UseMutationOptions } from '@tanstack/react-query';
-
 import type { AxiosError } from 'axios';
 
-import { memberQueryKeys } from 'client/lib';
+import { memberUrl, post } from '@repo/api/lib';
 
-import { memberUrl, post } from 'api/libs';
+import { memberQueryKeys } from '@/lib';
 
 interface ReturnDataType {
   status: string;

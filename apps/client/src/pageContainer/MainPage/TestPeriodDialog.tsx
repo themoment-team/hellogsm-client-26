@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { useModalStore } from 'shared/stores';
+import { useModalStore } from '@repo/store';
 
 const TestPeriodDialog = () => {
   const { setTestPeriodNoticeModal } = useModalStore();

@@ -1,8 +1,8 @@
 'use client';
 
-import { ChevronIcon } from 'client/assets';
+import { cn } from '@repo/utils';
 
-import { cn } from 'shared/lib/utils';
+import { ChevronIcon } from '@/assets';
 
 interface FaqProps {
   title: string;
@@ -28,6 +28,7 @@ const FaqElement = ({
 
     let startIndex = 0;
     const result = [];
+    // eslint-disable-next-line no-constant-condition
     while (true) {
       const index = lowerCaseText.indexOf(lowerCaseKeyword, startIndex);
       if (index === -1) break;

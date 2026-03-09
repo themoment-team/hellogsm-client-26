@@ -1,4 +1,4 @@
-import { cn } from 'shared/lib/utils';
+import { cn } from '@repo/utils';
 
 interface SexToggleProps extends React.HTMLAttributes<HTMLDivElement> {
   isSelected: boolean;

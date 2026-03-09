@@ -1,12 +1,11 @@
 import {
-  GraduationEnum,
-  ScreeningEnum,
-  MajorEnum,
   achievementGradeValues,
+  GraduationEnum,
+  MajorEnum,
   OneseoStatusType,
-} from 'types';
-
-import { cn } from 'shared/lib/utils';
+  ScreeningEnum,
+} from '@repo/types';
+import { cn } from '@repo/utils';
 
 const tdStyle = 'border border-black';
 const thStyle = 'border border-black bg-[#e9e9e9] p-[0.2vh] font-medium align-middle';
@@ -153,7 +152,7 @@ const OneseoStatus = ({ oneseo }: OneseoStatusType) => {
                   />
                 ) : (
                   <td key={gradeKey} className={cn(tdStyle)}>
-                    {generalSubjectsScoreDetail[achievementScoreMap[gradeKey]]}
+                    {generalSubjectsScoreDetail[achievementScoreMap[gradeKey]!]}
                   </td>
                 ),
               )}

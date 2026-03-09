@@ -1,6 +1,6 @@
-import { Footer, TeamSection1, TeamSection2, TeamSection3, TeamSection4 } from 'client/components';
+import { MemberListResponse, MemberPageData } from '@repo/types';
 
-import type { MemberListResponse, MemberPageData } from 'types';
+import { Footer, TeamSection1, TeamSection2, TeamSection3, TeamSection4 } from '@/components';
 
 const getMemberData = async (): Promise<MemberPageData[]> => {
   const response = await fetch(

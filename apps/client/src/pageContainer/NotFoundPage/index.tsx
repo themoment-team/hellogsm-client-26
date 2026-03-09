@@ -2,10 +2,10 @@
 
 import { useRouter } from 'next/navigation';
 
-import { BackIcon, NotFoundFourIcon, NotFoundZeroIcon } from 'client/assets';
-import { Footer } from 'client/components';
+import { cn } from '@repo/utils';
 
-import { cn } from 'shared/lib/utils';
+import { BackIcon, NotFoundFourIcon, NotFoundZeroIcon } from '@/assets';
+import { Footer } from '@/components';
 
 const NotFoundPage = () => {
   const { back } = useRouter();

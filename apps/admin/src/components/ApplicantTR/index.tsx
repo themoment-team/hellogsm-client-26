@@ -1,28 +1,25 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 
 import { QueryObserverResult, RefetchOptions } from '@tanstack/react-query';
-
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { EditabilityType, OneseoListType, OneseoType, ScreeningEnum } from 'types';
-
-import { TextField } from 'admin/components';
-
-import { CheckIcon } from 'shared/assets';
-import { Table, TableBody, TableCell, Toggle, TableRow, Badge, Button } from 'shared/components';
-import { useDebounce } from 'shared/hooks';
-import { cn } from 'shared/lib/utils';
-import { useModalStore } from 'shared/stores';
-import { formatScore } from 'shared/utils';
 
 import {
+  usePatchAgreeDocStatus,
   usePatchArrivedStatus,
   usePatchCompetencyScore,
   usePatchInterviewScore,
-  usePatchAgreeDocStatus,
-} from 'api/hooks';
+} from '@repo/api/hooks';
+import { useDebounce } from '@repo/hooks';
+import { useModalStore } from '@repo/store';
+import { EditabilityType, OneseoListType, OneseoType, ScreeningEnum } from '@repo/types';
+import { CheckIcon } from '@repo/ui/icons';
+import { Badge, Button, Table, TableBody, TableCell, TableRow, Toggle } from '@repo/ui/shadcn';
+import { cn, formatScore } from '@repo/utils';
+
+import TextField from '../TextField';
 
 interface ApplicationTRProps extends OneseoType {
   editableData: EditabilityType | undefined;

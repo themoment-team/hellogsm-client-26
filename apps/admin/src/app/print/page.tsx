@@ -1,5 +1,6 @@
-import { getAdmissionTickets } from 'admin/app/apis/oneseo/getAdmissionTickets';
-import { TicketPage } from 'admin/pageContainer';
+import { TicketPage } from '@/pageContainer';
+
+import { getAdmissionTickets } from '../apis';
 
 export default async function Print() {
   const data = await getAdmissionTickets({ redirectUrl: '/' });
