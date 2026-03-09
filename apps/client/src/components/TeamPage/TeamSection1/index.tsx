@@ -2,9 +2,10 @@
 
 import Image from 'next/image';
 
-import { cn, scrollToElement } from '@repo/utils';
+import { BottomArrow, SmallTheMomentIcon } from 'client/assets';
 
-import { BottomArrow, SmallTheMomentIcon } from '@/assets';
+import { cn } from 'shared/lib/utils';
+import { scrollToElement } from 'shared/utils';
 
 const TeamSection1 = () => {
   const scrollToSection2 = () => {

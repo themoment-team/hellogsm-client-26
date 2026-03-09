@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 
-import { MainPage } from '@/pageContainer';
-import { getIsServerHealthy } from '@/utils';
+import { MainPage } from 'client/pageContainer';
+import { getIsServerHealthy } from 'client/utils';
 
 import {
   getMyAuthInfo,

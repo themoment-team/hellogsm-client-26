@@ -1,4 +1,4 @@
-import { NotFoundPage } from '@/pageContainer';
+import { NotFoundPage } from 'client/pageContainer';
 
 export default function NotFound() {
   return <NotFoundPage />;

@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
-
 const nextConfig = {
+  transpilePackages: ['shared', 'types', 'api', 'tailwind-config', 'code-style-config'],
+  reactStrictMode: false,
   images: {
     remotePatterns: [
       {

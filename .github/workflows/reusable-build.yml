@@ -27,10 +27,6 @@ on:
         required: false
       AWS_ECR_ADMIN_REPOSITORY:
         required: false
-      TURBO_TOKEN:
-        required: false
-      TURBO_TEAM:
-        required: false
 
 jobs:
   build:
@@ -41,15 +37,11 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: 'pnpm'
+          version: 9.4.0
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
 
       - name: Create .env files for build
         run: |
@@ -65,9 +57,6 @@ jobs:
           cp .env.client apps/client/.env
           cp .env.admin apps/admin/.env
           pnpm build
-        env:
-          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-          TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
 
       - name: Configure AWS credentials
         if: inputs.push_to_ecr
@@ -84,6 +73,7 @@ jobs:
       - name: Docker Client build
         run: |
           docker build \
+          $(cat .env.client | sed 's/^/--build-arg /' | tr '\n' ' ') \
           -f ./client.Dockerfile \
           -t ${{ inputs.push_to_ecr && secrets.AWS_ECR_CLIENT_REPOSITORY || format('hello-{0}-client', inputs.environment) }}:latest \
           .
@@ -91,6 +81,7 @@ jobs:
       - name: Docker Admin build
         run: |
           docker build \
+          $(cat .env.admin | sed 's/^/--build-arg /' | tr '\n' ' ') \
           -f ./admin.Dockerfile \
           -t ${{ inputs.push_to_ecr && secrets.AWS_ECR_ADMIN_REPOSITORY || format('hello-{0}-admin', inputs.environment) }}:latest \
           .

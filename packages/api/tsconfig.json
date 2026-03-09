@@ -1,9 +1,10 @@
 {
-  "extends": "@repo/typescript-config/base.json",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "dist",
-    "rootDir": "src"
-  },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist"]
+    "paths": {
+      "api/*": ["./src/*"],
+      "types": ["../types/src"],
+      "shared/*": ["../shared/src/*"]
+    }
+  }
 }

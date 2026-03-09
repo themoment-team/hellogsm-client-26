@@ -1,9 +1,10 @@
 'use client';
 
-import { useGetMyOneseo } from '@repo/api/hooks';
-import { GetMyOneseoType } from '@repo/types';
+import { GetMyOneseoType } from 'types';
 
-import { ApplicationForm, PrintButton, ScoreConfirmationForm } from '@/components';
+import { ApplicationForm, PrintButton, ScoreConfirmationForm } from 'client/components';
+
+import { useGetMyOneseo } from 'api/hooks';
 
 interface PrintPageProps {
   initialData: GetMyOneseoType | undefined;

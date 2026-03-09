@@ -15,8 +15,6 @@ jobs:
     secrets:
       CLIENT_ENV_FILE: ${{ secrets.STAGE_CLIENT_ENV_FILE }}
       ADMIN_ENV_FILE: ${{ secrets.STAGE_ADMIN_ENV_FILE }}
-      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-      TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
 
   notify:
     needs: build

@@ -1,5 +1,6 @@
-import { OneseoStatusType } from '@repo/types';
-import { cn } from '@repo/utils';
+import { OneseoStatusType } from 'types';
+
+import { cn } from 'shared/lib/utils';
 
 const ExtracurricularTable = ({ oneseo }: OneseoStatusType) => {
   return (

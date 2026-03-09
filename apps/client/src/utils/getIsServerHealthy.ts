@@ -1,4 +1,4 @@
-import { getDate } from '@repo/api/apis';
+import { getDate } from 'api';
 
 const getIsServerHealthy = async () => {
   const dateList = await getDate();

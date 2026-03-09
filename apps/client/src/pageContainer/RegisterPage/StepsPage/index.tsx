@@ -2,8 +2,8 @@
 
 import { useEffect } from 'react';
 
-import { GetMyOneseoType, MyMemberInfoType, StepEnum } from '@repo/types';
-import { ComputerRecommendedPage, StepWrapper } from '@repo/ui/components';
+import { ComputerRecommendedPage, StepWrapper } from 'shared';
+import { GetMyOneseoType, MyMemberInfoType, StepEnum } from 'types';
 
 interface RegisterStepsPageProps {
   data: GetMyOneseoType | undefined;

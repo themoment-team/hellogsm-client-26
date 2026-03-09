@@ -1,10 +1,12 @@
 'use client';
 
-import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import { FaqPageData } from '@repo/types';
-import { SearchIcon } from '@repo/ui/icons';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
+
+import { FaqElement, Footer } from 'client/components';
+
+import { SearchIcon } from 'shared/assets';
 import {
   Pagination,
   PaginationContent,
@@ -12,10 +14,10 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from '@repo/ui/shadcn';
-import { cn } from '@repo/utils';
+} from 'shared/components';
+import { cn } from 'shared/lib/utils';
 
-import { FaqElement, Footer } from '@/components';
+import type { FaqPageData } from 'types';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -36,7 +38,7 @@ const FaqPage = ({ data, openIndex }: FaqPageProps) => {
   const pathname = usePathname();
 
   const totalItems = data.filter((item) =>
-    item.properties.title.title[0]?.plain_text?.toLowerCase().includes(keyword),
+    item.properties.title.title[0].plain_text.toLowerCase().includes(keyword),
   );
   const totalPages = Math.ceil(totalItems.length / ITEMS_PER_PAGE);
 
@@ -141,8 +143,8 @@ const FaqPage = ({ data, openIndex }: FaqPageProps) => {
                 return (
                   <FaqElement
                     key={globalIndex}
-                    title={faq.properties.title.title[0]?.plain_text || ''}
-                    content={faq.properties.content.rich_text[0]?.plain_text || ''}
+                    title={faq.properties.title.title[0].plain_text}
+                    content={faq.properties.content.rich_text[0].plain_text}
                     keyword={keyword}
                     showContent={!!faqStates[globalIndex]}
                     onToggle={() => toggleFaqContent(globalIndex)}

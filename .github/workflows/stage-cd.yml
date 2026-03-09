@@ -15,8 +15,6 @@ jobs:
     secrets:
       CLIENT_ENV_FILE: ${{ secrets.STAGE_CLIENT_ENV_FILE }}
       ADMIN_ENV_FILE: ${{ secrets.STAGE_ADMIN_ENV_FILE }}
-      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-      TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
       AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_REGION: ${{ secrets.AWS_REGION }}

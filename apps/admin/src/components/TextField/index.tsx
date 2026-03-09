@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { cn } from '@repo/utils';
+import { cn } from 'shared/lib/utils';
 
 const TextField = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
   ({ className, ...props }, ref) => {

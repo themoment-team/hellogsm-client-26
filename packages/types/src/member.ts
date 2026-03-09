@@ -1,4 +1,4 @@
-import { SexType, YesNo } from './oneseo';
+import { SexType, YesNo } from 'types';
 
 export type RoleType = 'UNAUTHENTICATED' | 'APPLICANT' | 'ADMIN' | 'ROOT';
 export type AuthReferrerType = 'KAKAO' | 'GOOGLE';

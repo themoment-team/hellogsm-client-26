@@ -1,8 +1,9 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-import { memberUrl } from '@repo/api/lib';
-import { MyMemberInfoType } from '@repo/types';
+import { memberUrl } from 'api/libs';
+
+import type { MyMemberInfoType } from 'types';
 
 /**
  * 나의 멤버 정보를 가져옵니다.

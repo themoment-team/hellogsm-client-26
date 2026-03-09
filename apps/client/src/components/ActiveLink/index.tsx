@@ -1,10 +1,11 @@
 'use client';
 
-import Link, { LinkProps } from 'next/link';
-import { usePathname } from 'next/navigation';
 import { PropsWithChildren } from 'react';
 
-import { cn } from '@repo/utils';
+import Link, { LinkProps } from 'next/link';
+import { usePathname } from 'next/navigation';
+
+import { cn } from 'shared/lib/utils';
 
 type ActiveLinkProps = LinkProps & {
   className?: string;
