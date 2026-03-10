@@ -1,42 +1,40 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
-
-import { useQueryClient } from '@tanstack/react-query';
-
 import { zodResolver } from '@hookform/resolvers/zod';
-import { memberQueryKeys, useGetDuplicateMember } from 'api';
+import { useQueryClient } from '@tanstack/react-query';
+import { useEffect, useState, useCallback } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
-import { MemberRegisterType, SendCodeType, SexType } from 'types';
 import { z } from 'zod';
 
-import { ChevronIcon } from 'client/assets';
-import { Footer, SexToggle } from 'client/components';
-import { useVerifyCode, usePostMemberRegister, useSendCode } from 'client/hooks';
-import { signupFormSchema } from 'client/schemas';
-
+import { useGetDuplicateMember } from '@repo/api/hooks';
+import { memberQueryKeys } from '@repo/api/lib';
+import { CURRENT_YEAR } from '@repo/constants';
+import { useDebounce } from '@repo/hooks';
+import { useModalStore } from '@repo/store';
+import { MemberRegisterType, SendCodeType, SexType } from '@repo/types';
+import { CustomFormItem, LoginDialogContent } from '@repo/ui/components';
 import {
-  FormControl,
-  CustomFormItem,
-  FormItem,
   Button,
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  FormControl,
+  FormItem,
   Input,
   Select,
+  SelectContent,
   SelectGroup,
+  SelectItem,
   SelectLabel,
   SelectTrigger,
-  SelectContent,
   SelectValue,
-  SelectItem,
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  LoginDialogContent,
-} from 'shared/components';
-import { CURRENT_YEAR } from 'shared/constants';
-import { useDebounce } from 'shared/hooks';
-import { cn } from 'shared/lib/utils';
-import { useModalStore } from 'shared/stores';
+} from '@repo/ui/shadcn';
+import { cn } from '@repo/utils';
+
+import { ChevronIcon } from '@/assets';
+import { Footer, SexToggle } from '@/components';
+import { usePostMemberRegister, useSendCode, useVerifyCode } from '@/hooks';
+import { signupFormSchema } from '@/schemas';
 
 const PERMIT_YEAR = 50;
 const VERIFICATION_CODE_TIMEOUT = 180;
@@ -174,7 +172,7 @@ const SignUpPage = ({ isPastAnnouncement }: SignUpProps) => {
     onError: () => setIsSuccess(false),
   });
 
-  const codeDebounce = useDebounce(certificationNumber, 500);
+  const codeDebounce = useDebounce(certificationNumber ?? '', 500);
 
   useEffect(() => {
     if (codeDebounce.length === 6 && codeDebounce !== lastSubmittedCode) {

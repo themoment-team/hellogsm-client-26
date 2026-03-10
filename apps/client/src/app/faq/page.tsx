@@ -1,6 +1,6 @@
-import { FaqPage } from 'client/pageContainer';
+import { FaqListResponse, FaqPageData } from '@repo/types';
 
-import type { FaqListResponse, FaqPageData } from 'types';
+import { FaqPage } from '@/pageContainer';
 
 const getFaqData = async (): Promise<FaqPageData[]> => {
   const response = await fetch(

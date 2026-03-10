@@ -1,16 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
 import type { UseQueryOptions } from '@tanstack/react-query';
 
-import { minutesToMs } from 'shared';
+import { minutesToMs } from '@repo/utils';
 
-import { get, exampleQueryKeys, exampleUrl } from 'api/libs';
+import { exampleQueryKeys, exampleUrl, get } from '../libs';
 
 interface ExampleDataType {
   id: string;
   data: string;
 }
 
-export const useGetMyMenteeInfo = (options?: Omit<UseQueryOptions<ExampleDataType>, 'queryKey'>) =>
+export const useGetExampleData = (options?: Omit<UseQueryOptions<ExampleDataType>, 'queryKey'>) =>
   useQuery({
     queryKey: exampleQueryKeys.getExampleData(),
     queryFn: () => get<ExampleDataType>(exampleUrl.getExampleData()),

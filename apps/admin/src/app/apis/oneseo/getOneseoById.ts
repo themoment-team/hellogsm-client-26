@@ -1,8 +1,9 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { GetMyOneseoType } from 'types';
 
-import { oneseoUrl } from 'api/libs';
+import { oneseoUrl } from '@repo/api/lib';
+import { GetMyOneseoType } from '@repo/types';
+
 export const getOneseoByMemberId = async (memberId: number): Promise<GetMyOneseoType> => {
   const session = cookies().get('SESSION')?.value;
 

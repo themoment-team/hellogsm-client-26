@@ -1,8 +1,10 @@
 import { redirect } from 'next/navigation';
-import { ComputerRecommendedPage, StepWrapper } from 'shared';
-import { StepEnum } from 'types';
 
-import { getOneseoByMemberId } from 'admin/app/apis/oneseo/getOneseoById';
+import { StepEnum } from '@repo/types';
+import { ComputerRecommendedPage, StepWrapper } from '@repo/ui/components';
+
+import { getOneseoByMemberId } from '@/app/apis';
+
 
 interface EditProps {
   params: { memberId: string };

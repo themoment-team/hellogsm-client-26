@@ -1,9 +1,9 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "@repo/typescript-config/base.json",
   "compilerOptions": {
-    "paths": {
-      "client/*": ["../../apps/client/src/*"],
-      "types/*": ["./src/*"]
-    }
-  }
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
 }

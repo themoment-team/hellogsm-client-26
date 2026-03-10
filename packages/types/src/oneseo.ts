@@ -1,12 +1,12 @@
+import { MockScoreType } from './mockScore';
 import {
   DesireMajorValueEnum,
   FreeSemesterValueEnum,
   GraduationTypeValueEnum,
   LiberalSystemValueEnum,
-  MockScoreType,
   RelationshipWithGuardianValueEnum,
   ScreeningValueEnum,
-} from 'types';
+} from './value';
 
 export type ScreeningType = 'GENERAL' | 'SPECIAL' | 'EXTRA_VETERANS' | 'EXTRA_ADMISSION';
 
@@ -65,11 +65,11 @@ export const achievementGradeValues = [
   'achievement3_2',
 ] as const;
 
-export enum MajorEnum {
-  소프트웨어개발과 = 'SW',
-  인공지능과 = 'AI',
-  스마트IOT과 = 'IOT',
-}
+// export enum MajorEnum {
+//   소프트웨어개발과 = 'SW',
+//   인공지능과 = 'AI',
+//   스마트IOT과 = 'IOT',
+// }
 
 export interface MiddleSchoolAchievementType {
   achievement1_1: number[];

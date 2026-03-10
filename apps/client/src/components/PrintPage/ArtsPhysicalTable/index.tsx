@@ -1,9 +1,8 @@
-import { OneseoStatusType } from 'types';
+import { ARTS_PHYSICAL_SUBJECTS } from '@repo/constants';
+import { OneseoStatusType } from '@repo/types';
+import { cn } from '@repo/utils';
 
-import { getArtPhysicalScores, scoreToAlphabet, semesterArray } from 'client/utils';
-
-import { ARTS_PHYSICAL_SUBJECTS } from 'shared/constants';
-import { cn } from 'shared/lib/utils';
+import { getArtPhysicalScores, scoreToAlphabet, semesterArray } from '@/utils';
 
 const ArtsPhysicalTable = ({ oneseo }: OneseoStatusType) => {
   const artPhysicalScores = getArtPhysicalScores(oneseo);

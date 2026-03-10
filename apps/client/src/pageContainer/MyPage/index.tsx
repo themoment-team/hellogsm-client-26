@@ -1,18 +1,18 @@
 'use client';
 
+import { useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-import { useQueryClient } from '@tanstack/react-query';
-
 import {
-  memberQueryKeys,
   useGetMyFirstTestResultInfo,
-  useGetMySecondTestResultInfo,
   useGetMyMemberInfo,
   useGetMyOneseo,
+  useGetMySecondTestResultInfo,
   useLogout,
-} from 'api';
-import { useRouter } from 'next/navigation';
+} from '@repo/api/hooks';
+import { memberQueryKeys } from '@repo/api/lib';
+import { GetMyOneseoType } from '@repo/types';
 import {
   Button,
   Dialog,
@@ -22,13 +22,11 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from 'shared';
-import { GetMyOneseoType } from 'types';
+} from '@repo/ui/shadcn';
+import { cn } from '@repo/utils';
 
-import { AlertIcon, DocumentIcon, ParticleIcon, PrintIcon, ProfileIcon } from 'client/assets';
-import { PassResultDialog } from 'client/components';
-
-import { cn } from 'shared/lib/utils';
+import { AlertIcon, DocumentIcon, ParticleIcon, PrintIcon, ProfileIcon } from '@/assets';
+import { PassResultDialog } from '@/components';
 
 interface MyInfoProps {
   initialData: GetMyOneseoType | undefined;
