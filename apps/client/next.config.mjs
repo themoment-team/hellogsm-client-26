@@ -5,7 +5,9 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const nextConfig = {
-  outputFileTracingRoot: path.join(__dirname, '../../'),
+  experimental: {
+    outputFileTracingRoot: path.join(__dirname, '../../'),
+  },
   images: {
     domains: ['github.com'],
     remotePatterns: [
