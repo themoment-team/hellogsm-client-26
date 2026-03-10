@@ -1,4 +1,4 @@
-import { GetMyOneseoType } from '@repo/types';
+import { GetMyOneseoType } from 'types';
 
 export const scoreToAlphabet = ['없음', 'E', 'D', 'C', 'B', 'A'] as const;
 export const semesterArray = ['1-1', '1-2', '2-1', '2-2', '3-1', '3-2'] as const;

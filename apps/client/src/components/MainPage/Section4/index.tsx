@@ -1,6 +1,6 @@
 'use client';
 
-import { cn } from '@repo/utils';
+import { cn } from 'shared/lib/utils';
 
 const TITLES = [
   {

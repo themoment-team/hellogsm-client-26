@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
+import { MySecondTestResultType } from 'types';
 
-import { memberUrl } from '@repo/api/lib';
-import { MySecondTestResultType } from '@repo/types';
+import { memberUrl } from 'api/libs';
 
 export const getMySecondTestResult = async (): Promise<MySecondTestResultType | undefined> => {
   const session = cookies().get('SESSION')?.value;

@@ -1,9 +1,10 @@
-import { getDate } from '@repo/api/apis';
-import { getKoreanDate, isTimeAfter, isTimeBefore } from '@repo/utils';
+// import { redirect } from 'next/navigation';
 
-import { MyPage as MyPageComponent } from '@/pageContainer';
+import { getDate } from 'api';
+import { getKoreanDate, isTimeAfter, isTimeBefore } from 'shared';
 
-import { getMyOneseo } from '../apis';
+import { getMyOneseo } from 'client/app/apis';
+import { MyPage as MyPageComponent } from 'client/pageContainer';
 
 export default async function MyPage() {
   const [data, dateList] = await Promise.all([getMyOneseo(), getDate()]);

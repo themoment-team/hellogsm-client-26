@@ -1,20 +1,31 @@
-import type { Config } from 'tailwindcss';
+const baseConfig = require('tailwind-config/tailwind.config');
 
-import sharedConfig from '@repo/tailwind-config/tailwind';
-
-const config: Config = {
-  ...sharedConfig,
-  content: ['./src/**/*.{ts,tsx}', '../../packages/ui/src/**/*.{ts,tsx}'],
+module.exports = {
+  ...baseConfig,
   theme: {
-    ...sharedConfig.theme,
-    extend: {
-      ...sharedConfig.theme?.extend,
-      backgroundImage: {
-        slash: "url('/images/slash.svg')",
-        backslash: "url('/images/back-slash.svg')",
-      },
+    ...baseConfig.theme,
+    screens: {
+      xs: '450px',
+
+      sm: '600px',
+
+      'max-sm': { max: '599px' },
+
+      smxm: '750px',
+
+      smx: '850px',
+
+      md: '1024px',
+
+      mdx: '1200px',
+
+      lg: '1440px',
+
+      xl: '1728px',
+
+      fhd: '1920px',
+
+      uhd: '2160px',
     },
   },
 };
-
-export default config;

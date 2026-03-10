@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { useModalStore } from '@repo/store';
+import { useModalStore } from 'shared/stores';
 
 const DevNoticeDialog = () => {
   const { setDevServerNoticeModal } = useModalStore();

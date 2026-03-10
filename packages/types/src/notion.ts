@@ -76,9 +76,9 @@ interface BaseNotionPage<T> {
   public_url: string | null;
 }
 
-export type FaqPageData = BaseNotionPage<FaqProperties>;
+export interface FaqPageData extends BaseNotionPage<FaqProperties> {}
 
-export type MemberPageData = BaseNotionPage<MemberProperties>;
+export interface MemberPageData extends BaseNotionPage<MemberProperties> {}
 
 interface BaseNotionResponse<T> {
   object: 'list';
@@ -91,6 +91,6 @@ interface BaseNotionResponse<T> {
   request_id: string;
 }
 
-export type FaqListResponse = BaseNotionResponse<FaqPageData>;
+export interface FaqListResponse extends BaseNotionResponse<FaqPageData> {}
 
-export type MemberListResponse = BaseNotionResponse<MemberPageData>;
+export interface MemberListResponse extends BaseNotionResponse<MemberPageData> {}

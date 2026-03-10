@@ -1,12 +1,12 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { MyMemberInfoType, MyTotalTestResultType, Majors } from 'types';
 
-import { Majors, MyMemberInfoType, MyTotalTestResultType } from '@repo/types';
-import { Button, Dialog, DialogContent, DialogTitle } from '@repo/ui/shadcn';
-import { cn } from '@repo/utils';
+import { BlurIcon, CopyIcon, HelloGSMIcon } from 'client/assets';
 
-import { BlurIcon, CopyIcon, HelloGSMIcon } from '@/assets';
+import { Button, Dialog, DialogContent, DialogTitle } from 'shared/components';
+import { cn } from 'shared/lib/utils';
 
 interface PassResultProps {
   isPassOpen: boolean;

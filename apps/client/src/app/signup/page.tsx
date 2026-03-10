@@ -1,9 +1,9 @@
 // import { redirect } from 'next/navigation';
 
-import { getDate } from '@repo/api/apis';
-import { getKoreanDate, isTimeAfter } from '@repo/utils';
+import { getDate } from 'api';
+import { getKoreanDate, isTimeAfter } from 'shared';
 
-import { SignUpPage } from '@/pageContainer';
+import { SignUpPage } from 'client/pageContainer';
 
 export default async function SignUp() {
   const dateList = await getDate();

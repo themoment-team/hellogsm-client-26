@@ -1,15 +1,16 @@
-import type { Metadata } from 'next';
+import { ModalContainer } from 'shared';
 
-import { ModalContainer } from '@repo/ui/components';
-import '@repo/ui/styles.css';
+import { Header } from 'client/components';
+import { GoogleAnalytics } from 'client/lib';
+import { getIsServerHealthy } from 'client/utils';
 
-import '@/styles/globals.css';
-import { Header } from '@/components';
-import { GoogleAnalytics } from '@/lib';
-import { pretendardFont } from '@/styles/pretendard';
-import { getIsServerHealthy } from '@/utils';
+import { pretendardFont } from 'shared/fonts';
 
 import Provider from './provider';
+
+import type { Metadata } from 'next';
+
+import 'shared/styles/globals.css';
 
 export const metadata: Metadata = {
   title: '광주소프트웨어마이스터고등학교 입학지원 서비스',

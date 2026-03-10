@@ -1,7 +1,7 @@
-import { Button } from '@repo/ui/shadcn';
-import { cn } from '@repo/utils';
+import { Button } from 'shared';
 
-import { PrintIcon } from '@/assets';
+import { PrintIcon } from 'shared/assets';
+import { cn } from 'shared/lib/utils';
 
 const PrintButton = () => {
   const handlePrint = () => {

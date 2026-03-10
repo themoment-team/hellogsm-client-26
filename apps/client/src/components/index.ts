@@ -1,3 +1,4 @@
+export * from './ui';
 export * from './MainPage';
 export * from './TeamPage';
 export * from './PrintPage';
@@ -6,6 +7,7 @@ export { default as Footer } from './Footer';
 export { default as Header } from './Header';
 export { default as SexToggle } from './SexToggle';
 export { default as ChannelTalk } from './ChannelTalk';
+export { default as OneseoStatus } from './PrintPage/OneseoStatus';
 export { default as FaqElement } from './FaqElement';
 export { default as TestResultDialog } from './TestResultDialog';
 export { default as PassResultDialog } from './PassResultDialog';

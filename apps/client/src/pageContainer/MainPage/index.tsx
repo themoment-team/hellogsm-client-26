@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-import { MyMemberInfoType, MyTotalTestResultType } from '@repo/types';
+import { MyMemberInfoType, MyTotalTestResultType } from 'types';
 
 import {
   Footer,
@@ -14,7 +14,7 @@ import {
   Section4,
   Section5,
   TestResultDialog,
-} from '@/components';
+} from 'client/components';
 
 import DevNoticeDialog from './DevNoticeDialog';
 import TestPeriodDialog from './TestPeriodDialog';

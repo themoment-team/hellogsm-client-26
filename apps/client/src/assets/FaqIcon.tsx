@@ -1,4 +1,4 @@
-import { IconProps } from '@repo/types';
+import { IconProps } from 'types';
 
 const FaqIcon = ({ color }: IconProps) => (
   <svg

@@ -1,43 +1,32 @@
 {
   "name": "admin",
-  "version": "1.0.0",
-  "type": "module",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --port 3001",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint src",
-    "check-types": "tsc --noEmit"
+    "lint": "next lint"
   },
   "dependencies": {
-    "@repo/types": "workspace:*",
-    "@repo/ui": "workspace:*",
-    "@repo/utils": "workspace:*",
-    "@repo/api": "workspace:*",
-    "@repo/store": "workspace:*",
-    "@repo/hooks": "workspace:*",
-    "@repo/constants": "workspace:*",
-    "@tanstack/react-query": "^5.90.21",
-    "axios": "^1.13.5",
-    "next": "^14.2.35",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-hook-form": "^7.71.1",
-    "react-toastify": "^11.0.5"
+    "@radix-ui/react-slot": "^1.0.2",
+    "api": "workspace:^",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.394.0",
+    "next": "14.2.35",
+    "react": "^18",
+    "react-dom": "^18",
+    "shared": "workspace:^",
+    "tailwind-config": "workspace:^",
+    "tailwind-merge": "^2.3.0",
+    "tailwindcss-animate": "^1.0.7",
+    "types": "workspace:^"
   },
   "devDependencies": {
-    "@next/eslint-plugin-next": "^14.2.35",
-    "@repo/eslint-config": "workspace:*",
-    "@repo/tailwind-config": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
-    "@types/node": "^20.19.33",
-    "@types/react": "^18.3.28",
-    "@types/react-dom": "^18.3.7",
-    "autoprefixer": "^10.4.24",
-    "eslint": "^8.57.1",
-    "postcss": "^8.5.6",
-    "tailwindcss": "^3.4.17",
-    "typescript": "5.9.2"
+    "@types/node": "^20",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.4"
   }
 }

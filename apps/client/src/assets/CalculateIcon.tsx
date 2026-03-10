@@ -1,4 +1,4 @@
-import { IconProps } from '@repo/types';
+import { IconProps } from 'types';
 
 const CalculateIcon = ({ color }: IconProps) => (
   <svg
