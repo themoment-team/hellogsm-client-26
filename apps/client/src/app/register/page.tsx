@@ -1,10 +1,12 @@
-import { getDate } from 'api';
 import { redirect } from 'next/navigation';
-import { getKoreanDate, isTimeAfter, isTimeBefore } from 'shared';
-import { StepEnum } from 'types';
 
-import { getMyMemberInfo, getMyOneseo } from 'client/app/apis';
-import { RegisterStepsPage } from 'client/pageContainer';
+import { getDate } from '@repo/api/apis';
+import { StepEnum } from '@repo/types';
+import { getKoreanDate, isTimeAfter, isTimeBefore } from '@repo/utils';
+
+import { RegisterStepsPage } from '@/pageContainer';
+
+import { getMyMemberInfo, getMyOneseo } from '../apis';
 
 interface RegisterProps {
   searchParams?: { [key: string]: string | undefined };

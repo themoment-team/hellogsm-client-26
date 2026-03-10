@@ -1,16 +1,15 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { Button } from 'shared';
-import { GetMyOneseoType } from 'types';
 
-import { BlueStarIcon, CloverIcon, CopyIcon } from 'client/assets';
-import { Footer } from 'client/components';
+import { useGetMyAuthInfo, useGetMyMemberInfo, useGetMyOneseo } from '@repo/api/hooks';
+import { useModalStore } from '@repo/store';
+import { GetMyOneseoType } from '@repo/types';
+import { Button } from '@repo/ui/shadcn';
+import { cn } from '@repo/utils';
 
-import { cn } from 'shared/lib/utils';
-import { useModalStore } from 'shared/stores';
-
-import { useGetMyAuthInfo, useGetMyMemberInfo, useGetMyOneseo } from 'api/hooks';
+import { BlueStarIcon, CloverIcon, CopyIcon } from '@/assets';
+import { Footer } from '@/components';
 
 const textStyle = ['text-[1.25rem]/[1.75rem]', 'font-semibold'];
 

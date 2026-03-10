@@ -1,4 +1,4 @@
-import { MockScoreType } from 'types';
+import { MockScoreType } from './mockScore';
 
 export interface SimpleModal {
   isOpen: boolean;

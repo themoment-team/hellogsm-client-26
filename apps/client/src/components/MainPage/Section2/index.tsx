@@ -2,6 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 
+import { cn } from '@repo/utils';
+
 import {
   Section2Icon1,
   Section2Icon2,
@@ -9,9 +11,7 @@ import {
   Section2Icon4,
   Section2Icon5,
   Section2Icon6,
-} from 'client/assets';
-
-import { cn } from 'shared/lib/utils';
+} from '@/assets';
 
 const stepsData = [
   {

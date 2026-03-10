@@ -2,11 +2,10 @@
 
 import { useRouter } from 'next/navigation';
 
-import { BottomArrow } from 'client/assets';
-import { RECRUITMENT_PERIOD } from 'client/constants';
+import { cn, scrollToElement } from '@repo/utils';
 
-import { cn } from 'shared/lib/utils';
-import { scrollToElement } from 'shared/utils';
+import { BottomArrow } from '@/assets';
+import { RECRUITMENT_PERIOD } from '@/constants';
 
 import Video from './Video';
 

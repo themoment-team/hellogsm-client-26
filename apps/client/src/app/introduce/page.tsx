@@ -1,4 +1,4 @@
-import { IntroducePage } from 'client/pageContainer';
+import { IntroducePage } from '@/pageContainer';
 
 export default function Introduce() {
   return <IntroducePage />;

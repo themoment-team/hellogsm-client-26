@@ -2,13 +2,13 @@
 
 import { PropsWithChildren } from 'react';
 
-import { useLogout } from 'api';
-import { Button } from 'shared';
-import { TestResultType } from 'types';
+import { useLogout } from '@repo/api/hooks';
+import { TestResultType } from '@repo/types';
+import { Button } from '@repo/ui/shadcn';
+import { cn } from '@repo/utils';
 
-import { ChevronsLeft, Puzzle, Exit } from 'admin/assets';
+import { ChevronsLeft, Exit, Puzzle } from '@/assets';
 
-import { cn } from 'shared/lib/utils';
 
 const Item = ({ children }: PropsWithChildren) => (
   <div

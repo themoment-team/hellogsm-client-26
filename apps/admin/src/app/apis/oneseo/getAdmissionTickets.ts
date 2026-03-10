@@ -1,9 +1,8 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-import { oneseoUrl } from 'api/libs';
-
-import { TicketType } from 'types/oneseo';
+import { oneseoUrl } from '@repo/api/lib';
+import { TicketType } from '@repo/types';
 
 interface GetAdmissionTicketsParams {
   redirectUrl: string;

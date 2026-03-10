@@ -1,25 +1,26 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 'use client';
 
-import { useState } from 'react';
-
 import { zodResolver } from '@hookform/resolvers/zod';
-import { usePostMockScore } from 'api';
 import Image from 'next/image';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Button, ComputerRecommendedPage, Step4Register, step4Schema } from 'shared';
+
+import { usePostMockScore } from '@repo/api/hooks';
+import { ARTS_PHYSICAL_SUBJECTS, GENERAL_SUBJECTS } from '@repo/constants';
+import { useModalStore } from '@repo/store';
 import {
   GEDAchievementType,
   GraduationTypeValueEnum,
   LiberalSystemValueEnum,
   MiddleSchoolAchievementType,
   Step4FormType,
+  step4Schema,
   StepEnum,
-} from 'types';
-
-import { ARTS_PHYSICAL_SUBJECTS, GENERAL_SUBJECTS } from 'shared/constants';
-import { cn } from 'shared/lib/utils';
-import { useModalStore } from 'shared/stores';
+} from '@repo/types';
+import { ComputerRecommendedPage, Step4Register } from '@repo/ui/components';
+import { Button } from '@repo/ui/shadcn';
+import { cn } from '@repo/utils';
 
 const graduationArray = [
   { text: '졸업 예정', value: GraduationTypeValueEnum.CANDIDATE, img: '/images/candidate.png' },

@@ -1,7 +1,6 @@
-import { OneseoStatusType } from 'types';
-
-import { CURRENT_YEAR, NEXT_YEAR } from 'shared/constants';
-import { cn } from 'shared/lib/utils';
+import { CURRENT_YEAR, NEXT_YEAR } from '@repo/constants';
+import { OneseoStatusType } from '@repo/types';
+import { cn } from '@repo/utils';
 
 const ApplicationPledge = ({ oneseo }: OneseoStatusType) => {
   return (

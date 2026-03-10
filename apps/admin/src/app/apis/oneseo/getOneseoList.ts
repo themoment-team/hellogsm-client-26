@@ -1,8 +1,8 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { OneseoListType } from 'types';
 
-import { oneseoUrl } from 'api/libs';
+import { oneseoUrl } from '@repo/api/lib';
+import { OneseoListType } from '@repo/types';
 
 const DEFAULT_LIST_SIZE = 10;
 const DEFAULT_TEST_RESULT_TAG = 'ALL';

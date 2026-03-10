@@ -1,6 +1,6 @@
-import { Footer } from 'client/components';
+import { cn } from '@repo/utils';
 
-import { cn } from 'shared/lib/utils';
+import { Footer } from '@/components';
 
 const Layout = ({
   children,

@@ -1,5 +1,11 @@
 **/node_modules
 **/.next
+!apps/admin/.next/standalone
+!apps/admin/.next/static
+!apps/client/.next/standalone
+!apps/client/.next/static
+**/.turbo
+**/dist
 *.log
 npm-debug.log*
 pnpm-debug.log*

@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 
-import { cn } from 'shared/lib/utils';
+import { cn } from '@repo/utils';
 
 const Elements = [
   {
@@ -22,8 +22,8 @@ const Elements = [
     textColor: 'text-lime-700',
     tagColor: 'bg-lime-50',
     learn: ['리눅스', '라즈베리파이', '아두이노', '하드웨어'],
-    description: `사물에 내장된 컴퓨터가 수행할 수 있는 소프트웨어개발 
-    사물에 센서를 부착해 실시간으로 데이터를 인터넷으로 
+    description: `사물에 내장된 컴퓨터가 수행할 수 있는 소프트웨어개발
+    사물에 센서를 부착해 실시간으로 데이터를 인터넷으로
     주고받는 기술인 IT융합 소프트웨어를 설계, 개발이 가능한
     전문 인재를 양성`,
   },
@@ -33,9 +33,9 @@ const Elements = [
     textColor: 'text-sky-900',
     tagColor: 'bg-slate-200',
     learn: ['빅데이터', '사물인터넷', '머신러닝', '딥러닝'],
-    description: `인공지능, 빅데이터, 사물인터넷을 바탕으로 한 인공지능 
-    기반 기술을 교육하여 인공지능 서비스의 요구사항을 
-    실현하기 위한 인공지능 플랫폼 구현, 인공지능 서비스 
+    description: `인공지능, 빅데이터, 사물인터넷을 바탕으로 한 인공지능
+    기반 기술을 교육하여 인공지능 서비스의 요구사항을
+    실현하기 위한 인공지능 플랫폼 구현, 인공지능 서비스
     기획 전문 인재를 양성`,
   },
 ] as const;
