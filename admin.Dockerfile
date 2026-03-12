@@ -21,6 +21,7 @@ COPY . .
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
 RUN pnpm install --frozen-lockfile
+RUN pnpm --filter @repo/ui build:styles
 RUN pnpm --filter admin build
 
 FROM node:20-alpine AS runner
