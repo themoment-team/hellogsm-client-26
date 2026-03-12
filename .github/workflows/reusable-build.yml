@@ -84,6 +84,7 @@ jobs:
       - name: Docker Client build
         run: |
           docker build \
+          $(cat .env.client | sed 's/^/--build-arg /' | tr '\n' ' ') \
           -f ./client.Dockerfile \
           -t ${{ inputs.push_to_ecr && secrets.AWS_ECR_CLIENT_REPOSITORY || format('hello-{0}-client', inputs.environment) }}:latest \
           .
@@ -91,6 +92,7 @@ jobs:
       - name: Docker Admin build
         run: |
           docker build \
+          $(cat .env.admin | sed 's/^/--build-arg /' | tr '\n' ' ') \
           -f ./admin.Dockerfile \
           -t ${{ inputs.push_to_ecr && secrets.AWS_ECR_ADMIN_REPOSITORY || format('hello-{0}-admin', inputs.environment) }}:latest \
           .
