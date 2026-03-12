@@ -61,6 +61,7 @@ jobs:
           EOF
 
       - name: All Package Build
+        if: inputs.push_to_ecr == false
         run: |
           cp .env.client apps/client/.env
           cp .env.admin apps/admin/.env
