@@ -4,17 +4,28 @@
 
 ### Usage
 
-```
-- git clone
+```bash
+# 1. 저장소 클론
 $ git clone https://github.com/themoment-team/hellogsm-front-25.git
-- setting project
+
+# 2. 의존성 설치
 $ pnpm install
-- start project
-$ pnpm [ client | admin | storybook ] dev
-- build
-$ pnpm [ client | admin ] build
+
+# 3. 개발 서버 실행 (Root에서 실행 시 모든 앱 동시 실행)
+$ pnpm dev
+
+# 특정 앱만 실행할 경우
+$ pnpm --filter client dev
+$ pnpm --filter admin dev
+
+# 4. 빌드
+$ pnpm build
 ```
 
 ### Tech Stack
 
-NextJS, TailwindCSS, Shadcn/Ui, Axios, Tanstack-Query,
+- **Framework**: Next.js 14 (App Router)
+- **Styling**: Tailwind CSS, shadcn/ui
+- **State Management**: TanStack Query (v5), Zustand
+- **Form**: React Hook Form, Zod
+- **Build Tool**: Turborepo, pnpm

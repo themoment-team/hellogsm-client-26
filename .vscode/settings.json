@@ -1,9 +1,7 @@
 {
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit",
-  },
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "[json]": {
-    "editor.defaultFormatter": "vscode.json-language-features"
-  }
+  "eslint.workingDirectories": [
+    {
+      "mode": "auto"
+    }
+  ]
 }

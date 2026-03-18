@@ -1,6 +1,6 @@
-import { TheMomentIcon } from 'client/assets';
+import { cn } from '@repo/utils';
 
-import { cn } from 'shared/lib/utils';
+import { TheMomentIcon } from '@/assets';
 
 const TeamSection2 = () => {
   return (

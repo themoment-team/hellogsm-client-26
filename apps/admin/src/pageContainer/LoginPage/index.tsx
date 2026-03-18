@@ -1,6 +1,6 @@
-import { LoginButton } from 'shared/components';
-import { CURRENT_YEAR } from 'shared/constants';
-import { cn } from 'shared/lib/utils';
+import { CURRENT_YEAR } from '@repo/constants';
+import { LoginButton } from '@repo/ui/components';
+import { cn } from '@repo/utils';
 
 const Circle = () => <div className={cn('w-1.5', 'h-1.5', 'bg-sky-300', 'rounded-full')} />;
 

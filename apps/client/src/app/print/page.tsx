@@ -1,9 +1,8 @@
-// import { redirect } from 'next/navigation';
-
 import { redirect } from 'next/navigation';
 
-import { getMyOneseo } from 'client/app/apis/oneseo/getMyOneseo';
-import { PrintPage } from 'client/pageContainer';
+import { PrintPage } from '@/pageContainer';
+
+import { getMyOneseo } from '../apis';
 
 export default async function Home() {
   const data = await getMyOneseo();

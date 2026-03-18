@@ -27,6 +27,10 @@ on:
         required: false
       AWS_ECR_ADMIN_REPOSITORY:
         required: false
+      TURBO_TOKEN:
+        required: false
+      TURBO_TEAM:
+        required: false
 
 jobs:
   build:
@@ -37,11 +41,15 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
         with:
-          version: 9.4.0
+          node-version: 20
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Create .env files for build
         run: |
@@ -53,14 +61,18 @@ jobs:
           EOF
 
       - name: All Package Build
+        if: inputs.push_to_ecr == false
         run: |
           cp .env.client apps/client/.env
           cp .env.admin apps/admin/.env
           pnpm build
+        env:
+          TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+          TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
 
       - name: Configure AWS credentials
         if: inputs.push_to_ecr
-        uses: aws-actions/configure-aws-credentials@v5
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

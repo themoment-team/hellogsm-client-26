@@ -2,9 +2,8 @@
 
 import { useEffect } from 'react';
 
-import { useModalStore } from 'shared/stores';
-
-import { useGetMyAuthInfo } from 'api/hooks';
+import { useGetMyAuthInfo } from '@repo/api/hooks';
+import { useModalStore } from '@repo/store';
 
 interface LoginNoticeDialogProps {
   userName: string | undefined;

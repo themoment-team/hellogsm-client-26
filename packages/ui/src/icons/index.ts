@@ -1,0 +1,16 @@
+export { default as Character } from './ComputerRecommendedPage/Character';
+export { default as MouseIcon } from './Confirm/MouseIcon';
+export { default as EditCheckIcon } from './EditBar/EditCheckIcon';
+export { default as PinIcon } from './FreeSemesterForm/PinIcon';
+export { default as InspectionIcon } from './Inspection/InspectionIcon';
+export { default as GoogleIcon } from './Login/GoogleIcon';
+export { default as KakaoIcon } from './Login/KakaoIcon';
+export { default as LoginIcon } from './Login/LoginIcon';
+export { default as PrintIcon } from './Print/PrintIcon';
+export { default as SearchIcon } from './SearchDialog/SearchIcon';
+export { default as StepCheckIcon } from './Step/CheckIcon';
+export { default as ProgressBarIcon } from './Step/ProgressBarIcon';
+export { default as CheckIcon } from './Table/CheckIcon';
+export { default as CloseIcon } from './Toast/CloseIcon';
+export { default as InfoIcon } from './Toast/InfoIcon';
+export { default as UploadIcon } from './UploadPhoto/UploadIcon';

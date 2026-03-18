@@ -1,20 +1,18 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-
 import { useQueryClient } from '@tanstack/react-query';
-
-import { memberQueryKeys } from 'api';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { LoginDialog } from 'shared';
+import { useEffect, useState } from 'react';
 
-import * as I from 'client/assets';
-import { ActiveLink } from 'client/components';
+import { useGetMyAuthInfo, useGetMyMemberInfo, useLogout } from '@repo/api/hooks';
+import { memberQueryKeys } from '@repo/api/lib';
+import { LoginDialog } from '@repo/ui/components';
+import { cn } from '@repo/utils';
 
-import { cn } from 'shared/lib/utils';
+import * as I from '@/assets';
 
-import { useGetMyAuthInfo, useGetMyMemberInfo, useLogout } from 'api/hooks';
+import ActiveLink from '../ActiveLink';
 
 const activeStyle = [
   'text-gray-900',
@@ -62,7 +60,7 @@ interface NavProps {
 }
 
 interface MobileNavProps {
-  links: Array<{ href: string; label: string; icon: React.ComponentType<any> }>;
+  links: Array<{ href: string; label: string; icon: React.ElementType }>;
   isRegisterPath: boolean;
   hoveredLink: string | null;
   setHoveredLink: (link: string | null) => void;

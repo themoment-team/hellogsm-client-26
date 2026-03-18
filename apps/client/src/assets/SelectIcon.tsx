@@ -1,4 +1,4 @@
-import { IconProps } from 'types';
+import { IconProps } from '@repo/types';
 
 const SelectIcon = ({ style }: IconProps) => (
   <svg

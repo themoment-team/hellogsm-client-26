@@ -2,10 +2,10 @@
 
 import Link from 'next/link';
 
-import * as I from 'client/assets';
-import { RECRUITMENT_PERIOD } from 'client/constants';
+import { cn } from '@repo/utils';
 
-import { cn } from 'shared/lib/utils';
+import * as I from '@/assets';
+import { RECRUITMENT_PERIOD } from '@/constants';
 
 const buttonStyle = [
   'font-semibold',
