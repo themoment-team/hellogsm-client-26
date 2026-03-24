@@ -428,6 +428,7 @@ const Step4Register = ({
                     isFreeSemester={isFreeSemester}
                     isGraduate={isGraduate}
                     showError={showError}
+                    freeSemester={watch('freeSemester')}
                   />
                 </div>
                 <div id="nonSubject" className={cn([...formWrapper])}>
