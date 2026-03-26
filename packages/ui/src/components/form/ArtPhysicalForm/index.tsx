@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { UseFormSetValue, UseFormWatch } from 'react-hook-form';
 
 import {
@@ -77,6 +78,13 @@ const ArtPhysicalForm = ({
   };
 
   const disabledIndices = getFreeSemesterIndices(freeSemester);
+
+  useEffect(() => {
+    const indices = getFreeSemesterIndices(freeSemester);
+    indices.forEach((index) => {
+      setValue(`artsPhysicalAchievement.${index}`, null);
+    });
+  }, [freeSemester, setValue]);
 
   return (
     <div className={cn('flex', 'flex-col', 'w-full')}>
