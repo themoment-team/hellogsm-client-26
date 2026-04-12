@@ -1,0 +1,44 @@
+name: Task
+description: 기능 개발, 리팩터링, 문서화 등 작업 이슈를 등록합니다
+title: '[task] '
+labels:
+  - 📋 task - 작업
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: 작업 목표
+      description: 무엇을 끝내려는 작업인지 한두 줄로 작성해주세요.
+      placeholder: 예) 마이페이지 필터 상태를 URL 쿼리와 동기화
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: 우선순위
+      description: 작업의 긴급도/중요도를 선택해주세요.
+      options:
+        - 높음
+        - 보통
+        - 낮음
+    validations:
+      required: true
+
+  - type: textarea
+    id: references
+    attributes:
+      label: 참고 자료 (선택)
+      description: 관련 이슈, 문서, PR 등 참고 링크를 남겨주세요.
+      placeholder: |
+        - 관련 이슈: #123
+        - 관련 문서: docs/CodeConvention.md
+
+  - type: textarea
+    id: subtasks
+    attributes:
+      label: 세부 작업 (선택)
+      description: 작업을 완료하기 위해 필요한 세부 작업 목록을 작성해주세요.
+      placeholder: |
+        - [ ] 세부 작업 1
+        - [ ] 세부 작업 2
