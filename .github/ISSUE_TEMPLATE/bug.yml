@@ -1,0 +1,51 @@
+name: Bug Report
+description: 버그를 제보합니다
+title: '[bug] '
+labels:
+  - 🚨 bug - 오류 발생
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: 문제 요약
+      description: 어떤 문제가 발생했는지 간단히 적어주세요.
+      placeholder: 예) 마이페이지 프로젝트 목록이 비어 보임
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: 재현 방법
+      description: 재현 절차와 기대 결과/실제 결과를 함께 작성해주세요.
+      placeholder: |
+        - 절차:
+          1. 로그인
+          2. 마이페이지 이동
+          3. 필터 변경
+        - 기대 결과: 목록이 표시됨
+        - 실제 결과: 목록이 비어 있음
+    validations:
+      required: true
+
+  - type: dropdown
+    id: frequency
+    attributes:
+      label: 재현 빈도
+      description: 어느 정도 자주 발생하는지 선택해주세요.
+      options:
+        - 항상 발생
+        - 가끔 발생
+        - 1회 발생
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: 실행 환경 및 참고 자료 (선택)
+      description: 디버깅에 도움이 되는 환경 정보와 참고 자료를 작성해주세요.
+      placeholder: |
+        - 로그/스크린샷:
+        - 브랜치/커밋:
+        - OS/브라우저:
