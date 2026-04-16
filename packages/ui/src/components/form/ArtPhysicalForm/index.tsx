@@ -82,7 +82,7 @@ const ArtPhysicalForm = ({
     return [semesterNumber * 3, semesterNumber * 3 + 1, semesterNumber * 3 + 2];
   };
 
-  const disabledIndices = getFreeSemesterIndices(freeSemester);
+  const disabledIndices = isFreeSemester ? getFreeSemesterIndices(freeSemester) : [];
 
   useEffect(() => {
     const indices = getFreeSemesterIndices(freeSemester);
