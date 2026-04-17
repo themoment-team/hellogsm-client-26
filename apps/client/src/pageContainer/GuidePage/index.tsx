@@ -323,6 +323,7 @@ const GuidePage = ({ initialData, isOneseoWrite }: GuideProps) => {
           'text-[1.25rem]/[1.75rem]',
           'rounded-[0.75rem]',
           isTempOneseo && ['opacity-100'],
+          !isOneseoWrite && ['cursor-not-allowed'],
         ])}
         onClick={() => {
           if (!authInfo?.authReferrerType) {
