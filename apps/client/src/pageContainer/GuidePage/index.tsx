@@ -1,8 +1,14 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 
-import { useGetMyAuthInfo, useGetMyMemberInfo, useGetMyOneseo } from '@repo/api/hooks';
+import {
+  useGetMyAuthInfo,
+  useGetMyMemberInfo,
+  useGetMyOneseo,
+  usePostOneseoModifyRequest,
+} from '@repo/api/hooks';
 import { useModalStore } from '@repo/store';
 import { GetMyOneseoType } from '@repo/types';
 import { Button } from '@repo/ui/shadcn';
@@ -200,12 +206,21 @@ interface GuideProps {
 }
 
 const GuidePage = ({ initialData, isOneseoWrite }: GuideProps) => {
-  const { setLoginRequiredModal } = useModalStore();
+  const { setLoginRequiredModal, setOneseoModifyRequestModal } = useModalStore();
   const { data: authInfo } = useGetMyAuthInfo();
   const { data: memberInfo } = useGetMyMemberInfo();
 
   const { data } = useGetMyOneseo({
     initialData: initialData,
+  });
+
+  const { push } = useRouter();
+
+  const { mutate: postOneseoModify } = usePostOneseoModifyRequest({
+    onSuccess: () => {
+      setOneseoModifyRequestModal(false);
+      toast.success('원서 수정 권한 요청이 성공했습니다.');
+    },
   });
 
   const [buttonText, buttonVariant]: [string, 'submit' | 'fill' | 'outlineBlue'] = (() => {
@@ -221,8 +236,6 @@ const GuidePage = ({ initialData, isOneseoWrite }: GuideProps) => {
   })();
 
   const isTempOneseo = data && !data.step;
-
-  const { push } = useRouter();
 
   return (
     <div className={cn('w-full', 'flex', 'flex-col', 'justify-center', 'items-center')}>
@@ -332,6 +345,10 @@ const GuidePage = ({ initialData, isOneseoWrite }: GuideProps) => {
           }
           if (!memberInfo?.name) {
             push('/signup');
+            return;
+          }
+          if (isTempOneseo) {
+            setOneseoModifyRequestModal(true, () => postOneseoModify());
             return;
           }
           push('/register?step=1');
