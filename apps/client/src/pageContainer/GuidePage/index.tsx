@@ -208,14 +208,14 @@ const GuidePage = ({ initialData, isOneseoWrite }: GuideProps) => {
     initialData: initialData,
   });
 
-  const [buttonText, buttonVariant]: [string, 'submit' | 'fill' | 'reverseFill'] = (() => {
+  const [buttonText, buttonVariant]: [string, 'submit' | 'fill' | 'outlineBlue'] = (() => {
     if (!isOneseoWrite) return ['원서 작성을 할 수 없는 기간입니다.', 'submit'];
 
     if (!data) return ['원서 작성하기', 'fill'];
 
     if (data && data.step) return ['원서 이어서 작성하기', 'fill'];
 
-    if (data && !data.step) return ['최종제출을 이미 완료하였습니다.', 'reverseFill'];
+    if (data && !data.step) return ['원서 권한 수정 요청하기', 'outlineBlue'];
 
     return ['원서 작성하기', 'fill'];
   })();
@@ -310,7 +310,7 @@ const GuidePage = ({ initialData, isOneseoWrite }: GuideProps) => {
 
       <Button
         variant={buttonVariant}
-        disabled={buttonVariant === 'fill' ? false : true}
+        disabled={!isOneseoWrite}
         className={cn([
           'sticky',
           'bottom-10',
@@ -322,7 +322,7 @@ const GuidePage = ({ initialData, isOneseoWrite }: GuideProps) => {
           'mb-[10rem]',
           'text-[1.25rem]/[1.75rem]',
           'rounded-[0.75rem]',
-          isTempOneseo && ['cursor-not-allowed', 'opacity-100'],
+          isTempOneseo && ['opacity-100'],
         ])}
         onClick={() => {
           if (!authInfo?.authReferrerType) {
