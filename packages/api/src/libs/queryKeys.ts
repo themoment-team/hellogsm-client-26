@@ -26,6 +26,7 @@ export const oneseoQueryKeys = {
   getMyOneseo: () => ['get', 'my', 'oneseo'],
   getEditability: () => ['get', 'my', 'editability'],
   postExcel: () => ['post', 'excel'],
+  postOneseoModifyRequest: () => ['post', 'oneseo', 'modify', 'request'],
 } as const;
 
 export const memberQueryKeys = {

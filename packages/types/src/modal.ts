@@ -45,7 +45,7 @@ export interface ClientModals {
   applicationPeriodModal: SimpleModal;
   oneseoNotSubmittedModal: SimpleModal;
   resultNotAnnouncedModal: SimpleModal;
-  oneseoModifyRequestModal: SimpleModal;
+  oneseoModifyRequestModal: ConfirmModal;
 }
 
 export interface SharedModals {
@@ -73,7 +73,7 @@ export interface ModalActions {
   setApplicationPeriodModal: (isOpen: boolean) => void;
   setOneseoNotSubmittedModal: (isOpen: boolean) => void;
   setResultNotAnnouncedModal: (isOpen: boolean) => void;
-  setOneseoModifyRequestModal: (isOpen: boolean) => void;
+  setOneseoModifyRequestModal: (isOpen: boolean, onConfirm?: () => void) => void;
 
   setSystemInspectionModal: (isOpen: boolean) => void;
   setScoreCalculationCompleteModal: (

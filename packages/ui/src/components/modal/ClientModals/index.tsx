@@ -264,7 +264,7 @@ const ClientModals = () => {
             <Button variant="outline" onClick={() => setOneseoModifyRequestModal(false)}>
               취소
             </Button>
-            <AlertDialogAction>확인</AlertDialogAction>
+            <AlertDialogAction onClick={oneseoModifyRequestModal.onConfirm}>확인</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

@@ -22,7 +22,7 @@ const createInitialClientModals = (): ClientModals => ({
   applicationPeriodModal: { isOpen: false },
   oneseoNotSubmittedModal: { isOpen: false },
   resultNotAnnouncedModal: { isOpen: false },
-  oneseoModifyRequestModal: { isOpen: false },
+  oneseoModifyRequestModal: { isOpen: false, onConfirm: () => {} },
 });
 
 const createInitialSharedModals = (): SharedModals => ({
@@ -88,8 +88,8 @@ export const useModalStore = create<ModalStore>((set) => ({
   setResultNotAnnouncedModal: (isOpen) => {
     set({ resultNotAnnouncedModal: { isOpen } });
   },
-  setOneseoModifyRequestModal: (isOpen) => {
-    set({ oneseoModifyRequestModal: { isOpen } });
+  setOneseoModifyRequestModal: (isOpen, onConfirm = () => {}) => {
+    set({ oneseoModifyRequestModal: { isOpen, onConfirm } });
   },
 
   // shared modal action
