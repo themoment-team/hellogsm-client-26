@@ -437,6 +437,15 @@ const StepWrapper = ({ data, step, info, memberId, type }: StepWrapperProps) => 
       });
     }
   }, [step]);
+  const handlePreviewPrint = () => {
+    if (!isScoreComplete) {
+      handleStepError(StepEnum.FOUR);
+      return;
+    }
+    postTempStorage(getOneseo(true), {
+      onSuccess: () => push('/print?preview=true'),
+    });
+  };
 
   const handlePreviewPrint = () => {
     if (!isScoreComplete) {
