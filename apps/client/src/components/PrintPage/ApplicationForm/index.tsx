@@ -7,7 +7,11 @@ import { PersonalInfoTable, OneseoStatus } from '../';
 import ApplicationPledge from '../ApplicationPledge';
 /* eslint-disable-next-line no-restricted-imports */
 
-const ApplicationForm = ({ oneseo }: OneseoStatusType) => {
+interface ApplicationFormProps extends OneseoStatusType {
+  isPreview?: boolean;
+}
+
+const ApplicationForm = ({ oneseo, isPreview }: ApplicationFormProps) => {
   return (
     <div
       className={cn(
@@ -30,6 +34,22 @@ const ApplicationForm = ({ oneseo }: OneseoStatusType) => {
       )}
     >
       <div className={cn('relative', 'z-[2]', 'w-[63vh]', 'py-20')}>
+        {isPreview && (
+          <p
+            className={cn(
+              'absolute',
+              'top-2',
+              'left-0',
+              'z-10',
+              'text-red-600',
+              'text-sm',
+              'font-normal',
+              'leading-normal',
+            )}
+          >
+            * 해당 원서는 미리보기 용입니다
+          </p>
+        )}
         <div className={cn('relative', 'z-[2]', 'w-[63vh]')}>
           <div
             id="sample"

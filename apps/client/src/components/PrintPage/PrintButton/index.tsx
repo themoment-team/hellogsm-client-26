@@ -3,7 +3,11 @@ import { cn } from '@repo/utils';
 
 import { PrintIcon } from '@/assets';
 
-const PrintButton = () => {
+interface PrintButtonProps {
+  isPreview?: boolean;
+}
+
+const PrintButton = ({ isPreview = false }: PrintButtonProps) => {
   const handlePrint = () => {
     window.print();
   };
@@ -22,7 +26,9 @@ const PrintButton = () => {
       onClick={handlePrint}
     >
       <PrintIcon />
-      <p className={cn('text-[2.1vh]', 'font-bold', 'hover:text-white')}>인쇄하기</p>
+      <p className={cn('text-[2.1vh]', 'font-bold', 'hover:text-white')}>
+        {isPreview ? '미리보기 출력' : '인쇄하기'}
+      </p>
     </Button>
   );
 };
