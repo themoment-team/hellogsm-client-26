@@ -17,7 +17,19 @@ const semesterLabels: Record<SemesterKey, string> = {
 
 const GeneralSubjectsTable = ({ oneseo }: OneseoStatusType) => {
   const { graduationType } = oneseo.privacyDetail;
-  const { generalSubjectsScoreDetail } = oneseo.calculatedScore;
+  const isPreview = oneseo.oneseoId === null;
+  const freeSemesterKey = oneseo.middleSchoolAchievement.freeSemester
+    ? (oneseo.middleSchoolAchievement.freeSemester.replace('-', '_') as SemesterKey)
+    : null;
+  const generalSubjectsScoreDetail =
+    oneseo.calculatedScore?.generalSubjectsScoreDetail ?? {
+      score1_1: null,
+      score1_2: null,
+      score2_1: null,
+      score2_2: null,
+      score3_1: null,
+      score3_2: null,
+    };
   const subjects = [...GENERAL_SUBJECTS, ...(oneseo.middleSchoolAchievement.newSubjects ?? [])];
 
   const semesters: SemesterKey[] =
@@ -65,7 +77,7 @@ const GeneralSubjectsTable = ({ oneseo }: OneseoStatusType) => {
                 `achievement${key}` as keyof typeof oneseo.middleSchoolAchievement
               ] as (number | null)[] | undefined;
 
-              if (!scoreDetail) {
+              if (!scoreDetail || freeSemesterKey === key || (!isPreview && !scores?.length)) {
                 if (rowIdx === 0) {
                   return (
                     <td
@@ -97,9 +109,14 @@ const GeneralSubjectsTable = ({ oneseo }: OneseoStatusType) => {
           <td className={cn('border', 'border-black')}>환산점</td>
           {semesters.map((key) => {
             const detailKey = `score${key}` as keyof typeof generalSubjectsScoreDetail;
+            const scores = oneseo.middleSchoolAchievement[
+              `achievement${key}` as keyof typeof oneseo.middleSchoolAchievement
+            ] as (number | null)[] | undefined;
             return (
               <td key={`${key}-total`} className={cn('border', 'border-black')}>
-                {generalSubjectsScoreDetail[detailKey] ?? ''}
+                {freeSemesterKey !== key && (isPreview || scores?.length)
+                  ? (generalSubjectsScoreDetail[detailKey] ?? '')
+                  : ''}
               </td>
             );
           })}

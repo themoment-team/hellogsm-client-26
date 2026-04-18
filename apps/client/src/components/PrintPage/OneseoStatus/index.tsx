@@ -14,13 +14,20 @@ const OneseoStatus = ({ oneseo }: OneseoStatusType) => {
   const { graduationDate, graduationType, schoolName, schoolAddress, studentNumber } =
     oneseo.privacyDetail;
   const {
-    attendanceScore,
-    volunteerScore,
-    totalScore,
-    generalSubjectsScoreDetail,
-    artsPhysicalSubjectsScore,
-    totalSubjectsScore,
-  } = oneseo.calculatedScore;
+    attendanceScore = 0,
+    volunteerScore = 0,
+    totalScore = 0,
+    generalSubjectsScoreDetail = {
+      score1_1: null,
+      score1_2: null,
+      score2_1: null,
+      score2_2: null,
+      score3_1: null,
+      score3_2: null,
+    },
+    artsPhysicalSubjectsScore = 0,
+    totalSubjectsScore = 0,
+  } = oneseo.calculatedScore ?? {};
 
   const isGED = graduationType === 'GED';
 
@@ -160,7 +167,7 @@ const OneseoStatus = ({ oneseo }: OneseoStatusType) => {
               <td className={cn(tdStyle)} colSpan={2}>
                 {parseFloat(
                   (
-                    (oneseo.calculatedScore.generalSubjectsScore ?? 0) +
+                    (oneseo.calculatedScore?.generalSubjectsScore ?? 0) +
                     (artsPhysicalSubjectsScore ?? 0)
                   ).toFixed(3),
                 )}
