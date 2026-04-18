@@ -52,6 +52,7 @@ interface StepBarType {
     '4': boolean;
   };
   handleStepError: (step: StepEnum) => void;
+  handlePreviewPrint?: () => void;
 }
 
 const StepBar = ({
@@ -60,14 +61,27 @@ const StepBar = ({
   isStepSuccess,
   handleCheckScoreButtonClick,
   handleStepError,
+  handlePreviewPrint,
 }: StepBarType) => {
   const { push } = useRouter();
+
+  const isScoreComplete = Object.values(isStepSuccess).every((value) => value === true);
 
   const handleCheckNextStep = (step: StepEnum) => {
     if (!isStepSuccess[step]) return handleStepError(step);
 
     push(`${baseUrl}?step=${Number(step) + 1}`);
   };
+
+  const handlePreviewPrintDefault = () => {
+    if (!isScoreComplete) {
+      handleStepError(StepEnum.FOUR);
+      return;
+    }
+    push('/print?preview=true');
+  };
+
+  const handlePreviewPrintClick = handlePreviewPrint || handlePreviewPrintDefault;
 
   return (
     <>
@@ -100,6 +114,7 @@ const StepBar = ({
             </div>
           ))}
         </div>
+
         <div className={cn('flex', 'gap-[0.5rem]')}>
           {step !== StepEnum.ONE && (
             <Button variant="ghost" onClick={() => push(`${baseUrl}?step=${Number(step) - 1}`)}>
@@ -108,14 +123,24 @@ const StepBar = ({
           )}
 
           {step === StepEnum.FOUR ? (
-            <Button
-              variant={step === StepEnum.FOUR && isStepSuccess[step] ? 'next' : 'submit'}
-              onClick={
-                isStepSuccess[step] ? handleCheckScoreButtonClick : () => handleCheckNextStep(step)
-              }
-            >
-              내 성적 계산하기
-            </Button>
+            <>
+              <Button
+                variant={isScoreComplete ? 'next' : 'submit'}
+                onClick={handlePreviewPrintClick}
+              >
+                원서 미리 출력하기
+              </Button>
+              <Button
+                variant={isStepSuccess[step] ? 'next' : 'submit'}
+                onClick={
+                  isStepSuccess[step]
+                    ? handleCheckScoreButtonClick
+                    : () => handleCheckNextStep(step)
+                }
+              >
+                내 성적 계산하기
+              </Button>
+            </>
           ) : (
             <Button
               variant={isStepSuccess[step] ? 'next' : 'submit'}
