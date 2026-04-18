@@ -77,12 +77,7 @@ const GeneralSubjectsTable = ({ oneseo }: OneseoStatusType) => {
                 `achievement${key}` as keyof typeof oneseo.middleSchoolAchievement
               ] as (number | null)[] | undefined;
 
-              if (
-                (!isPreview && !scoreDetail) ||
-                freeSemesterKey === key ||
-                key === '1_1' ||
-                (!isPreview && !scores?.length)
-              ) {
+              if (!scoreDetail || freeSemesterKey === key || (!isPreview && !scores?.length)) {
                 if (rowIdx === 0) {
                   return (
                     <td
