@@ -202,6 +202,7 @@ export interface OneseoType {
   interviewScore: number | null;
   secondTestPassYn: YesNo | null;
   examinationNumber: number | null;
+  oneseoEditStatus: OneseoEditStatusType;
 }
 
 export interface OneseoListType {

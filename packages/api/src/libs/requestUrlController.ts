@@ -1,7 +1,7 @@
 import { GraduationType } from '@repo/types';
 
-const addParameters = (key: string, value: number | string | undefined) => {
-  if (!value) {
+const addParameters = (key: string, value: number | string | boolean | undefined) => {
+  if (value === undefined || value === '') {
     return '';
   }
 
@@ -32,8 +32,9 @@ export const oneseoUrl = {
     screeningTag?: string,
     isSubmitted?: string,
     keyword?: string,
+    requested?: boolean,
   ) =>
-    `/oneseo/v3/oneseo/search?page=${page}&size=${size}&testResultTag=${testResultTag}${addParameters('screeningTag', screeningTag)}${addParameters('isSubmitted', isSubmitted)}${addParameters('keyword', keyword)}`,
+    `/oneseo/v3/oneseo/search?page=${page}&size=${size}&testResultTag=${testResultTag}${addParameters('screeningTag', screeningTag)}${addParameters('isSubmitted', isSubmitted)}${addParameters('keyword', keyword)}${addParameters('requested', requested)}`,
   getExcel: () => '/oneseo/v3/excel',
   patchArrivedStatus: (memberId: number) => `/oneseo/v3/arrived-status/${memberId}`,
   patchAgreeDocStatus: (memberId: number) => `/oneseo/v3/entrance-intention/${memberId}`,
@@ -43,6 +44,7 @@ export const oneseoUrl = {
   getEditability: () => '/oneseo/v3/editability',
   postExcel: () => '/oneseo/v3/excel',
   postOneseoModifyRequest: () => '/oneseo/v3/oneseo/me/request',
+  patchOneseoApproval: (memberId: number) => `/oneseo/v3/oneseo/${memberId}/approval`,
 } as const;
 
 export const memberUrl = {

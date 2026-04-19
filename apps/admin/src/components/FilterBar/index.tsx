@@ -24,7 +24,6 @@ import { cn } from '@repo/utils';
 
 import { CloverIcon, FileIcon, MedalIcon, SearchIcon, UploadIcon } from '@/assets';
 
-
 interface FilterBarProps {
   keyword: string;
   setKeyword: React.Dispatch<React.SetStateAction<string>>;

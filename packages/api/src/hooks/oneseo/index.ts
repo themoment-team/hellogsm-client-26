@@ -6,6 +6,7 @@ export * from './usePatchAgreeDocStatus';
 export * from './usePatchArrivedStatus';
 export * from './usePatchCompetencyScore';
 export * from './usePatchInterviewScore';
+export * from './usePatchOneseoApproval';
 export * from './usePostExcel';
 export * from './usePostImage';
 export * from './usePostMockScore';

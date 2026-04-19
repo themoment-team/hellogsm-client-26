@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 import { useGetEditability, useGetOneseoList } from '@repo/api/hooks';
 import { useDebounce } from '@repo/hooks';
-import { OneseoListType, ScreeningType, TestResultType, YesNo } from '@repo/types';
+import { OneseoListType, ScreeningType, YesNo } from '@repo/types';
 import {
   Pagination,
   PaginationContent,
@@ -16,7 +16,7 @@ import {
 import { cn } from '@repo/utils';
 
 import { ApplicantTH, ApplicantTR, FilterBar, SideMenu } from '@/components';
-
+import { SideBarType } from '@/schemas';
 
 interface MainPageProps {
   initialData: OneseoListType | undefined;
@@ -33,6 +33,7 @@ const DEFAULT_TEST_RESULT_TAG = 'ALL';
 
 const testResultTypeConvertor: { [key: string]: string } = {
   ALL: '전체 지원자 관리',
+  REQUEST: '원서 수정 요청 관리',
   FIRST_PASS: '1차 전형 합격자 관리',
   FINAL_PASS: '최종 합격자 관리',
   FALL: '불합격자 관리',
@@ -48,7 +49,7 @@ const MainPage = ({
   const [isOpen, setIsOpen] = useState<boolean>(true);
 
   const [keyword, setKeyword] = useState<string>('');
-  const [testResultTag, setTestResultTag] = useState<TestResultType>(DEFAULT_TEST_RESULT_TAG);
+  const [testResultTag, setTestResultTag] = useState<SideBarType>(DEFAULT_TEST_RESULT_TAG);
   const [isSubmitted, setIsSubmitted] = useState<YesNo | string>('');
   const [screeningTag, setScreeningTag] = useState<ScreeningType | string>('');
   const [page, setPage] = useState<number>(0);
@@ -59,10 +60,11 @@ const MainPage = ({
     {
       page: page,
       size: PER_PAGE,
-      testResultTag: testResultTag,
+      testResultTag: testResultTag === 'REQUEST' ? 'ALL' : testResultTag,
       screeningTag: screeningTag,
       isSubmitted: isSubmitted,
       keyword: debouncedKeyword,
+      requested: testResultTag === 'REQUEST' ? true : undefined,
     },
     {
       initialData: initialData,
@@ -95,7 +97,7 @@ const MainPage = ({
     <main
       className={cn([
         isOpen && 'ml-60',
-        isOpen ? 'px-10' : 'pr-10 pl-20',
+        isOpen ? 'px-10' : 'pl-20 pr-10',
         'pt-[60px]',
         'pb-8',
         'bg-white',
@@ -146,6 +148,7 @@ const MainPage = ({
                   editableRefetch={editableRefetch}
                   is역량검사처리기간={is역량검사처리기간}
                   is심층면접처리기간={is심층면접처리기간}
+                  testResultTag={testResultTag}
                 />
               ))}
           </div>

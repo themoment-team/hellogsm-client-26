@@ -17,7 +17,8 @@ export const oneseoQueryKeys = {
     screeningTag?: string,
     isSubmitted?: string,
     keyword?: string,
-  ) => ['oneseo', 'list', page, size, testResultTag, screeningTag, isSubmitted, keyword],
+    requested?: boolean,
+  ) => ['oneseo', 'list', page, size, testResultTag, screeningTag, isSubmitted, keyword, requested],
   patchArrivedStatus: (memberId: number) => ['patch', 'arrivedStatus', memberId],
   patchAgreeDocStatus: (memberId: number) => ['patch', 'agreeDocStatus', memberId],
   patchCompetencyScore: (memberId: number) => ['patch', 'competencyScore', memberId],
@@ -27,6 +28,7 @@ export const oneseoQueryKeys = {
   getEditability: () => ['get', 'my', 'editability'],
   postExcel: () => ['post', 'excel'],
   postOneseoModifyRequest: () => ['post', 'oneseo', 'modify', 'request'],
+  patchOneseoApproval: (memberId: number) => ['patch', 'oneseo', 'approval', memberId],
 } as const;
 
 export const memberQueryKeys = {
