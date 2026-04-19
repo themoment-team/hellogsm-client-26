@@ -219,6 +219,9 @@ export interface TicketType {
   examinationNumber: string;
 }
 
+export type OneseoEditStatusType = 'NONE' | 'REQUESTED' | 'APPROVED';
+
 export interface EditabilityType {
   oneseoEditability: boolean;
+  oneseoEditStatus: OneseoEditStatusType;
 }

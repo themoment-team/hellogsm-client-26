@@ -10,7 +10,7 @@ import {
   usePostOneseoModifyRequest,
 } from '@repo/api/hooks';
 import { useModalStore } from '@repo/store';
-import { GetMyOneseoType } from '@repo/types';
+import { EditabilityType, GetMyOneseoType } from '@repo/types';
 import { Button } from '@repo/ui/shadcn';
 import { cn } from '@repo/utils';
 
@@ -203,9 +203,10 @@ const List = ({
 interface GuideProps {
   initialData: GetMyOneseoType | undefined;
   isOneseoWrite: boolean;
+  editability: EditabilityType | undefined;
 }
 
-const GuidePage = ({ initialData, isOneseoWrite }: GuideProps) => {
+const GuidePage = ({ initialData, isOneseoWrite, editability }: GuideProps) => {
   const { setLoginRequiredModal, setOneseoModifyRequestModal } = useModalStore();
   const { data: authInfo } = useGetMyAuthInfo();
   const { data: memberInfo } = useGetMyMemberInfo();
@@ -223,6 +224,15 @@ const GuidePage = ({ initialData, isOneseoWrite }: GuideProps) => {
     },
   });
 
+  const isTempOneseo = data && !data.step;
+
+  const isOneseoModifyRequestTime = (() => {
+    const now = new Date();
+    const kst = new Date(now.getTime() + (now.getTimezoneOffset() + 540) * 60000);
+    const hour = kst.getHours();
+    return hour >= 9 && hour < 16;
+  })();
+
   const [buttonText, buttonVariant]: [string, 'submit' | 'fill' | 'outlineBlue'] = (() => {
     if (!isOneseoWrite) return ['원서 작성을 할 수 없는 기간입니다.', 'submit'];
 
@@ -230,12 +240,23 @@ const GuidePage = ({ initialData, isOneseoWrite }: GuideProps) => {
 
     if (data && data.step) return ['원서 이어서 작성하기', 'fill'];
 
-    if (data && !data.step) return ['원서 권한 수정 요청하기', 'outlineBlue'];
+    if (editability?.oneseoEditStatus === 'REQUESTED')
+      return ['원서 수정 권한을 아직 받지 못했습니다.', 'submit'];
+
+    if (editability?.oneseoEditStatus === 'APPROVED') return ['원서 수정하기.', 'fill'];
+
+    if (isTempOneseo && !isOneseoModifyRequestTime)
+      return ['9시부터 16시 이외에는 수정 권한 요청이 제한됩니다.', 'submit'];
+
+    if (isTempOneseo) return ['원서 권한 수정 요청하기', 'outlineBlue'];
 
     return ['원서 작성하기', 'fill'];
   })();
 
-  const isTempOneseo = data && !data.step;
+  const isButtonDisabled =
+    !isOneseoWrite ||
+    editability?.oneseoEditStatus === 'REQUESTED' ||
+    (isTempOneseo && !isOneseoModifyRequestTime);
 
   return (
     <div className={cn('w-full', 'flex', 'flex-col', 'justify-center', 'items-center')}>
@@ -323,7 +344,7 @@ const GuidePage = ({ initialData, isOneseoWrite }: GuideProps) => {
 
       <Button
         variant={buttonVariant}
-        disabled={!isOneseoWrite}
+        disabled={isButtonDisabled}
         className={cn([
           'sticky',
           'bottom-10',
@@ -336,7 +357,7 @@ const GuidePage = ({ initialData, isOneseoWrite }: GuideProps) => {
           'text-[1.25rem]/[1.75rem]',
           'rounded-[0.75rem]',
           isTempOneseo && ['opacity-100'],
-          !isOneseoWrite && ['cursor-not-allowed'],
+          isButtonDisabled && 'disabled:pointer-events-auto disabled:cursor-not-allowed',
         ])}
         onClick={() => {
           if (!authInfo?.authReferrerType) {
