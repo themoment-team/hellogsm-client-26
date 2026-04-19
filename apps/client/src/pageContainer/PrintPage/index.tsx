@@ -15,11 +15,12 @@ interface PrintPageProps {
 }
 
 const ApplicationPage = ({ initialData, isPreview }: PrintPageProps) => {
-  const { back } = useRouter();
+  const { push } = useRouter();
 
   const { data: oneseoPreview } = useGetMyOneseoPreview({
     enabled: isPreview,
     initialData: isPreview ? (initialData as PreviewOneseoType | undefined) : undefined,
+    staleTime: 0,
   });
   const { data: oneseoNormal } = useGetMyOneseo({
     enabled: !isPreview,
@@ -109,7 +110,7 @@ const ApplicationPage = ({ initialData, isPreview }: PrintPageProps) => {
                 'print:hidden',
               )}
             >
-              <Button variant="ghost" onClick={back}>
+              <Button variant="ghost" onClick={() => push('/register?step=4')}>
                 이전
               </Button>
               <Button variant="next" onClick={() => window.print()}>
