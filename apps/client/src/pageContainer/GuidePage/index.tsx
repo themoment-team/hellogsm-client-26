@@ -240,13 +240,13 @@ const GuidePage = ({ initialData, isOneseoWrite, editability }: GuideProps) => {
 
     if (data && data.step) return ['원서 이어서 작성하기', 'fill'];
 
-    if (editability?.oneseoEditStatus === 'REQUESTED')
-      return ['원서 수정 권한을 아직 받지 못했습니다.', 'submit'];
-
-    if (editability?.oneseoEditStatus === 'APPROVED') return ['원서 수정하기.', 'fill'];
-
     if (isTempOneseo && !isOneseoModifyRequestTime)
-      return ['9시부터 16시 이외에는 수정 권한 요청이 제한됩니다.', 'submit'];
+      return ['9시부터 16시 이외에는 수정 권한 요청이 제한됩니다', 'submit'];
+
+    if (editability?.oneseoEditStatus === 'REQUESTED')
+      return ['원서 수정 권한을 아직 받지 못했습니다', 'submit'];
+
+    if (editability?.oneseoEditStatus === 'APPROVED') return ['원서 수정하기', 'fill'];
 
     if (isTempOneseo) return ['원서 권한 수정 요청하기', 'outlineBlue'];
 
@@ -368,7 +368,7 @@ const GuidePage = ({ initialData, isOneseoWrite, editability }: GuideProps) => {
             push('/signup');
             return;
           }
-          if (isTempOneseo) {
+          if (isTempOneseo && editability?.oneseoEditStatus !== 'APPROVED') {
             setOneseoModifyRequestModal(true, () => postOneseoModify());
             return;
           }
