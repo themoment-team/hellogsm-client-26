@@ -1,14 +1,17 @@
 'use client';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 
 import {
+  useGetEditability,
   useGetMyAuthInfo,
   useGetMyMemberInfo,
   useGetMyOneseo,
   usePostOneseoModifyRequest,
 } from '@repo/api/hooks';
+import { oneseoQueryKeys } from '@repo/api/lib';
 import { useModalStore } from '@repo/store';
 import { EditabilityType, GetMyOneseoType } from '@repo/types';
 import { Button } from '@repo/ui/shadcn';
@@ -206,13 +209,18 @@ interface GuideProps {
   editability: EditabilityType | undefined;
 }
 
-const GuidePage = ({ initialData, isOneseoWrite, editability }: GuideProps) => {
+const GuidePage = ({ initialData, isOneseoWrite, editability: initialEditability }: GuideProps) => {
   const { setLoginRequiredModal, setOneseoModifyRequestModal } = useModalStore();
   const { data: authInfo } = useGetMyAuthInfo();
   const { data: memberInfo } = useGetMyMemberInfo();
+  const queryClient = useQueryClient();
 
   const { data } = useGetMyOneseo({
     initialData: initialData,
+  });
+
+  const { data: editability } = useGetEditability({
+    initialData: initialEditability,
   });
 
   const { push } = useRouter();
@@ -220,6 +228,7 @@ const GuidePage = ({ initialData, isOneseoWrite, editability }: GuideProps) => {
   const { mutate: postOneseoModify } = usePostOneseoModifyRequest({
     onSuccess: () => {
       setOneseoModifyRequestModal(false);
+      queryClient.invalidateQueries({ queryKey: oneseoQueryKeys.getEditability() });
       toast.success('원서 수정 권한 요청이 성공했습니다.');
     },
   });
