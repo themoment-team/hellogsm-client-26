@@ -99,8 +99,14 @@ export const useModalStore = create<ModalStore>((set) => ({
   setScoreCalculationCompleteModal: (isOpen, data = null, type = 'mock') => {
     set({ scoreCalculationCompleteModal: { isOpen, data, type } });
   },
-  setApplicationSubmitModal: (isOpen, type = 'client', isModify = false) => {
-    set({ applicationSubmitModal: { isOpen, type, isModify } });
+  setApplicationSubmitModal: (isOpen, type, isModify) => {
+    set((state) => ({
+      applicationSubmitModal: {
+        isOpen,
+        type: type ?? state.applicationSubmitModal.type,
+        isModify: isModify ?? state.applicationSubmitModal.isModify,
+      },
+    }));
   },
   setImageUploadSizeLimitModal: (isOpen) => {
     set({ imageUploadSizeLimitModal: { isOpen } });
