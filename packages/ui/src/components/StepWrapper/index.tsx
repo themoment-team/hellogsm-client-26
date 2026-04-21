@@ -49,9 +49,10 @@ interface StepWrapperProps {
   step: StepEnum;
   memberId?: number;
   type: 'client' | 'admin';
+  isModifyApproved?: boolean;
 }
 
-const StepWrapper = ({ data, step, info, memberId, type }: StepWrapperProps) => {
+const StepWrapper = ({ data, step, info, memberId, type, isModifyApproved }: StepWrapperProps) => {
   const { setScoreCalculationCompleteModal, setApplicationSubmitModal } = useModalStore();
 
   const step1UseForm = useForm<Step1FormType>({
@@ -462,6 +463,7 @@ const StepWrapper = ({ data, step, info, memberId, type }: StepWrapperProps) => 
           handleOneseoSubmitButtonClick={handleOneseoSubmitButtonClick}
           handleTemporarySaveButtonClick={handleTemporarySaveButtonClick}
           handleStepError={handleStepError}
+          isModifyApproved={isModifyApproved}
         />
       ) : (
         <EditBar

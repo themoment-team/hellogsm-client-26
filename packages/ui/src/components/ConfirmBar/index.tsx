@@ -21,6 +21,7 @@ interface ConfirmBarProps {
   isStep4Success: boolean;
   isStep4: boolean;
   handleStepError: (step: StepEnum) => void;
+  isModifyApproved?: boolean;
 }
 
 interface FinalSubmitDialogProps {
@@ -28,6 +29,7 @@ interface FinalSubmitDialogProps {
   isStep4: boolean;
   handleOneseoSubmitButtonClick: () => void;
   onInvalidClick: () => void;
+  isModifyApproved?: boolean;
 }
 
 const FinalSubmitDialog = ({
@@ -35,15 +37,18 @@ const FinalSubmitDialog = ({
   isStep4,
   handleOneseoSubmitButtonClick,
   onInvalidClick,
+  isModifyApproved,
 }: FinalSubmitDialogProps) => {
   const canOpen = isStep4 && isStep4Success;
+  const buttonText = isModifyApproved ? '원서 수정' : '원서 최종 제출';
+
   return (
     <Dialog>
       {canOpen ? (
         <DialogTrigger asChild>
           <Button variant="next" className={cn('flex', 'gap-2', 'items-center')}>
             <MouseIcon />
-            <p>원서 최종 제출</p>
+            <p>{buttonText}</p>
           </Button>
         </DialogTrigger>
       ) : (
@@ -54,14 +59,18 @@ const FinalSubmitDialog = ({
           aria-disabled
         >
           <MouseIcon />
-          <p>원서 최종 제출</p>
+          <p>{buttonText}</p>
         </Button>
       )}
       <DialogContent className={cn('bg-white')} showCloseIcon={false}>
         <DialogHeader>
-          <DialogTitle>원서를 최종 제출 하시겠습니까?</DialogTitle>
+          <DialogTitle>
+            {isModifyApproved ? '원서를 수정 하시겠습니까?' : '원서를 최종 제출 하시겠습니까?'}
+          </DialogTitle>
           <DialogDescription>
-            제출 후에는 정보를 수정할 수 없으니, 모든 정보가 맞는지 확인 후 제출해주세요.
+            {isModifyApproved
+              ? '수정 후에는 정보를 다시 수정할 수 없으니, 모든 정보가 맞는지 확인 후 수정해주세요.'
+              : '제출 후에는 정보를 수정할 수 없으니, 모든 정보가 맞는지 확인 후 제출해주세요.'}
           </DialogDescription>
         </DialogHeader>
         <div className={cn('flex', 'justify-end', 'gap-2')}>
@@ -88,7 +97,7 @@ const FinalSubmitDialog = ({
               disabled={!isStep4Success}
               onClick={handleOneseoSubmitButtonClick}
             >
-              최종 제출
+              {isModifyApproved ? '수정 완료' : '최종 제출'}
             </button>
           </DialogClose>
         </div>
@@ -103,6 +112,7 @@ const ConfirmBar = ({
   isStep4Success,
   isStep4,
   handleStepError,
+  isModifyApproved,
 }: ConfirmBarProps) => {
   const handleCheckErrorStepFour = () => {
     handleStepError(StepEnum.FOUR);
@@ -129,9 +139,15 @@ const ConfirmBar = ({
     >
       <div>
         <span className={cn('text-body1', 'text-blue-600')}>
-          📎 최종 제출 후에는 정보를 수정할 수 없습니다. &nbsp;
+          📎{' '}
+          {isModifyApproved
+            ? '원서 제출 기간 이후에는 정보를 수정할 수 없습니다.'
+            : '최종 제출 후에는 정보를 수정할 수 없습니다.'}
+          &nbsp;
         </span>
-        <span className={cn('text-body1', 'text-slate-900')}>정확히 입력 후 제출해주세요!</span>
+        <span className={cn('text-body1', 'text-slate-900')}>
+          정확히 입력 후 {isModifyApproved ? '수정' : '제출'}해주세요!
+        </span>
       </div>
       <div className={cn('flex', 'items-center', 'gap-[0.5rem]')}>
         <Button onClick={handleTemporarySaveButtonClick} variant="outline">
@@ -142,6 +158,7 @@ const ConfirmBar = ({
           isStep4={isStep4}
           isStep4Success={isStep4Success}
           onInvalidClick={handleCheckErrorStepFour}
+          isModifyApproved={isModifyApproved}
         />
       </div>
     </div>
