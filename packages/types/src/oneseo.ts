@@ -121,7 +121,7 @@ export interface PrivacyDetailType {
   profileImg: string;
 }
 
-export interface PostOneseoType {
+export interface BaseOneseoApiType {
   guardianName?: string;
   guardianPhoneNumber?: string;
   relationshipWithGuardian?: string;
@@ -142,6 +142,9 @@ export interface PostOneseoType {
   screening?: ScreeningValueEnum;
   step?: number;
 }
+
+export type PostOneseoType = BaseOneseoApiType;
+export type PutOneseoType = BaseOneseoApiType;
 
 export interface GeneralSubjectsScoreDetailType {
   score1_1: number | null;

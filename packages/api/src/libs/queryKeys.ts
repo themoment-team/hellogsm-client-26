@@ -7,6 +7,7 @@ export const exampleQueryKeys = {
 export const oneseoQueryKeys = {
   postTempStorage: () => ['post', 'temp', 'oneseo', 'storage'],
   postMyOneseo: () => ['post', 'my', 'oneseo'],
+  putMyOneseo: () => ['put', 'my', 'oneseo'],
   postMockScore: (type: GraduationType) => ['mock', 'oneseo', 'score', type],
   putOneseoByMemberId: (memberId: number) => ['put', 'oneseo', memberId],
   postImage: () => ['post', 'certification', 'image'],

@@ -69,7 +69,7 @@ const FinalSubmitDialog = ({
           </DialogTitle>
           <DialogDescription>
             {isModifyApproved
-              ? '수정 후에는 정보를 다시 수정할 수 없으니, 모든 정보가 맞는지 확인 후 수정해주세요.'
+              ? '원서 수정은 관리자 승인 후에만 가능합니다. 추후에 다시 수정하기 어려울 수 있으니, 모든 정보가 맞는지 확인하신 후 수정해주세요.'
               : '제출 후에는 정보를 수정할 수 없으니, 모든 정보가 맞는지 확인 후 제출해주세요.'}
           </DialogDescription>
         </DialogHeader>

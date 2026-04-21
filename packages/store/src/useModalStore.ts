@@ -28,7 +28,7 @@ const createInitialClientModals = (): ClientModals => ({
 const createInitialSharedModals = (): SharedModals => ({
   systemInspectionModal: { isOpen: false },
   scoreCalculationCompleteModal: { isOpen: false, data: null, type: 'mock' },
-  applicationSubmitModal: { isOpen: false, type: 'client' },
+  applicationSubmitModal: { isOpen: false, type: 'client', isModify: false },
   imageUploadSizeLimitModal: { isOpen: false },
 });
 
@@ -99,8 +99,8 @@ export const useModalStore = create<ModalStore>((set) => ({
   setScoreCalculationCompleteModal: (isOpen, data = null, type = 'mock') => {
     set({ scoreCalculationCompleteModal: { isOpen, data, type } });
   },
-  setApplicationSubmitModal: (isOpen, type = 'client') => {
-    set({ applicationSubmitModal: { isOpen, type } });
+  setApplicationSubmitModal: (isOpen, type = 'client', isModify = false) => {
+    set({ applicationSubmitModal: { isOpen, type, isModify } });
   },
   setImageUploadSizeLimitModal: (isOpen) => {
     set({ imageUploadSizeLimitModal: { isOpen } });

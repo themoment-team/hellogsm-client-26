@@ -23,6 +23,7 @@ export interface ScoreModal extends SimpleModal {
 
 export interface ApplicationModal extends SimpleModal {
   type: 'client' | 'admin';
+  isModify: boolean;
 }
 
 export interface AdminModals {
@@ -81,7 +82,7 @@ export interface ModalActions {
     data?: MockScoreType | null,
     type?: 'score' | 'mock',
   ) => void;
-  setApplicationSubmitModal: (isOpen: boolean, type?: 'client' | 'admin') => void;
+  setApplicationSubmitModal: (isOpen: boolean, type?: 'client' | 'admin', isModify?: boolean) => void;
   setImageUploadSizeLimitModal: (isOpen: boolean) => void;
 }
 

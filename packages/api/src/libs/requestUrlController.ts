@@ -22,6 +22,7 @@ export const oneseoUrl = {
   getMyOneseo: () => '/oneseo/v3/oneseo/me',
   postTempStorage: (step: number) => `/oneseo/v3/temp-storage?step=${step}`,
   postMyOneseo: () => '/oneseo/v3/oneseo/me',
+  putMyOneseo: () => '/oneseo/v3/oneseo/me',
   postImage: () => '/oneseo/v3/image',
   getOneseoByMemberId: (memberId: number) => `/oneseo/v3/oneseo/${memberId}`,
   putOneseoByMemberId: (memberId: number) => `/oneseo/v3/oneseo/${memberId}`,

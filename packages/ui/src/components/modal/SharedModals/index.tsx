@@ -86,7 +86,9 @@ const SharedModals = () => {
         <AlertDialogContent className={cn('w-[400px]')}>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              {applicationSubmitModal.type === 'client' ? (
+              {applicationSubmitModal.isModify || applicationSubmitModal.type === 'admin' ? (
+                <>원서가 수정되었습니다.</>
+              ) : (
                 <>
                   원서가 제출되었습니다.
                   <br />
@@ -94,8 +96,6 @@ const SharedModals = () => {
                   <br />
                   062-949-6842(교무실)로 연락주세요.
                 </>
-              ) : (
-                <>원서가 수정되었습니다.</>
               )}
             </AlertDialogTitle>
           </AlertDialogHeader>

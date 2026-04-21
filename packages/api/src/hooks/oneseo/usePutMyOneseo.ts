@@ -5,12 +5,11 @@ import { PutOneseoType } from '@repo/types';
 
 import { oneseoQueryKeys, oneseoUrl, put } from '../../libs';
 
-export const usePutOneseoByMemberId = (
-  memberId: number,
+export const usePutMyOneseo = (
   options?: UseMutationOptions<unknown, AxiosError, PutOneseoType>,
 ) =>
   useMutation({
-    mutationKey: oneseoQueryKeys.putOneseoByMemberId(memberId),
-    mutationFn: (data: PutOneseoType) => put(oneseoUrl.putOneseoByMemberId(memberId), data),
+    mutationKey: oneseoQueryKeys.putMyOneseo(),
+    mutationFn: (data: PutOneseoType) => put(oneseoUrl.putMyOneseo(), data),
     ...options,
   });

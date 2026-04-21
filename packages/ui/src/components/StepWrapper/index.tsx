@@ -12,6 +12,7 @@ import {
   usePostMockScore,
   usePostMyOneseo,
   usePostTempStorage,
+  usePutMyOneseo,
   usePutOneseoByMemberId,
 } from '@repo/api/hooks';
 import { ARTS_PHYSICAL_SUBJECTS, GENERAL_SUBJECTS } from '@repo/constants';
@@ -181,6 +182,10 @@ const StepWrapper = ({ data, step, info, memberId, type, isModifyApproved }: Ste
     onSuccess: () => setApplicationSubmitModal(true, type),
   });
 
+  const { mutate: modifyMyOneseo } = usePutMyOneseo({
+    onSuccess: () => setApplicationSubmitModal(true, type, isModifyApproved),
+  });
+
   const { mutate: putOneseoByMemberId } = usePutOneseoByMemberId(memberId!, {
     onSuccess: () => setApplicationSubmitModal(true, type),
   });
@@ -309,7 +314,11 @@ const StepWrapper = ({ data, step, info, memberId, type, isModifyApproved }: Ste
   const handleOneseoSubmitButtonClick = () => {
     const body = getOneseo();
 
-    postMyOneseo(body);
+    if (isModifyApproved) {
+      modifyMyOneseo(body);
+    } else {
+      postMyOneseo(body);
+    }
   };
 
   const handleTemporarySaveButtonClick = () => {
