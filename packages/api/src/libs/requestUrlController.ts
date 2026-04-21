@@ -42,6 +42,7 @@ export const oneseoUrl = {
   getAdmissionTickets: () => '/oneseo/v3/admission-tickets',
   getEditability: () => '/oneseo/v3/editability',
   postExcel: () => '/oneseo/v3/excel',
+  patchPersonalInfo: () => '/oneseo/v3/personal-info/me',
 } as const;
 
 export const memberUrl = {
