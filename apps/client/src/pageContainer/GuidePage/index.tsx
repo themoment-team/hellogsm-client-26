@@ -206,10 +206,10 @@ const List = ({
 interface GuideProps {
   initialData: GetMyOneseoType | undefined;
   isOneseoWrite: boolean;
-  editability: EditabilityType | undefined;
+  initialEditability: EditabilityType | undefined;
 }
 
-const GuidePage = ({ initialData, isOneseoWrite, editability: initialEditability }: GuideProps) => {
+const GuidePage = ({ initialData, isOneseoWrite, initialEditability }: GuideProps) => {
   const { setLoginRequiredModal, setOneseoModifyRequestModal } = useModalStore();
   const { data: authInfo } = useGetMyAuthInfo();
   const { data: memberInfo } = useGetMyMemberInfo();
