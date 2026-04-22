@@ -216,7 +216,7 @@ const GuidePage = ({ initialData, isOneseoWrite, editability: initialEditability
   const queryClient = useQueryClient();
 
   const { data } = useGetMyOneseo({
-    initialData: initialData,
+    initialData,
   });
 
   const { data: editability } = useGetEditability({
@@ -242,30 +242,30 @@ const GuidePage = ({ initialData, isOneseoWrite, editability: initialEditability
     return hour >= 9 && hour < 16;
   })();
 
-  const [buttonText, buttonVariant]: [string, 'submit' | 'fill' | 'outlineBlue'] = (() => {
-    if (!isOneseoWrite) return ['원서 작성을 할 수 없는 기간입니다.', 'submit'];
+  const [buttonText, buttonVariant, isButtonDisabled]: [
+    string,
+    'submit' | 'fill' | 'outlineBlue' | 'reverseFill',
+    boolean,
+  ] = (() => {
+    if (!data) return ['원서 작성하기', 'fill', false];
 
-    if (!data) return ['원서 작성하기', 'fill'];
+    if (!isOneseoWrite) return ['최종제출을 이미 완료하였습니다.', 'reverseFill', true];
 
-    if (data && data.step) return ['원서 이어서 작성하기', 'fill'];
+    if (data.step && editability?.oneseoEditStatus === 'APPROVED')
+      return ['원서 이어서 수정하기', 'fill', false];
 
-    if (isTempOneseo && !isOneseoModifyRequestTime)
-      return ['9시부터 16시 이외에는 수정 권한 요청이 제한됩니다', 'submit'];
+    if (data.step) return ['원서 이어서 작성하기', 'fill', false];
 
     if (editability?.oneseoEditStatus === 'REQUESTED')
-      return ['원서 수정 권한을 아직 받지 못했습니다', 'submit'];
+      return ['원서 수정 권한을 아직 받지 못했습니다', 'submit', true];
 
-    if (editability?.oneseoEditStatus === 'APPROVED') return ['원서 수정하기', 'fill'];
+    if (editability?.oneseoEditStatus === 'APPROVED') return ['원서 수정하기', 'fill', false];
 
-    if (isTempOneseo) return ['원서 권한 수정 요청하기', 'outlineBlue'];
+    if (!isOneseoModifyRequestTime)
+      return ['9시부터 16시 이외에는 수정 권한 요청이 제한됩니다', 'submit', true];
 
-    return ['원서 작성하기', 'fill'];
+    return ['원서 권한 수정 요청하기', 'outlineBlue', false];
   })();
-
-  const isButtonDisabled =
-    !isOneseoWrite ||
-    editability?.oneseoEditStatus === 'REQUESTED' ||
-    (isTempOneseo && !isOneseoModifyRequestTime);
 
   return (
     <div className={cn('w-full', 'flex', 'flex-col', 'justify-center', 'items-center')}>
@@ -365,10 +365,12 @@ const GuidePage = ({ initialData, isOneseoWrite, editability: initialEditability
           'mb-[10rem]',
           'text-[1.25rem]/[1.75rem]',
           'rounded-[0.75rem]',
-          isTempOneseo && ['opacity-100'],
+          isTempOneseo && 'opacity-100',
           isButtonDisabled && 'disabled:pointer-events-auto disabled:cursor-not-allowed',
         ])}
         onClick={() => {
+          if (isButtonDisabled) return;
+
           if (!authInfo?.authReferrerType) {
             setLoginRequiredModal(true);
             return;
