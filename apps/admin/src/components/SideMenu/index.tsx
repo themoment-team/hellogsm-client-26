@@ -69,7 +69,7 @@ const ManageTypeArray = [
     value: 'ALL',
   },
   {
-    borderStyle: 'border-blue-500',
+    borderStyle: 'border-[#4DC7FC]',
     textStyle: 'text-blue-900',
     type: '원서 수정 요청 관리',
     value: 'REQUEST',
