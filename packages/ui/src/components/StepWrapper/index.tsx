@@ -346,7 +346,9 @@ const StepWrapper = ({ data, step, info, memberId, type }: StepWrapperProps) => 
       schoolAddress: schoolAddress ?? null,
       studentNumber: studentNumber ?? null,
       graduationDate:
-        graduationDate && graduationDate.split('-')[0] !== '0000' ? graduationDate : undefined,
+        graduationDate && graduationDate.split('-')[0] !== '0000'
+          ? graduationDate
+          : undefined,
       guardianName: guardianName!,
       guardianPhoneNumber: guardianPhoneNumber!,
       relationshipWithGuardian:
@@ -447,7 +449,6 @@ const StepWrapper = ({ data, step, info, memberId, type }: StepWrapperProps) => 
       onSuccess: () => push('/print?preview=true'),
     });
   };
-
   useEffect(() => {
     if (errorStep !== step) clearStepError();
 
