@@ -365,8 +365,8 @@ const GuidePage = ({ initialData, isOneseoWrite, initialEditability }: GuideProp
           'mb-[10rem]',
           'text-[1.25rem]/[1.75rem]',
           'rounded-[0.75rem]',
-          isTempOneseo && 'opacity-100',
-          isButtonDisabled && 'disabled:pointer-events-auto disabled:cursor-not-allowed',
+          isTempOneseo && ['opacity-100'],
+          isButtonDisabled && ['cursor-not-allowed'],
         ])}
         onClick={() => {
           if (isButtonDisabled) return;
