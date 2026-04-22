@@ -184,6 +184,7 @@ const StepWrapper = ({ data, step, info, memberId, type, isModifyApproved }: Ste
   const { mutate: postMyOneseo } = usePostMyOneseo({
     onSuccess: () => {
       setApplicationSubmitModal(true, type);
+      queryClient.invalidateQueries({ queryKey: oneseoQueryKeys.getMyOneseo() });
       queryClient.invalidateQueries({ queryKey: oneseoQueryKeys.getEditability() });
     },
   });
@@ -191,6 +192,7 @@ const StepWrapper = ({ data, step, info, memberId, type, isModifyApproved }: Ste
   const { mutate: modifyMyOneseo } = usePutMyOneseo({
     onSuccess: () => {
       setApplicationSubmitModal(true, type, isModifyApproved);
+      queryClient.invalidateQueries({ queryKey: oneseoQueryKeys.getMyOneseo() });
       queryClient.invalidateQueries({ queryKey: oneseoQueryKeys.getEditability() });
     },
   });
@@ -198,6 +200,7 @@ const StepWrapper = ({ data, step, info, memberId, type, isModifyApproved }: Ste
   const { mutate: putOneseoByMemberId } = usePutOneseoByMemberId(memberId!, {
     onSuccess: () => {
       setApplicationSubmitModal(true, type, true);
+      queryClient.invalidateQueries({ queryKey: oneseoQueryKeys.getMyOneseo() });
       queryClient.invalidateQueries({ queryKey: oneseoQueryKeys.getEditability() });
     },
   });

@@ -228,6 +228,7 @@ const GuidePage = ({ initialData, isOneseoWrite, initialEditability }: GuideProp
   const { mutate: postOneseoModify } = usePostOneseoModifyRequest({
     onSuccess: () => {
       setOneseoModifyRequestModal(false);
+      queryClient.invalidateQueries({ queryKey: oneseoQueryKeys.getMyOneseo() });
       queryClient.invalidateQueries({ queryKey: oneseoQueryKeys.getEditability() });
       toast.success('원서 수정 권한 요청이 성공했습니다.');
     },
