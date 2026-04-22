@@ -189,6 +189,8 @@ export interface OneseoStatusType {
   oneseo: GetMyOneseoType;
 }
 
+export type OneseoEditStatusType = 'NONE' | 'REQUESTED' | 'APPROVED';
+
 export interface OneseoType {
   memberId: number;
   submitCode: string | null;
@@ -222,8 +224,6 @@ export interface TicketType {
   oneseoSubmitCode: string;
   examinationNumber: string;
 }
-
-export type OneseoEditStatusType = 'NONE' | 'REQUESTED' | 'APPROVED';
 
 export interface EditabilityType {
   oneseoEditability: boolean;
