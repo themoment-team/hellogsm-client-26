@@ -19,6 +19,13 @@ const achievementSchema = (minLength: number) =>
     z.array(z.number().refine((value) => MAX_SCORE >= value && value >= MIN_SCORE)).min(minLength),
   );
 
+const artsPhysicalAchievementSchema = (minLength: number) =>
+  z.nullable(
+    z
+      .array(z.nullable(z.number().refine((value) => MAX_SCORE >= value && value >= MIN_SCORE)))
+      .min(minLength),
+  );
+
 const nonSubjectSchema = z.nullable(
   z.array(z.number().refine((value) => !isNaN(value) && value >= 0)),
 );
@@ -67,7 +74,7 @@ export const step4Schema = z
           });
         }),
     ),
-    artsPhysicalAchievement: achievementSchema(ARTS_PHYSICAL_SUBJECTS.length * 3),
+    artsPhysicalAchievement: artsPhysicalAchievementSchema(ARTS_PHYSICAL_SUBJECTS.length * 3),
     absentDays: nonSubjectSchema,
     attendanceDays: nonSubjectSchema,
     volunteerTime: nonSubjectSchema,
