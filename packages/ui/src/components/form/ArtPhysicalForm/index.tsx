@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { UseFormSetValue, UseFormWatch } from 'react-hook-form';
 
 import {
@@ -67,7 +67,7 @@ const ArtPhysicalForm = ({
     isFreeGrade,
   });
 
-  const getFreeSemesterIndices = (semester: FreeSemesterValueEnum | null) => {
+  const getFreeSemesterIndices = useCallback((semester: FreeSemesterValueEnum | null) => {
     if (!semester) return [];
     const semesterParts = semester.split('-');
     const grade = Number(semesterParts[0]);
@@ -80,7 +80,7 @@ const ArtPhysicalForm = ({
 
     if (semesterNumber < 0) return []; // 유효하지 않은 학기
     return [semesterNumber * 3, semesterNumber * 3 + 1, semesterNumber * 3 + 2];
-  };
+  }, [isGraduate]);
 
   const disabledIndices = isFreeSemester ? getFreeSemesterIndices(freeSemester) : [];
 
