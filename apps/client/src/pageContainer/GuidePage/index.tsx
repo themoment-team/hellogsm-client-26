@@ -234,7 +234,7 @@ const GuidePage = ({ initialData, isOneseoWrite, initialEditability }: GuideProp
     },
   });
 
-  const isTempOneseo = data && !data.step;
+  const isSubmittedOneseo = data && !data.step;
 
   const isOneseoModifyRequestTime = (() => {
     const now = new Date();
@@ -248,11 +248,9 @@ const GuidePage = ({ initialData, isOneseoWrite, initialEditability }: GuideProp
     'submit' | 'fill' | 'outlineBlue' | 'reverseFill',
     boolean,
   ] = (() => {
-    if (!isOneseoWrite && data) return ['최종제출을 이미 완료하였습니다.', 'reverseFill', true];
-
     if (!isOneseoWrite) return ['원서 접수 기간이 아닙니다.', 'submit', true];
 
-    if (!isOneseoModifyRequestTime && editability?.oneseoEditStatus)
+    if (!isOneseoModifyRequestTime && editability?.oneseoEditStatus === 'NONE')
       return ['9시부터 16시 이외에는 수정 권한 요청이 제한됩니다', 'submit', true];
 
     if (!data) return ['원서 작성하기', 'fill', false];
@@ -368,7 +366,7 @@ const GuidePage = ({ initialData, isOneseoWrite, initialEditability }: GuideProp
           'mb-[10rem]',
           'text-[1.25rem]/[1.75rem]',
           'rounded-[0.75rem]',
-          isTempOneseo && ['opacity-100'],
+          isSubmittedOneseo && ['opacity-100'],
           isButtonDisabled && ['cursor-not-allowed'],
         ])}
         onClick={() => {
@@ -382,7 +380,7 @@ const GuidePage = ({ initialData, isOneseoWrite, initialEditability }: GuideProp
             push('/signup');
             return;
           }
-          if (isTempOneseo && editability?.oneseoEditStatus !== 'APPROVED') {
+          if (isSubmittedOneseo && editability?.oneseoEditStatus !== 'APPROVED') {
             setOneseoModifyRequestModal(true, () => postOneseoModify());
             return;
           }
