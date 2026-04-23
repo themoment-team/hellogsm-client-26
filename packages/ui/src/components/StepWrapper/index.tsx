@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 
 import {
   usePatchPersonalInfo,
+  usePatchPersonalInfoByMemberId,
   usePostMockScore,
   usePostMyOneseo,
   usePostTempStorage,
@@ -179,6 +180,7 @@ const StepWrapper = ({ data, step, info, memberId, type }: StepWrapperProps) => 
   };
 
   const { mutateAsync: patchPersonalInfo } = usePatchPersonalInfo();
+  const { mutateAsync: patchPersonalInfoByMemberId } = usePatchPersonalInfoByMemberId(memberId ?? 0);
 
   const { mutate: postMyOneseo } = usePostMyOneseo({
     onSuccess: () => setApplicationSubmitModal(true, type),
@@ -363,7 +365,7 @@ const StepWrapper = ({ data, step, info, memberId, type }: StepWrapperProps) => 
   };
 
   const handleOneseoEditButtonClick = async () => {
-    await patchPersonalInfo(getPersonalInfo());
+    await patchPersonalInfoByMemberId(getPersonalInfo());
     putOneseoByMemberId(getOneseo());
   };
 
