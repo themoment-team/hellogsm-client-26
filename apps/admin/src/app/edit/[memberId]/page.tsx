@@ -5,7 +5,6 @@ import { ComputerRecommendedPage, StepWrapper } from '@repo/ui/components';
 
 import { getOneseoByMemberId } from '@/app/apis';
 
-
 interface EditProps {
   params: { memberId: string };
   searchParams?: { [key: string]: string | undefined };

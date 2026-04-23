@@ -7,7 +7,6 @@ import { cn } from '@repo/utils';
 
 import { QuestionMark } from '@/assets';
 
-
 const ApplicantTH = () => {
   const defaultStyle = cn('font-semibold', 'text-zinc-500');
 

@@ -158,10 +158,7 @@ const Step1Register = ({
             fullWidth={true}
           >
             <div className={cn('flex', 'w-full', 'justify-between')}>
-              <Select
-                value={birthYear || ''}
-                onValueChange={handleBirthYearChange}
-              >
+              <Select value={birthYear || ''} onValueChange={handleBirthYearChange}>
                 <SelectTrigger
                   className={cn('w-[9.3785rem]', showError && errors.birth && '!border-red-600')}
                 >

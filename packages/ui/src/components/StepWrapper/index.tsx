@@ -65,7 +65,10 @@ const StepWrapper = ({ data, step, info, memberId, type }: StepWrapperProps) => 
       profileImg: data?.privacyDetail.profileImg,
       name: type === 'client' ? info?.name : data?.privacyDetail.name,
       birth: type === 'client' ? info?.birth : data?.privacyDetail.birth,
-      sex: (type === 'client' ? info?.sex : data?.privacyDetail.sex) as 'MALE' | 'FEMALE' | undefined,
+      sex: (type === 'client' ? info?.sex : data?.privacyDetail.sex) as
+        | 'MALE'
+        | 'FEMALE'
+        | undefined,
       address: data?.privacyDetail.address,
       detailAddress: data?.privacyDetail.detailAddress,
     },
@@ -180,7 +183,9 @@ const StepWrapper = ({ data, step, info, memberId, type }: StepWrapperProps) => 
   };
 
   const { mutateAsync: patchPersonalInfo } = usePatchPersonalInfo();
-  const { mutateAsync: patchPersonalInfoByMemberId } = usePatchPersonalInfoByMemberId(memberId ?? 0);
+  const { mutateAsync: patchPersonalInfoByMemberId } = usePatchPersonalInfoByMemberId(
+    memberId ?? 0,
+  );
 
   const { mutate: postMyOneseo } = usePostMyOneseo({
     onSuccess: () => setApplicationSubmitModal(true, type),
@@ -339,9 +344,7 @@ const StepWrapper = ({ data, step, info, memberId, type }: StepWrapperProps) => 
       schoolAddress: schoolAddress ?? null,
       studentNumber: studentNumber ?? null,
       graduationDate:
-        graduationDate && graduationDate.split('-')[0] !== '0000'
-          ? graduationDate
-          : undefined,
+        graduationDate && graduationDate.split('-')[0] !== '0000' ? graduationDate : undefined,
       guardianName: guardianName!,
       guardianPhoneNumber: guardianPhoneNumber!,
       relationshipWithGuardian:
