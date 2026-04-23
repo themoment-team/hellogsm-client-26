@@ -426,9 +426,13 @@ const StepWrapper = ({ data, step, info, memberId, type }: StepWrapperProps) => 
       step !== StepEnum.ONE &&
       isClient &&
       step1UseForm.formState.isDirty &&
-      isStepSuccess[1]
+      isStepSuccess[1] &&
+      isStepSuccess[2] &&
+      isStepSuccess[3]
     ) {
-      patchPersonalInfo(getPersonalInfo());
+      patchPersonalInfo(getPersonalInfo()).catch(() => {
+        toast.error('인적사항 자동 저장에 실패하였습니다.');
+      });
     }
   }, [step]);
 
