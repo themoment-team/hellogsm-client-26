@@ -233,7 +233,7 @@ export interface PatchPersonalInfoType {
   address: string;
   detailAddress: string;
   profileImg: string;
-  graduationType: string;
+  graduationType: GraduationTypeValueEnum;
   schoolName?: string | null;
   schoolAddress?: string | null;
   studentNumber?: string | null;
