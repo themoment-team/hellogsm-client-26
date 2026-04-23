@@ -85,11 +85,12 @@ const ArtPhysicalForm = ({
   const disabledIndices = isFreeSemester ? getFreeSemesterIndices(freeSemester) : [];
 
   useEffect(() => {
+    if (!isFreeSemester) return;
     const indices = getFreeSemesterIndices(freeSemester);
     indices.forEach((index) => {
       setValue(`artsPhysicalAchievement.${index}`, null);
     });
-  }, [freeSemester, setValue]);
+  }, [freeSemester, isFreeSemester, setValue, getFreeSemesterIndices]);
 
   return (
     <div className={cn('flex', 'flex-col', 'w-full')}>
