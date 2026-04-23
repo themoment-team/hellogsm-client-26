@@ -43,6 +43,7 @@ export const oneseoUrl = {
   getEditability: () => '/oneseo/v3/editability',
   postExcel: () => '/oneseo/v3/excel',
   patchPersonalInfo: () => '/oneseo/v3/personal-info/me',
+  patchPersonalInfoByMemberId: (memberId: number) => `/oneseo/v3/personal-info/${memberId}`,
 } as const;
 
 export const memberUrl = {
