@@ -275,7 +275,7 @@ const ApplicantTR = ({
                 variant={oneseoEditStatus === 'APPROVED' ? 'subtitle' : 'outline'}
                 disabled={oneseoEditStatus === 'APPROVED'}
               >
-                {oneseoEditStatus === 'REQUESTED' ? '원서 수정 승인' : '수정 요청 승인'}
+                {oneseoEditStatus === 'REQUESTED' ? '원서 수정 승인' : '승인 완료'}
               </Button>
             ) : (
               <Button onClick={handleOneseoEdit} variant="outline">
