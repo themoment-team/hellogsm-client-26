@@ -1,7 +1,7 @@
 import { GraduationType } from '@repo/types';
 
 const addParameters = (key: string, value: number | string | boolean | undefined) => {
-  if (value === undefined || value === '') {
+  if (value === undefined || value === null || value === '') {
     return '';
   }
 
