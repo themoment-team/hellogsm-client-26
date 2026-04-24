@@ -33,9 +33,9 @@ export const oneseoUrl = {
     screeningTag?: string,
     isSubmitted?: string,
     keyword?: string,
-    requested?: boolean,
+    status?: string,
   ) =>
-    `/oneseo/v3/oneseo/search?page=${page}&size=${size}&testResultTag=${testResultTag}${addParameters('screeningTag', screeningTag)}${addParameters('isSubmitted', isSubmitted)}${addParameters('keyword', keyword)}${addParameters('requested', requested)}`,
+    `/oneseo/v3/oneseo/search?page=${page}&size=${size}&testResultTag=${testResultTag}${addParameters('screeningTag', screeningTag)}${addParameters('isSubmitted', isSubmitted)}${addParameters('keyword', keyword)}${addParameters('status', status)}`,
   getExcel: () => '/oneseo/v3/excel',
   patchArrivedStatus: (memberId: number) => `/oneseo/v3/arrived-status/${memberId}`,
   patchAgreeDocStatus: (memberId: number) => `/oneseo/v3/entrance-intention/${memberId}`,

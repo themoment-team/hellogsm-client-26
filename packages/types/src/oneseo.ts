@@ -191,6 +191,8 @@ export interface OneseoStatusType {
 
 export type OneseoEditStatusType = 'NONE' | 'REQUESTED' | 'APPROVED';
 
+export type OneseoEditStatusTag = 'ANY_EDIT' | 'REQUESTED' | 'APPROVED';
+
 export interface OneseoType {
   memberId: number;
   submitCode: string | null;

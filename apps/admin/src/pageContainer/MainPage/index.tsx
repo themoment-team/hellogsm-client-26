@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 import { useGetEditability, useGetOneseoList } from '@repo/api/hooks';
 import { useDebounce } from '@repo/hooks';
-import { OneseoListType, ScreeningType, YesNo } from '@repo/types';
+import { OneseoEditStatusTag, OneseoListType, ScreeningType, YesNo } from '@repo/types';
 import {
   Pagination,
   PaginationContent,
@@ -52,6 +52,7 @@ const MainPage = ({
   const [testResultTag, setTestResultTag] = useState<SideBarType>(DEFAULT_TEST_RESULT_TAG);
   const [isSubmitted, setIsSubmitted] = useState<YesNo | string>('');
   const [screeningTag, setScreeningTag] = useState<ScreeningType | string>('');
+  const [requested, setRequested] = useState<OneseoEditStatusTag>('ANY_EDIT');
   const [page, setPage] = useState<number>(0);
 
   const debouncedKeyword = useDebounce(keyword, 1000);
@@ -64,7 +65,7 @@ const MainPage = ({
       screeningTag: screeningTag,
       isSubmitted: isSubmitted,
       keyword: debouncedKeyword,
-      requested: testResultTag === 'REQUEST' ? true : undefined,
+      status: testResultTag === 'REQUEST' ? requested : undefined,
     },
     {
       initialData: initialData,
@@ -86,11 +87,11 @@ const MainPage = ({
 
   useEffect(() => {
     oneseoRefetch();
-  }, [debouncedKeyword, page, testResultTag, isSubmitted, screeningTag]);
+  }, [debouncedKeyword, page, testResultTag, isSubmitted, screeningTag, requested]);
 
   useEffect(() => {
     setPage(0);
-  }, [debouncedKeyword, testResultTag, isSubmitted, screeningTag]);
+  }, [debouncedKeyword, testResultTag, isSubmitted, screeningTag, requested]);
   // 필터 조건이 변경 되었을때 1번부터 다시 시작
 
   return (
@@ -121,6 +122,9 @@ const MainPage = ({
             setKeyword={setKeyword}
             isSubmitted={isSubmitted}
             setIsSubmitted={setIsSubmitted}
+            requested={requested}
+            setRequested={setRequested}
+            testResultTag={testResultTag}
             isAfterFirstResults={isAfterFirstResults}
             isAfterSecondResults={isAfterSecondResults}
           />
