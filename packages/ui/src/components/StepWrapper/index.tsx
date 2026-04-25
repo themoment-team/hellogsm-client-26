@@ -4,11 +4,13 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 import {
+  usePatchPersonalInfo,
+  usePatchPersonalInfoByMemberId,
   usePostMockScore,
   usePostMyOneseo,
   usePostTempStorage,
@@ -23,6 +25,7 @@ import {
   LiberalSystemValueEnum,
   MiddleSchoolAchievementType,
   MyMemberInfoType,
+  PatchPersonalInfoType,
   PostOneseoType,
   RelationshipWithGuardianValueEnum,
   Step1FormType,
@@ -60,6 +63,12 @@ const StepWrapper = ({ data, step, info, memberId, type }: StepWrapperProps) => 
     resolver: zodResolver(step1Schema),
     defaultValues: {
       profileImg: data?.privacyDetail.profileImg,
+      name: type === 'client' ? info?.name : data?.privacyDetail.name,
+      birth: type === 'client' ? info?.birth : data?.privacyDetail.birth,
+      sex: (type === 'client' ? info?.sex : data?.privacyDetail.sex) as
+        | 'MALE'
+        | 'FEMALE'
+        | undefined,
       address: data?.privacyDetail.address,
       detailAddress: data?.privacyDetail.detailAddress,
     },
@@ -150,9 +159,6 @@ const StepWrapper = ({ data, step, info, memberId, type }: StepWrapperProps) => 
 
   const BASE_URL = isClient ? '/register' : `/edit/${memberId}`;
 
-  const name = isClient ? info!.name : data!.privacyDetail.name;
-  const birth = isClient ? info!.birth : data!.privacyDetail.birth;
-  const sex = isClient ? info!.sex : data!.privacyDetail.sex;
   const phoneNumber = isClient ? info!.phoneNumber : data!.privacyDetail.phoneNumber;
 
   const isStepSuccess = {
@@ -175,6 +181,11 @@ const StepWrapper = ({ data, step, info, memberId, type }: StepWrapperProps) => 
   const clearStepError = () => {
     setErrorStep(null);
   };
+
+  const { mutateAsync: patchPersonalInfo } = usePatchPersonalInfo();
+  const { mutateAsync: patchPersonalInfoByMemberId } = usePatchPersonalInfoByMemberId(
+    memberId ?? 0,
+  );
 
   const { mutate: postMyOneseo } = usePostMyOneseo({
     onSuccess: () => setApplicationSubmitModal(true, type),
@@ -204,7 +215,7 @@ const StepWrapper = ({ data, step, info, memberId, type }: StepWrapperProps) => 
   });
 
   const getOneseo = (isTemp: boolean = false) => {
-    const { profileImg, address, detailAddress } = step1UseForm.watch();
+    const { profileImg, name, birth, sex, address, detailAddress } = step1UseForm.watch();
     const {
       graduationType,
       schoolName,
@@ -244,6 +255,9 @@ const StepWrapper = ({ data, step, info, memberId, type }: StepWrapperProps) => 
     const body: PostOneseoType = {
       // step 1
       profileImg: profileImg || undefined,
+      name: name || undefined,
+      birth: birth || undefined,
+      sex: sex || undefined,
       address: address || undefined,
       detailAddress: detailAddress || undefined,
 
@@ -305,10 +319,46 @@ const StepWrapper = ({ data, step, info, memberId, type }: StepWrapperProps) => 
     return body;
   };
 
-  const handleOneseoSubmitButtonClick = () => {
-    const body = getOneseo();
+  const getPersonalInfo = (): PatchPersonalInfoType => {
+    const { profileImg, name, birth, sex, address, detailAddress } = step1UseForm.watch();
+    const { graduationType, schoolName, schoolAddress, studentNumber, graduationDate } =
+      step2UseForm.watch();
+    const {
+      guardianName,
+      guardianPhoneNumber,
+      relationshipWithGuardian,
+      otherRelationshipWithGuardian,
+      schoolTeacherName,
+      schoolTeacherPhoneNumber,
+    } = step3UseForm.watch();
 
-    postMyOneseo(body);
+    return {
+      profileImg: profileImg!,
+      name: name!,
+      birth: birth!,
+      sex: sex!,
+      address: address!,
+      detailAddress: detailAddress!,
+      graduationType: graduationType!,
+      schoolName: schoolName ?? null,
+      schoolAddress: schoolAddress ?? null,
+      studentNumber: studentNumber ?? null,
+      graduationDate:
+        graduationDate && graduationDate.split('-')[0] !== '0000' ? graduationDate : undefined,
+      guardianName: guardianName!,
+      guardianPhoneNumber: guardianPhoneNumber!,
+      relationshipWithGuardian:
+        (relationshipWithGuardian === RelationshipWithGuardianValueEnum.OTHER
+          ? otherRelationshipWithGuardian
+          : relationshipWithGuardian) ?? '',
+      schoolTeacherName: schoolTeacherName ?? null,
+      schoolTeacherPhoneNumber: schoolTeacherPhoneNumber ?? null,
+    };
+  };
+
+  const handleOneseoSubmitButtonClick = async () => {
+    await patchPersonalInfo(getPersonalInfo());
+    postMyOneseo(getOneseo());
   };
 
   const handleTemporarySaveButtonClick = () => {
@@ -317,10 +367,9 @@ const StepWrapper = ({ data, step, info, memberId, type }: StepWrapperProps) => 
     postTempStorage(body);
   };
 
-  const handleOneseoEditButtonClick = () => {
-    const body = getOneseo();
-
-    putOneseoByMemberId(body);
+  const handleOneseoEditButtonClick = async () => {
+    await patchPersonalInfoByMemberId(getPersonalInfo());
+    putOneseoByMemberId(getOneseo());
   };
 
   const handleCheckScoreButtonClick = () => {
@@ -365,6 +414,27 @@ const StepWrapper = ({ data, step, info, memberId, type }: StepWrapperProps) => 
 
     postMockScore(body);
   };
+
+  const prevStepRef = useRef<StepEnum>(step);
+
+  useEffect(() => {
+    const prevStep = prevStepRef.current;
+    prevStepRef.current = step;
+
+    if (
+      prevStep === StepEnum.ONE &&
+      step !== StepEnum.ONE &&
+      isClient &&
+      step1UseForm.formState.isDirty &&
+      isStepSuccess[1] &&
+      isStepSuccess[2] &&
+      isStepSuccess[3]
+    ) {
+      patchPersonalInfo(getPersonalInfo()).catch(() => {
+        toast.error('인적사항 자동 저장에 실패하였습니다.');
+      });
+    }
+  }, [step]);
 
   useEffect(() => {
     if (errorStep !== step) clearStepError();
@@ -424,9 +494,6 @@ const StepWrapper = ({ data, step, info, memberId, type }: StepWrapperProps) => 
             {step === StepEnum.ONE && (
               <Step1Register
                 {...step1UseForm}
-                name={name}
-                birth={birth}
-                sex={sex}
                 phoneNumber={phoneNumber}
                 showError={errorStep === StepEnum.ONE}
               />

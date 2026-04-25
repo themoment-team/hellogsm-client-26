@@ -47,7 +47,7 @@ const ConfirmationTable = ({ oneseo }: OneseoStatusType) => {
               {oneseo.privacyDetail.graduationType === 'CANDIDATE' && (
                 <>
                   {oneseo.privacyDetail.schoolTeacherName}
-                  <span className="absolute top-1/2 right-1 -translate-y-1/2">(인)</span>
+                  <span className="absolute right-1 top-1/2 -translate-y-1/2">(인)</span>
                 </>
               )}
             </td>
@@ -66,7 +66,7 @@ const ConfirmationTable = ({ oneseo }: OneseoStatusType) => {
               )}
             >
               {oneseo.privacyDetail.name}
-              <span className="absolute top-1/2 right-1 -translate-y-1/2">(인)</span>
+              <span className="absolute right-1 top-1/2 -translate-y-1/2">(인)</span>
             </td>
           </tr>
         </tbody>
@@ -92,7 +92,7 @@ const ConfirmationTable = ({ oneseo }: OneseoStatusType) => {
                 'w-[50%]',
                 'text-center',
               )}
-              rowSpan={2}
+              rowSpan={3}
             >
               광주소프트웨어마이스터고 접수자 확인
             </td>
@@ -104,6 +104,12 @@ const ConfirmationTable = ({ oneseo }: OneseoStatusType) => {
           <tr>
             <td className={cn('border', 'border-black', 'bg-gray-200', 'p-[0.3vh]', 'text-center')}>
               2차
+            </td>
+            <td className={cn('border', 'border-black', 'p-[0.3vh]', 'text-right')}>(인)</td>
+          </tr>
+          <tr>
+            <td className={cn('border', 'border-black', 'bg-gray-200', 'p-[0.3vh]', 'text-center')}>
+              3차
             </td>
             <td className={cn('border', 'border-black', 'p-[0.3vh]', 'text-right')}>(인)</td>
           </tr>

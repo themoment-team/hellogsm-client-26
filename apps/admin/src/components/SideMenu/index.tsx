@@ -9,7 +9,6 @@ import { cn } from '@repo/utils';
 
 import { ChevronsLeft, Exit, Puzzle } from '@/assets';
 
-
 const Item = ({ children }: PropsWithChildren) => (
   <div
     className={cn(

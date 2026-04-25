@@ -122,6 +122,9 @@ export interface PrivacyDetailType {
 }
 
 export interface PostOneseoType {
+  name?: string;
+  birth?: string;
+  sex?: SexType;
   guardianName?: string;
   guardianPhoneNumber?: string;
   relationshipWithGuardian?: string;
@@ -221,4 +224,23 @@ export interface TicketType {
 
 export interface EditabilityType {
   oneseoEditability: boolean;
+}
+
+export interface PatchPersonalInfoType {
+  name: string;
+  birth: string;
+  sex: SexType;
+  address: string;
+  detailAddress: string;
+  profileImg: string;
+  graduationType: GraduationTypeValueEnum;
+  schoolName?: string | null;
+  schoolAddress?: string | null;
+  studentNumber?: string | null;
+  graduationDate?: string;
+  guardianName: string;
+  guardianPhoneNumber: string;
+  relationshipWithGuardian: string;
+  schoolTeacherName?: string | null;
+  schoolTeacherPhoneNumber?: string | null;
 }

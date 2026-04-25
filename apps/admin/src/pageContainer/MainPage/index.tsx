@@ -17,7 +17,6 @@ import { cn } from '@repo/utils';
 
 import { ApplicantTH, ApplicantTR, FilterBar, SideMenu } from '@/components';
 
-
 interface MainPageProps {
   initialData: OneseoListType | undefined;
   isAfterFirstResults: boolean;
@@ -95,7 +94,7 @@ const MainPage = ({
     <main
       className={cn([
         isOpen && 'ml-60',
-        isOpen ? 'px-10' : 'pr-10 pl-20',
+        isOpen ? 'px-10' : 'pl-20 pr-10',
         'pt-[60px]',
         'pb-8',
         'bg-white',
