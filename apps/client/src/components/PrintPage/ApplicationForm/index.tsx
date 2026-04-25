@@ -38,8 +38,9 @@ const ApplicationForm = ({ oneseo, isPreview }: ApplicationFormProps) => {
           <p
             className={cn(
               'absolute',
-              'top-2',
-              'left-0',
+              'print:fixed',
+              'top-6',
+              'left-4',
               'z-10',
               'text-red-600',
               'text-sm',
@@ -50,11 +51,12 @@ const ApplicationForm = ({ oneseo, isPreview }: ApplicationFormProps) => {
             * 해당 원서는 미리보기 용입니다
           </p>
         )}
-        <div className={cn('relative', 'z-[2]', 'w-[63vh]')}>
+        <div className={cn('relative', 'z-[2]', 'w-[63vh]', 'overflow-hidden')}>
           <div
             id="sample"
             className={cn(
               'absolute',
+              'top-[-60px]',
               'z-[-1]',
               'rotate-[-30deg]',
               'select-none',

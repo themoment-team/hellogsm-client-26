@@ -44,7 +44,8 @@ const ScoreConfirmationForm = ({ oneseo, isPreview }: ScoreConfirmationFormProps
           <p
             className={cn(
               'absolute',
-              'top-2',
+              'print:fixed',
+              'top-6',
               'left-4',
               'z-10',
               'text-red-600',
