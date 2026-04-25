@@ -8,7 +8,7 @@ const inputVariants = cva(cn(''), {
     variant: {
       default: cn('focus-visible:border-slate-900'),
       blueOutline: cn('focus-visible:border-blue-500'),
-      error: cn('!border-red-600'),
+      error: cn('!border-red-600', 'disabled:!opacity-100'),
     },
     width: {
       full: cn('w-full'),
