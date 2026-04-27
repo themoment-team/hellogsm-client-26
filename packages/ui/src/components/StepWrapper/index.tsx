@@ -438,11 +438,12 @@ const StepWrapper = ({ data, step, info, memberId, type }: StepWrapperProps) => 
     }
   }, [step]);
 
-  const handlePreviewPrint = () => {
+  const handlePreviewPrint = async () => {
     if (!isScoreComplete) {
       handleStepError(StepEnum.FOUR);
       return;
     }
+    await patchPersonalInfo(getPersonalInfo());
     postTempStorage(getOneseo(true), {
       onSuccess: () => push('/print?preview=true'),
     });
