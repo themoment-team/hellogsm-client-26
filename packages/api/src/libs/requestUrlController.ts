@@ -46,6 +46,8 @@ export const oneseoUrl = {
   postExcel: () => '/oneseo/v3/excel',
   postOneseoModifyRequest: () => '/oneseo/v3/oneseo/me/request',
   patchOneseoApproval: (memberId: number) => `/oneseo/v3/oneseo/${memberId}/approval`,
+  patchPersonalInfo: () => '/oneseo/v3/personal-info/me',
+  patchPersonalInfoByMemberId: (memberId: number) => `/oneseo/v3/personal-info/${memberId}`,
 } as const;
 
 export const memberUrl = {

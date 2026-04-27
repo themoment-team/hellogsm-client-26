@@ -30,6 +30,8 @@ export const oneseoQueryKeys = {
   postExcel: () => ['post', 'excel'],
   postOneseoModifyRequest: () => ['post', 'oneseo', 'modify', 'request'],
   patchOneseoApproval: (memberId: number) => ['patch', 'oneseo', 'approval', memberId],
+  patchPersonalInfo: () => ['patch', 'personal', 'info'],
+  patchPersonalInfoByMemberId: (memberId: number) => ['patch', 'personal', 'info', memberId],
 } as const;
 
 export const memberQueryKeys = {

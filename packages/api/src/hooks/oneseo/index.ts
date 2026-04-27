@@ -4,6 +4,8 @@ export * from './useGetMyOneseo';
 export * from './useGetOneseoList';
 export * from './usePatchAgreeDocStatus';
 export * from './usePatchArrivedStatus';
+export * from './usePatchPersonalInfo';
+export * from './usePatchPersonalInfoByMemberId';
 export * from './usePatchCompetencyScore';
 export * from './usePatchInterviewScore';
 export * from './usePatchOneseoApproval';
