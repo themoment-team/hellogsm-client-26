@@ -177,11 +177,11 @@ export interface PreviewOneseoType {
   privacyDetail: PrivacyDetailType;
   middleSchoolAchievement: MiddleSchoolAchievementType &
     GEDAchievementType & {
-      absentDaysCount: number | null;
+      absentDaysCount: number;
       artsPhysicalSubjects: string[];
       generalSubjects: string[];
     };
-  calculatedScore?: CalculatedScoreType;
+  calculatedScore: CalculatedScoreType;
   step: number | null;
 }
 
