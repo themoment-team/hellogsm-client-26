@@ -73,16 +73,6 @@ const StepBar = ({
     push(`${baseUrl}?step=${Number(step) + 1}`);
   };
 
-  const handlePreviewPrintDefault = () => {
-    if (!isScoreComplete) {
-      handleStepError(StepEnum.FOUR);
-      return;
-    }
-    push('/print?preview=true');
-  };
-
-  const handlePreviewPrintClick = handlePreviewPrint || handlePreviewPrintDefault;
-
   return (
     <>
       <div
@@ -124,12 +114,14 @@ const StepBar = ({
 
           {step === StepEnum.FOUR ? (
             <>
-              <Button
-                variant={isScoreComplete ? 'next' : 'submit'}
-                onClick={handlePreviewPrintClick}
-              >
-                원서 미리 출력하기
-              </Button>
+              {handlePreviewPrint && (
+                <Button
+                  variant={isScoreComplete ? 'next' : 'submit'}
+                  onClick={handlePreviewPrint}
+                >
+                  원서 미리 출력하기
+                </Button>
+              )}
               <Button
                 variant={isStepSuccess[step] ? 'next' : 'submit'}
                 onClick={

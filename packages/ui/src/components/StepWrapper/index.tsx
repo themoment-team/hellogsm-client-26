@@ -489,7 +489,7 @@ const StepWrapper = ({ data, step, info, memberId, type }: StepWrapperProps) => 
             isStepSuccess={isStepSuccess}
             handleCheckScoreButtonClick={handleCheckScoreButtonClick}
             handleStepError={handleStepError}
-            handlePreviewPrint={handlePreviewPrint}
+            handlePreviewPrint={isClient ? handlePreviewPrint : undefined}
           />
           <div
             className={cn(
