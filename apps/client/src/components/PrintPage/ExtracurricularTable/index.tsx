@@ -61,13 +61,13 @@ const ExtracurricularTable = ({ oneseo }: OneseoStatusType) => {
             {oneseo.middleSchoolAchievement.absentDaysCount}
           </td>
           <td className={cn('border', 'border-black')} rowSpan={3}>
-            {oneseo.calculatedScore?.attendanceScore ?? ''}
+            {oneseo.calculatedScore.attendanceScore}
           </td>
           <td className={cn('border', 'border-black')}>
             {oneseo.middleSchoolAchievement.volunteerTime[0]}
           </td>
           <td className={cn('border', 'border-black')} rowSpan={3}>
-            {oneseo.calculatedScore?.volunteerScore ?? ''}
+            {oneseo.calculatedScore.volunteerScore}
           </td>
         </tr>
         <tr>
