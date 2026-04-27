@@ -21,15 +21,7 @@ const GeneralSubjectsTable = ({ oneseo }: OneseoStatusType) => {
   const freeSemesterKey = oneseo.middleSchoolAchievement.freeSemester
     ? (oneseo.middleSchoolAchievement.freeSemester.replace('-', '_') as SemesterKey)
     : null;
-  const generalSubjectsScoreDetail =
-    oneseo.calculatedScore?.generalSubjectsScoreDetail ?? {
-      score1_1: null,
-      score1_2: null,
-      score2_1: null,
-      score2_2: null,
-      score3_1: null,
-      score3_2: null,
-    };
+  const { generalSubjectsScoreDetail } = oneseo.calculatedScore;
   const subjects = [...GENERAL_SUBJECTS, ...(oneseo.middleSchoolAchievement.newSubjects ?? [])];
 
   const semesters: SemesterKey[] =
