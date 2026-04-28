@@ -18,8 +18,8 @@ const OneseoStatus = ({ oneseo }: OneseoStatusType) => {
     volunteerScore,
     totalScore,
     generalSubjectsScoreDetail,
-    artsPhysicalSubjectsScore,
-    totalSubjectsScore,
+    artsPhysicalSubjectsScore = 0,
+    totalSubjectsScore = 0,
   } = oneseo.calculatedScore;
 
   const isGED = graduationType === 'GED';
@@ -145,7 +145,10 @@ const OneseoStatus = ({ oneseo }: OneseoStatusType) => {
           ) : (
             <>
               {achievementGradeValues.map((gradeKey) =>
-                !oneseo.middleSchoolAchievement[gradeKey]?.length ? (
+                !oneseo.middleSchoolAchievement[gradeKey]?.length ||
+                (oneseo.oneseoId !== null &&
+                  generalSubjectsScoreDetail[achievementScoreMap[gradeKey]!] === null) ||
+                gradeKey === 'achievement1_1' ? (
                   <td
                     key={gradeKey}
                     className={cn(tdStyle, 'bg-slash', 'bg-contain', 'bg-no-repeat')}
@@ -160,8 +163,7 @@ const OneseoStatus = ({ oneseo }: OneseoStatusType) => {
               <td className={cn(tdStyle)} colSpan={2}>
                 {parseFloat(
                   (
-                    (oneseo.calculatedScore.generalSubjectsScore ?? 0) +
-                    (artsPhysicalSubjectsScore ?? 0)
+                    (oneseo.calculatedScore.generalSubjectsScore ?? 0) + artsPhysicalSubjectsScore
                   ).toFixed(3),
                 )}
               </td>
