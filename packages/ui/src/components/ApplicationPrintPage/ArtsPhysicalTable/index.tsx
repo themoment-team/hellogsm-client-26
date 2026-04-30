@@ -6,7 +6,7 @@ import { getArtPhysicalScores, scoreToAlphabet, semesterArray } from '../scoreUt
 
 const ArtsPhysicalTable = ({ oneseo }: OneseoStatusType) => {
   const artPhysicalScores = getArtPhysicalScores(oneseo);
-  const totalArtsPhysicalConvertedScore = oneseo.calculatedScore?.artsPhysicalSubjectsScore || 0;
+  const totalArtsPhysicalConvertedScore = oneseo.calculatedScore.artsPhysicalSubjectsScore;
 
   const availableSemesters = semesterArray.filter((semester) => {
     if (oneseo.privacyDetail.graduationType === 'GRADUATE') {
