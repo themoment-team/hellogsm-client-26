@@ -8,7 +8,15 @@ import { cn } from '@repo/utils';
 import { QuestionMark } from '@/assets';
 
 const ApplicantTH = () => {
-  const defaultStyle = cn('font-semibold', 'text-zinc-500');
+  const defaultStyle = cn(
+    'h-12',
+    'px-4',
+    'py-px',
+    'text-sm',
+    'font-semibold',
+    'leading-6',
+    'text-zinc-500',
+  );
 
   const [isDocOver, setIsDocOver] = useState<boolean>(false);
   const [isAgreeOver, setIsAgreeOver] = useState<boolean>(false);
@@ -17,9 +25,9 @@ const ApplicantTH = () => {
     <>
       <Table>
         <TableBody>
-          <TableRow>
-            <TableCell className={cn([defaultStyle, 'w-[5.25rem]'])}>접수 번호</TableCell>
-            <TableCell className={cn([defaultStyle, 'w-[7.5rem]'])}>
+          <TableRow className={cn('border-0', 'hover:bg-transparent')}>
+            <TableCell className={cn([defaultStyle, 'w-[100px]'])}>접수 번호</TableCell>
+            <TableCell className={cn([defaultStyle, 'w-[130px]'])}>
               <div className={cn('flex', 'gap-1', 'items-center')}>
                 서류 제출 여부
                 <div
@@ -48,15 +56,14 @@ const ApplicantTH = () => {
                 </div>
               </div>
             </TableCell>
-            <TableCell className={cn([defaultStyle, 'w-[7rem]'])}>성명</TableCell>
-            <TableCell className={cn([defaultStyle, 'w-[7.5rem]'])}>수험 번호</TableCell>
-            <TableCell className={cn([defaultStyle, 'w-[8.5rem]'])}>출신 중학교</TableCell>
-            <TableCell className={cn([defaultStyle, 'w-[6.75rem]'])}>전형</TableCell>
-            <TableCell className={cn([defaultStyle, 'w-[6rem]'])}>1차 결과</TableCell>
-            <TableCell className={cn([defaultStyle, 'w-[10.25rem]'])}>역량검사 점수</TableCell>
-            <TableCell className={cn([defaultStyle, 'w-[10rem]'])}>심층면접 점수</TableCell>
-            <TableCell className={cn([defaultStyle, 'w-[5.625rem]'])}>2차 결과</TableCell>
-            <TableCell className={cn([defaultStyle, 'w-[14.5rem]'])}>
+            <TableCell className={cn([defaultStyle, 'w-[154.38px]'])}>지원자 정보</TableCell>
+            <TableCell className={cn([defaultStyle, 'w-[154.38px]'])}>출신 중학교</TableCell>
+            <TableCell className={cn([defaultStyle, 'w-[152px]'])}>전형</TableCell>
+            <TableCell className={cn([defaultStyle, 'w-[96px]'])}>1차 결과</TableCell>
+            <TableCell className={cn([defaultStyle, 'w-[153px]'])}>직무적성 점수</TableCell>
+            <TableCell className={cn([defaultStyle, 'w-[153px]'])}>심층면접 점수</TableCell>
+            <TableCell className={cn([defaultStyle, 'w-[96px]'])}>2차 결과</TableCell>
+            <TableCell className={cn([defaultStyle, 'w-[170px]'])}>
               <div className={cn('flex', 'gap-1', 'items-center')}>
                 입학 동의서 제출 여부
                 <div
@@ -85,7 +92,8 @@ const ApplicantTH = () => {
                 </div>
               </div>
             </TableCell>
-            {/* <TableCell className={'w-[100px]'} /> */}
+            <TableCell className={cn([defaultStyle, 'w-[121.12px]'])} />
+            <TableCell className={cn([defaultStyle, 'w-[121.12px]'])} />
           </TableRow>
         </TableBody>
       </Table>

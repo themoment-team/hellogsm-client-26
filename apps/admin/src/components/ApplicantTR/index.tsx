@@ -39,11 +39,11 @@ const ApplicantTR = ({
   interviewScore,
   memberId,
   name,
+  phoneNumber,
   realOneseoArrivedYn,
   schoolName,
   screening,
   secondTestPassYn,
-  examinationNumber,
   submitCode,
   entranceIntentionYn,
   editableData,
@@ -162,12 +162,18 @@ const ApplicantTR = ({
     }
   };
 
+  const handleOneseoPrint = () => {
+    push(`/print/${memberId}`);
+  };
+
   return (
     <Table>
       <TableBody>
-        <TableRow>
-          <TableCell className={cn('w-[6.5rem]', 'text-zinc-900')}>{submitCode}</TableCell>
-          <TableCell className={cn('w-[7.25rem]', 'p-0')}>
+        <TableRow className={cn('h-16', 'border-0', 'hover:bg-transparent')}>
+          <TableCell className={cn('h-16', 'w-[100px]', 'p-4', 'text-zinc-900')}>
+            {submitCode}
+          </TableCell>
+          <TableCell className={cn('h-16', 'w-[130px]', 'p-4')}>
             <Toggle
               onClick={() => setDocumentSubmissionChangeModal(true, handleRealOneseoArrived)}
               pressed={isRealOneseoArrived}
@@ -176,20 +182,26 @@ const ApplicantTR = ({
               제출 완료
             </Toggle>
           </TableCell>
-          <TableCell className={cn('w-[7.5rem]', 'font-semibold', 'text-zinc-900')}>
-            {name}
+          <TableCell className={cn('h-16', 'w-[154.38px]', 'p-4')}>
+            <div className={cn('flex', 'flex-col')}>
+              <span className={cn('text-sm', 'font-semibold', 'leading-5', 'text-zinc-900')}>
+                {name}
+              </span>
+              <span className={cn('text-sm', 'font-normal', 'leading-5', 'text-zinc-600')}>
+                {phoneNumber}
+              </span>
+            </div>
           </TableCell>
-          <TableCell className={cn('w-[8rem]', 'text-zinc-900')}>
-            {examinationNumber === null ? <Badge variant={'미정'}>미정</Badge> : examinationNumber}
+          <TableCell className={cn('h-16', 'w-[154.38px]', 'p-4', 'text-zinc-600')}>
+            {schoolName}
           </TableCell>
-          <TableCell className={cn('w-[9rem]', 'text-zinc-600')}>{schoolName}</TableCell>
-          <TableCell className={cn('w-[7.25rem]', 'text-zinc-900')}>
+          <TableCell className={cn('h-16', 'w-[152px]', 'p-4', 'font-medium', 'text-zinc-900')}>
             {ScreeningEnum[screening]}
           </TableCell>
-          <TableCell className={cn('w-[7rem]')}>
+          <TableCell className={cn('h-16', 'w-[96px]', 'p-4')}>
             <Badge variant={firstTestResult}>{firstTestResult}</Badge>
           </TableCell>
-          <TableCell className={cn('w-[10.75rem]', 'text-zinc-400')}>
+          <TableCell className={cn('h-16', 'w-[153px]', 'p-4', 'text-zinc-400')}>
             {firstTestPassYn === 'YES' && is역량검사처리기간 ? (
               <div className={cn('flex', 'gap-1.5')}>
                 <Controller
@@ -213,7 +225,7 @@ const ApplicantTR = ({
               '진행 전'
             )}
           </TableCell>
-          <TableCell className={cn('w-[10.75rem]', 'text-zinc-400')}>
+          <TableCell className={cn('h-16', 'w-[153px]', 'p-4', 'text-zinc-400')}>
             {firstTestPassYn === 'YES' && is심층면접처리기간 ? (
               <div className={cn('flex', 'gap-1.5')}>
                 <Controller
@@ -237,10 +249,10 @@ const ApplicantTR = ({
               '진행 전'
             )}
           </TableCell>
-          <TableCell className={cn('w-[6rem]')}>
+          <TableCell className={cn('h-16', 'w-[96px]', 'p-4')}>
             <Badge variant={secondTestResult}>{secondTestResult}</Badge>
           </TableCell>
-          <TableCell className={cn('w-[8.125rem]')}>
+          <TableCell className={cn('h-16', 'w-[170px]', 'p-4', 'text-center')}>
             <Toggle
               onClick={() => setAdmissionAgreementChangeModal(true, handleAgreeDocArrived)}
               pressed={entranceIntention === 'YES'}
@@ -250,9 +262,14 @@ const ApplicantTR = ({
               제출 완료
             </Toggle>
           </TableCell>
-          <TableCell className={cn('w-[5rem]')}>
+          <TableCell className={cn('h-16', 'w-[121.12px]', 'p-4', 'text-right')}>
+            <Button onClick={handleOneseoPrint} variant="outline">
+              원서 출력
+            </Button>
+          </TableCell>
+          <TableCell className={cn('h-16', 'w-[121.12px]', 'p-4', 'text-right')}>
             <Button onClick={handleOneseoEdit} variant="outline">
-              원서수정
+              성적 수정
             </Button>
           </TableCell>
         </TableRow>
