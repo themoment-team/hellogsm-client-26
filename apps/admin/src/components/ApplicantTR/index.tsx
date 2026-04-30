@@ -15,7 +15,7 @@ import { useDebounce } from '@repo/hooks';
 import { useModalStore } from '@repo/store';
 import { EditabilityType, OneseoListType, OneseoType, ScreeningEnum } from '@repo/types';
 import { CheckIcon } from '@repo/ui/icons';
-import { Badge, Button, Table, TableBody, TableCell, TableRow, Toggle } from '@repo/ui/shadcn';
+import { Badge, Button, TableCell, TableRow, Toggle } from '@repo/ui/shadcn';
 import { cn, formatScore } from '@repo/utils';
 
 import TextField from '../TextField';
@@ -167,114 +167,110 @@ const ApplicantTR = ({
   };
 
   return (
-    <Table>
-      <TableBody>
-        <TableRow className={cn('h-16', 'border-0', 'hover:bg-transparent')}>
-          <TableCell className={cn('h-16', 'w-[100px]', 'p-4', 'text-zinc-900')}>
-            {submitCode}
-          </TableCell>
-          <TableCell className={cn('h-16', 'w-[130px]', 'p-4')}>
-            <Toggle
-              onClick={() => setDocumentSubmissionChangeModal(true, handleRealOneseoArrived)}
-              pressed={isRealOneseoArrived}
-              icon={<CheckIcon />}
+    <TableRow className={cn('h-16', 'border-0', 'hover:bg-transparent')}>
+      <TableCell className={cn('h-16', 'w-[100px]', 'p-4', 'text-zinc-900')}>
+        {submitCode}
+      </TableCell>
+      <TableCell className={cn('h-16', 'w-[130px]', 'p-4')}>
+        <Toggle
+          onClick={() => setDocumentSubmissionChangeModal(true, handleRealOneseoArrived)}
+          pressed={isRealOneseoArrived}
+          icon={<CheckIcon />}
+        >
+          제출 완료
+        </Toggle>
+      </TableCell>
+      <TableCell className={cn('h-16', 'w-[154px]', 'p-4')}>
+        <div className={cn('flex', 'flex-col')}>
+          <span className={cn('text-sm', 'font-semibold', 'leading-5', 'text-zinc-900')}>
+            {name}
+          </span>
+          <span className={cn('text-sm', 'font-normal', 'leading-5', 'text-zinc-600')}>
+            {phoneNumber}
+          </span>
+        </div>
+      </TableCell>
+      <TableCell className={cn('h-16', 'w-[154px]', 'p-4', 'text-zinc-600')}>
+        {schoolName}
+      </TableCell>
+      <TableCell className={cn('h-16', 'w-[152px]', 'p-4', 'font-medium', 'text-zinc-900')}>
+        {ScreeningEnum[screening]}
+      </TableCell>
+      <TableCell className={cn('h-16', 'w-[96px]', 'p-4')}>
+        <Badge variant={firstTestResult}>{firstTestResult}</Badge>
+      </TableCell>
+      <TableCell className={cn('h-16', 'w-[153px]', 'p-4', 'text-zinc-400')}>
+        {firstTestPassYn === 'YES' && is역량검사처리기간 ? (
+          <div className={cn('flex', 'gap-1.5')}>
+            <Controller
+              name="역량검사점수"
+              control={control}
+              render={({ field }) => <TextField {...field} disabled={!!secondTestPassYn} />}
+            />
+            <Button
+              variant={
+                watch('역량검사점수') && formatted역량검사점수 !== watch('역량검사점수')
+                  ? 'default'
+                  : 'subtitle'
+              }
+              onClick={handleAptitudeScore}
+              disabled={!!secondTestPassYn}
             >
-              제출 완료
-            </Toggle>
-          </TableCell>
-          <TableCell className={cn('h-16', 'w-[154.38px]', 'p-4')}>
-            <div className={cn('flex', 'flex-col')}>
-              <span className={cn('text-sm', 'font-semibold', 'leading-5', 'text-zinc-900')}>
-                {name}
-              </span>
-              <span className={cn('text-sm', 'font-normal', 'leading-5', 'text-zinc-600')}>
-                {phoneNumber}
-              </span>
-            </div>
-          </TableCell>
-          <TableCell className={cn('h-16', 'w-[154.38px]', 'p-4', 'text-zinc-600')}>
-            {schoolName}
-          </TableCell>
-          <TableCell className={cn('h-16', 'w-[152px]', 'p-4', 'font-medium', 'text-zinc-900')}>
-            {ScreeningEnum[screening]}
-          </TableCell>
-          <TableCell className={cn('h-16', 'w-[96px]', 'p-4')}>
-            <Badge variant={firstTestResult}>{firstTestResult}</Badge>
-          </TableCell>
-          <TableCell className={cn('h-16', 'w-[153px]', 'p-4', 'text-zinc-400')}>
-            {firstTestPassYn === 'YES' && is역량검사처리기간 ? (
-              <div className={cn('flex', 'gap-1.5')}>
-                <Controller
-                  name="역량검사점수"
-                  control={control}
-                  render={({ field }) => <TextField {...field} disabled={!!secondTestPassYn} />}
-                />
-                <Button
-                  variant={
-                    watch('역량검사점수') && formatted역량검사점수 !== watch('역량검사점수')
-                      ? 'default'
-                      : 'subtitle'
-                  }
-                  onClick={handleAptitudeScore}
-                  disabled={!!secondTestPassYn}
-                >
-                  저장
-                </Button>
-              </div>
-            ) : (
-              '진행 전'
-            )}
-          </TableCell>
-          <TableCell className={cn('h-16', 'w-[153px]', 'p-4', 'text-zinc-400')}>
-            {firstTestPassYn === 'YES' && is심층면접처리기간 ? (
-              <div className={cn('flex', 'gap-1.5')}>
-                <Controller
-                  name="심층면접점수"
-                  control={control}
-                  render={({ field }) => <TextField {...field} disabled={!!secondTestPassYn} />}
-                />
-                <Button
-                  variant={
-                    watch('심층면접점수') && formatted심층면접점수 !== watch('심층면접점수')
-                      ? 'default'
-                      : 'subtitle'
-                  }
-                  onClick={handleInterviewScore}
-                  disabled={!!secondTestPassYn}
-                >
-                  저장
-                </Button>
-              </div>
-            ) : (
-              '진행 전'
-            )}
-          </TableCell>
-          <TableCell className={cn('h-16', 'w-[96px]', 'p-4')}>
-            <Badge variant={secondTestResult}>{secondTestResult}</Badge>
-          </TableCell>
-          <TableCell className={cn('h-16', 'w-[170px]', 'p-4', 'text-center')}>
-            <Toggle
-              onClick={() => setAdmissionAgreementChangeModal(true, handleAgreeDocArrived)}
-              pressed={entranceIntention === 'YES'}
-              icon={<CheckIcon />}
-              disabled={secondTestPassYn !== 'YES'}
+              저장
+            </Button>
+          </div>
+        ) : (
+          '진행 전'
+        )}
+      </TableCell>
+      <TableCell className={cn('h-16', 'w-[153px]', 'p-4', 'text-zinc-400')}>
+        {firstTestPassYn === 'YES' && is심층면접처리기간 ? (
+          <div className={cn('flex', 'gap-1.5')}>
+            <Controller
+              name="심층면접점수"
+              control={control}
+              render={({ field }) => <TextField {...field} disabled={!!secondTestPassYn} />}
+            />
+            <Button
+              variant={
+                watch('심층면접점수') && formatted심층면접점수 !== watch('심층면접점수')
+                  ? 'default'
+                  : 'subtitle'
+              }
+              onClick={handleInterviewScore}
+              disabled={!!secondTestPassYn}
             >
-              제출 완료
-            </Toggle>
-          </TableCell>
-          <TableCell className={cn('h-16', 'w-[121.12px]', 'p-4', 'text-right')}>
-            <Button onClick={handleOneseoPrint} variant="outline">
-              원서 출력
+              저장
             </Button>
-          </TableCell>
-          <TableCell className={cn('h-16', 'w-[121.12px]', 'p-4', 'text-right')}>
-            <Button onClick={handleOneseoEdit} variant="outline">
-              성적 수정
-            </Button>
-          </TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
+          </div>
+        ) : (
+          '진행 전'
+        )}
+      </TableCell>
+      <TableCell className={cn('h-16', 'w-[96px]', 'p-4')}>
+        <Badge variant={secondTestResult}>{secondTestResult}</Badge>
+      </TableCell>
+      <TableCell className={cn('h-16', 'w-[170px]', 'p-4', 'text-center')}>
+        <Toggle
+          onClick={() => setAdmissionAgreementChangeModal(true, handleAgreeDocArrived)}
+          pressed={entranceIntention === 'YES'}
+          icon={<CheckIcon />}
+          disabled={secondTestPassYn !== 'YES'}
+        >
+          제출 완료
+        </Toggle>
+      </TableCell>
+      <TableCell className={cn('h-16', 'w-[121px]', 'p-4', 'text-right')}>
+        <Button onClick={handleOneseoPrint} variant="outline">
+          원서 출력
+        </Button>
+      </TableCell>
+      <TableCell className={cn('h-16', 'w-[121px]', 'p-4', 'text-right')}>
+        <Button onClick={handleOneseoEdit} variant="outline">
+          성적 수정
+        </Button>
+      </TableCell>
+    </TableRow>
   );
 };
 

@@ -3,10 +3,11 @@
 import { GetMyOneseoType, PreviewOneseoType } from '@repo/types';
 import { cn } from '@repo/utils';
 
+import { Button } from '../../shadcn';
+
 import ApplicationForm from './ApplicationForm';
 import PrintButton from './PrintButton';
 import ScoreConfirmationForm from './ScoreConfirmationForm';
-import { Button } from '../../shadcn';
 
 interface ApplicationPrintPageProps {
   oneseo: GetMyOneseoType | PreviewOneseoType | undefined;
@@ -110,8 +111,8 @@ const ApplicationPrintPage = ({
                   출력 문서를 확인해 주세요.
                 </h1>
                 <p className={cn('text-[0.875rem]', 'text-gray-600', 'leading-[1.25rem]')}>
-                  출력 문서를 더 자세히 보고 싶다면 문서를 출력해주세요. 출력된 문서는 입학
-                  과정에서 사용될 수 없는 견본 문서입니다.
+                  출력 문서를 더 자세히 보고 싶다면 문서를 출력해주세요. 출력된 문서는 입학 과정에서
+                  사용될 수 없는 견본 문서입니다.
                   <br />
                   정식 입학에 쓰이는 최종 제출 문서는 원서 최종 제출 후 마이페이지에서
                   다운로드해주세요

@@ -27,9 +27,7 @@ const PersonalInfoTable = ({ oneseo }: Props) => {
           <td className={cn(tdStyle)}>{oneseo.privacyDetail.name}</td>
 
           <td className={cn(thStyle, 'w-[3%]', 'leading-none')}>성별</td>
-          <td className={cn(tdStyle)}>
-            {SexEnum[oneseo.privacyDetail.sex ?? 'MALE']}
-          </td>
+          <td className={cn(tdStyle)}>{SexEnum[oneseo.privacyDetail.sex ?? 'MALE']}</td>
 
           <td className={cn(thStyle)}>생년월일</td>
           <td className={cn(tdStyle)}>
@@ -76,8 +74,7 @@ const PersonalInfoTable = ({ oneseo }: Props) => {
           </td>
 
           <td className={cn(tdStyle)} colSpan={2}>
-            지원자 {oneseo.privacyDetail.name}의{' '}
-            {oneseo.privacyDetail.relationshipWithGuardian}
+            지원자 {oneseo.privacyDetail.name}의 {oneseo.privacyDetail.relationshipWithGuardian}
           </td>
         </tr>
 
@@ -111,9 +108,7 @@ const PersonalInfoTable = ({ oneseo }: Props) => {
             {oneseo.privacyDetail.graduationType === 'CANDIDATE' && (
               <>
                 {oneseo.privacyDetail.schoolTeacherName}
-                <span className="absolute top-1/2 right-1 -translate-y-1/2">
-                  (인)
-                </span>
+                <span className="absolute right-1 top-1/2 -translate-y-1/2">(인)</span>
               </>
             )}
           </td>
