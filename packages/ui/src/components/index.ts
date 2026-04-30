@@ -1,6 +1,7 @@
 export * from './form';
 export * from './modal';
 export * from './register';
+export { default as ApplicationPrintPage } from './ApplicationPrintPage';
 export { default as ComputerRecommendedPage } from './ComputerRecommendedPage';
 export { default as ConfirmBar } from './ConfirmBar';
 export { default as CustomFormItem } from './CustomFormItem';

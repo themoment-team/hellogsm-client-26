@@ -2,7 +2,7 @@ import { GENERAL_SUBJECTS } from '@repo/constants';
 import { OneseoStatusType } from '@repo/types';
 import { cn } from '@repo/utils';
 
-import { scoreToAlphabet } from '@/utils';
+import { scoreToAlphabet } from '../scoreUtils';
 
 type SemesterKey = '1_1' | '1_2' | '2_1' | '2_2' | '3_1' | '3_2';
 

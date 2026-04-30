@@ -3,8 +3,9 @@ import { NEXT_YEAR } from '@repo/constants';
 import { OneseoStatusType } from '@repo/types';
 import { cn } from '@repo/utils';
 
-import { PersonalInfoTable, OneseoStatus } from '../';
 import ApplicationPledge from '../ApplicationPledge';
+import OneseoStatus from '../OneseoStatus';
+import PersonalInfoTable from '../PersonalInfoTable';
 /* eslint-disable-next-line no-restricted-imports */
 
 const ApplicationForm = ({ oneseo }: OneseoStatusType) => {
