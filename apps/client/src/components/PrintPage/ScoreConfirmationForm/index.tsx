@@ -11,7 +11,11 @@ import ExtracurricularTable from '../ExtracurricularTable';
 /* eslint-disable-next-line no-restricted-imports */
 import GeneralSubjectsTable from '../GeneralSubjectsTable';
 
-const ScoreConfirmationForm = ({ oneseo }: OneseoStatusType) => {
+interface ScoreConfirmationFormProps extends OneseoStatusType {
+  isPreview?: boolean;
+}
+
+const ScoreConfirmationForm = ({ oneseo, isPreview }: ScoreConfirmationFormProps) => {
   return (
     <div
       className={cn(
@@ -35,7 +39,24 @@ const ScoreConfirmationForm = ({ oneseo }: OneseoStatusType) => {
         'print:m-0',
       )}
     >
-      <div className={cn('relative', 'z-[2]', 'w-[66vh]')}>
+      <div className={cn('relative', 'z-[2]', 'w-[66vh]', isPreview ? 'pt-8' : 'pt-0')}>
+        {isPreview && (
+          <p
+            className={cn(
+              'absolute',
+              'print:fixed',
+              'top-6',
+              'left-4',
+              'z-10',
+              'text-red-600',
+              'text-sm',
+              'font-normal',
+              'leading-normal',
+            )}
+          >
+            * 해당 원서는 미리보기 용입니다
+          </p>
+        )}
         <div className={cn('relative', 'z-[2]', 'w-[66vh]', 'overflow-hidden')}>
           <div className={cn('relative', 'bg-white', 'p-4', 'text-black')}>
             <div className={cn('relative', 'z-[2]', 'bg-white', 'p-6')}>

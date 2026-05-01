@@ -19,7 +19,7 @@ export const authUrl = {
 
 export const oneseoUrl = {
   postMockScore: (type: GraduationType) => `/oneseo/v3/calculate-mock-score?graduationType=${type}`,
-  getMyOneseo: () => '/oneseo/v3/oneseo/me',
+  getMyOneseo: (preview?: boolean) => `/oneseo/v3/oneseo/me${preview ? '?preview=true' : ''}`,
   postTempStorage: (step: number) => `/oneseo/v3/temp-storage?step=${step}`,
   postMyOneseo: () => '/oneseo/v3/oneseo/me',
   postImage: () => '/oneseo/v3/image',
@@ -42,6 +42,8 @@ export const oneseoUrl = {
   getAdmissionTickets: () => '/oneseo/v3/admission-tickets',
   getEditability: () => '/oneseo/v3/editability',
   postExcel: () => '/oneseo/v3/excel',
+  patchPersonalInfo: () => '/oneseo/v3/personal-info/me',
+  patchPersonalInfoByMemberId: (memberId: number) => `/oneseo/v3/personal-info/${memberId}`,
 } as const;
 
 export const memberUrl = {

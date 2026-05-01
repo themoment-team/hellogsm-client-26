@@ -10,16 +10,23 @@ import {
   FormState,
 } from 'react-hook-form';
 
-import { SexType, SexValueEnum, Step1FormType } from '@repo/types';
+import { SexValueEnum, Step1FormType } from '@repo/types';
 import { cn } from '@repo/utils';
 
 import { UploadPhoto, RadioButton, CustomFormItem } from '../../';
-import { Button, Input, Select, SelectTrigger, SelectValue } from '../../../shadcn';
+import {
+  Button,
+  Input,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '../../../shadcn';
 
 interface Step1RegisterProps {
-  name: string;
-  birth: string;
-  sex: SexType;
   phoneNumber: string;
   register: UseFormRegister<Step1FormType>;
   setValue: UseFormSetValue<Step1FormType>;
@@ -29,10 +36,11 @@ interface Step1RegisterProps {
   showError: boolean;
 }
 
+const BIRTH_YEARS = Array.from({ length: 20 }, (_, i) => 2015 - i);
+const BIRTH_MONTHS = Array.from({ length: 12 }, (_, i) => i + 1);
+const BIRTH_DAYS = Array.from({ length: 31 }, (_, i) => i + 1);
+
 const Step1Register = ({
-  name,
-  birth,
-  sex,
   phoneNumber,
   register,
   setValue,
@@ -43,11 +51,9 @@ const Step1Register = ({
 }: Step1RegisterProps) => {
   const daumPostCode = useDaumPostcodePopup();
 
-  // 개선 필요해보임
-  const birthDate = birth ? new Date(birth) : null;
-  const birthYear = birthDate ? birthDate.getFullYear() : '';
-  const birthMonth = birthDate ? String(birthDate.getMonth() + 1).padStart(2, '0') : '';
-  const birthDay = birthDate ? String(birthDate.getDate()).padStart(2, '0') : '';
+  const birth = watch('birth') || '';
+  const [birthYear, birthMonth, birthDay] = birth.split('-');
+
   const sexList = [
     { name: '남자', value: SexValueEnum.MALE },
     { name: '여자', value: SexValueEnum.FEMALE },
@@ -87,6 +93,30 @@ const Step1Register = ({
       onComplete: handleDaumPostCodePopupComplete,
     });
 
+  const handleBirthYearChange = (year: string) => {
+    const month = birthMonth || '01';
+    const day = birthDay || '01';
+    setValue('birth', `${year}-${month}-${day}`, { shouldValidate: true, shouldDirty: true });
+  };
+
+  const handleBirthMonthChange = (month: string) => {
+    const year = birthYear || '2000';
+    const day = birthDay || '01';
+    setValue('birth', `${year}-${month.padStart(2, '0')}-${day}`, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+  };
+
+  const handleBirthDayChange = (day: string) => {
+    const year = birthYear || '2000';
+    const month = birthMonth || '01';
+    setValue('birth', `${year}-${month}-${day.padStart(2, '0')}`, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+  };
+
   useEffect(() => {
     if (!showError) return;
 
@@ -106,7 +136,7 @@ const Step1Register = ({
           기본 정보를 입력해 주세요.
         </h1>
         <p className={cn('text-gray-600', 'text-[0.875rem]/[1.25rem]', 'font-normal')}>
-          회원가입 시 입력한 기본 정보가 노출됩니다.
+          전화번호를 제외한 인적사항을 수정할 수 있습니다.
         </p>
       </div>
 
@@ -114,7 +144,12 @@ const Step1Register = ({
         <div className={cn('flex', 'w-[29.75rem]', 'flex-col', 'items-start', 'gap-[2rem]')}>
           <UploadPhoto setValue={setValue} watch={watch} errors={errors} showError={showError} />
           <CustomFormItem text={'이름'} className={cn('gap-1')} required={true} fullWidth={true}>
-            <Input placeholder={name} disabled={true} />
+            <Input
+              {...register('name')}
+              placeholder="이름을 입력해 주세요"
+              width="full"
+              variant={showError && errors.name ? 'error' : null}
+            />
           </CustomFormItem>
           <CustomFormItem
             text={'생년월일'}
@@ -123,20 +158,62 @@ const Step1Register = ({
             fullWidth={true}
           >
             <div className={cn('flex', 'w-full', 'justify-between')}>
-              <Select>
-                <SelectTrigger className={cn('w-[9.3785rem]')} disabled={true}>
-                  <SelectValue placeholder={birthYear} />
+              <Select value={birthYear || ''} onValueChange={handleBirthYearChange}>
+                <SelectTrigger
+                  className={cn('w-[9.3785rem]', showError && errors.birth && '!border-red-600')}
+                >
+                  <SelectValue placeholder="연도 선택" />
                 </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>연도 선택</SelectLabel>
+                    {BIRTH_YEARS.map((year) => (
+                      <SelectItem key={year} value={year.toString()}>
+                        {year}년
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
               </Select>
-              <Select>
-                <SelectTrigger className={cn('w-[9.3785rem]')} disabled={true}>
-                  <SelectValue placeholder={birthMonth} />
+              <Select
+                value={birthMonth ? Number(birthMonth).toString() : ''}
+                onValueChange={handleBirthMonthChange}
+              >
+                <SelectTrigger
+                  className={cn('w-[9.3785rem]', showError && errors.birth && '!border-red-600')}
+                >
+                  <SelectValue placeholder="월 선택" />
                 </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>월 선택</SelectLabel>
+                    {BIRTH_MONTHS.map((month) => (
+                      <SelectItem key={month} value={month.toString()}>
+                        {month}월
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
               </Select>
-              <Select>
-                <SelectTrigger className={cn('w-[9.3785rem]')} disabled={true}>
-                  <SelectValue placeholder={birthDay} />
+              <Select
+                value={birthDay ? Number(birthDay).toString() : ''}
+                onValueChange={handleBirthDayChange}
+              >
+                <SelectTrigger
+                  className={cn('w-[9.3785rem]', showError && errors.birth && '!border-red-600')}
+                >
+                  <SelectValue placeholder="일 선택" />
                 </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>일 선택</SelectLabel>
+                    {BIRTH_DAYS.map((day) => (
+                      <SelectItem key={day} value={day.toString()}>
+                        {day}일
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
               </Select>
             </div>
           </CustomFormItem>
@@ -147,8 +224,14 @@ const Step1Register = ({
             title={'성별'}
             list={sexList}
             required={true}
-            disabled={true}
-            selectedValue={sex}
+            selectedValue={watch('sex') || ''}
+            handleOptionClick={(value) =>
+              setValue('sex', value as 'MALE' | 'FEMALE', {
+                shouldValidate: true,
+                shouldDirty: true,
+              })
+            }
+            error={showError && !!errors.sex}
           />
 
           <div className={cn('flex', 'flex-col', 'items-start', 'gap-[0.375rem]', 'w-full')}>

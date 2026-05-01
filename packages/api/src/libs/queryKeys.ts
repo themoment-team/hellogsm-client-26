@@ -23,9 +23,11 @@ export const oneseoQueryKeys = {
   patchCompetencyScore: (memberId: number) => ['patch', 'competencyScore', memberId],
   patchInterviewScore: (memberId: number) => ['patch', 'interviewScore', memberId],
   getAdmissionTickets: () => ['tickets'],
-  getMyOneseo: () => ['get', 'my', 'oneseo'],
+  getMyOneseo: (preview?: boolean) => ['get', 'my', 'oneseo', preview],
   getEditability: () => ['get', 'my', 'editability'],
   postExcel: () => ['post', 'excel'],
+  patchPersonalInfo: () => ['patch', 'personal', 'info'],
+  patchPersonalInfoByMemberId: (memberId: number) => ['patch', 'personal', 'info', memberId],
 } as const;
 
 export const memberQueryKeys = {

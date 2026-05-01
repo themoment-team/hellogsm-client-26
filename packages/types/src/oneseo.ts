@@ -122,6 +122,9 @@ export interface PrivacyDetailType {
 }
 
 export interface PostOneseoType {
+  name?: string;
+  birth?: string;
+  sex?: SexType;
   guardianName?: string;
   guardianPhoneNumber?: string;
   relationshipWithGuardian?: string;
@@ -166,6 +169,22 @@ export interface CalculatedScoreType extends MockScoreType {
   artsPhysicalSubjectsScoreDetail: ArtsPhysicalSubjectsScoreDetailType;
 }
 
+export interface PreviewOneseoType {
+  oneseoId: null;
+  submitCode: null;
+  wantedScreening: ScreeningValueEnum;
+  desiredMajors: DesireMajorsType;
+  privacyDetail: PrivacyDetailType;
+  middleSchoolAchievement: MiddleSchoolAchievementType &
+    GEDAchievementType & {
+      absentDaysCount: number;
+      artsPhysicalSubjects: string[];
+      generalSubjects: string[];
+    };
+  calculatedScore: CalculatedScoreType;
+  step: number | null;
+}
+
 export interface GetMyOneseoType {
   oneseoId: number;
   submitCode: string;
@@ -183,7 +202,7 @@ export interface GetMyOneseoType {
 }
 
 export interface OneseoStatusType {
-  oneseo: GetMyOneseoType;
+  oneseo: GetMyOneseoType | PreviewOneseoType;
 }
 
 export interface OneseoType {
@@ -221,4 +240,23 @@ export interface TicketType {
 
 export interface EditabilityType {
   oneseoEditability: boolean;
+}
+
+export interface PatchPersonalInfoType {
+  name: string;
+  birth: string;
+  sex: SexType;
+  address: string;
+  detailAddress: string;
+  profileImg: string;
+  graduationType: GraduationTypeValueEnum;
+  schoolName?: string | null;
+  schoolAddress?: string | null;
+  studentNumber?: string | null;
+  graduationDate?: string;
+  guardianName: string;
+  guardianPhoneNumber: string;
+  relationshipWithGuardian: string;
+  schoolTeacherName?: string | null;
+  schoolTeacherPhoneNumber?: string | null;
 }
