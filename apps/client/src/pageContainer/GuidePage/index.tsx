@@ -9,7 +9,6 @@ import {
   useGetMyAuthInfo,
   useGetMyMemberInfo,
   useGetMyOneseo,
-  usePostOneseoModifyRequest,
 } from '@repo/api/hooks';
 import { oneseoQueryKeys } from '@repo/api/lib';
 import { useModalStore } from '@repo/store';
@@ -19,6 +18,7 @@ import { cn } from '@repo/utils';
 
 import { BlueStarIcon, CloverIcon, CopyIcon } from '@/assets';
 import { Footer } from '@/components';
+import { usePostOneseoModifyRequest } from '@/hooks/api';
 
 const textStyle = ['text-[1.25rem]/[1.75rem]', 'font-semibold'];
 
