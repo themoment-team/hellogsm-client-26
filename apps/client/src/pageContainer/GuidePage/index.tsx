@@ -245,9 +245,11 @@ const GuidePage = ({ initialData, isOneseoWrite, initialEditability }: GuideProp
 
   const [buttonText, buttonVariant, isButtonDisabled]: [
     string,
-    'submit' | 'fill' | 'outlineBlue' | 'reverseFill',
+    'submit' | 'fill' | 'reverseFill',
     boolean,
   ] = (() => {
+    if (!isOneseoWrite && data) return ['최종제출을 이미 완료하였습니다', 'reverseFill', true];
+
     if (!isOneseoWrite) return ['원서 접수 기간이 아닙니다.', 'submit', true];
 
     if (!isOneseoModifyRequestTime && editability?.oneseoEditStatus === 'NONE')
@@ -265,7 +267,7 @@ const GuidePage = ({ initialData, isOneseoWrite, initialEditability }: GuideProp
 
     if (editability?.oneseoEditStatus === 'APPROVED') return ['원서 수정하기', 'fill', false];
 
-    return ['원서 권한 수정 요청하기', 'outlineBlue', false];
+    return ['원서 수정 권한 요청하기', 'reverseFill', false];
   })();
 
   return (

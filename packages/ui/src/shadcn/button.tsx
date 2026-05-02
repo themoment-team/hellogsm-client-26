@@ -30,7 +30,6 @@ const buttonVariants = cva(
         default: cn('bg-slate-800', 'text-white', 'hover:bg-slate-200'),
         fill: cn('bg-blue-600', 'text-white', 'hover:bg-blue-800'),
         reverseFill: cn('text-blue-600', 'bg-white', 'border', 'border-blue-600'),
-        outlineBlue: cn('bg-white', 'border', 'border-blue-600', 'rounded-lg', 'text-blue-600'),
         blue: cn('bg-blue-600', 'text-white', 'hover:bg-blue-800'),
         destructive: cn('bg-red-500', 'text-destructive-foreground', 'hover:bg-red-600'),
         outline: cn(
