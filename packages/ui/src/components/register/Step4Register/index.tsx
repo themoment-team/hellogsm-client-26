@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Control,
   UseFormRegister,
@@ -14,7 +14,7 @@ import {
   get,
 } from 'react-hook-form';
 
-import { GENERAL_SUBJECTS, getArtPhysicalIndexArray } from '@repo/constants';
+import { GENERAL_SUBJECTS } from '@repo/constants';
 import {
   AchievementType,
   FreeSemesterValueEnum,
@@ -236,28 +236,21 @@ const Step4Register = ({
     }
   }, []);
 
+  const prevIsFreeSemesterRef = useRef(isFreeSemester);
+  const prevIsFreeGradeRef = useRef(isFreeGrade);
+
   useEffect(() => {
-    if (isGED) return;
-    const allIndexArray = getArtPhysicalIndexArray({
-      graduationType,
-      isFreeSemester,
-      isFreeGrade,
-    });
+    const modeChanged =
+      prevIsFreeSemesterRef.current !== isFreeSemester ||
+      prevIsFreeGradeRef.current !== isFreeGrade;
 
-    const validIndexes = allIndexArray.flatMap(
-      (item: { registerIndexList: readonly number[] }) => item.registerIndexList,
-    );
-    const currentValues = watch('artsPhysicalAchievement') ?? [];
+    prevIsFreeSemesterRef.current = isFreeSemester;
+    prevIsFreeGradeRef.current = isFreeGrade;
 
-    const newValues = currentValues.map((value, index) =>
-      validIndexes.includes(index) ? value : null,
-    );
+    if (!modeChanged || isGED) return;
 
-    setValue(
-      'artsPhysicalAchievement',
-      newValues.filter((v): v is number => v !== null),
-    );
-  }, [isFreeSemester, isGED]);
+    setValue('artsPhysicalAchievement', null);
+  }, [isFreeSemester, isFreeGrade, isGED, setValue]);
 
   useEffect(() => {
     if (clearStepError) clearStepError();
