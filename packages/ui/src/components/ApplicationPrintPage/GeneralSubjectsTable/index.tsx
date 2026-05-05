@@ -2,7 +2,7 @@ import { GENERAL_SUBJECTS } from '@repo/constants';
 import { OneseoStatusType } from '@repo/types';
 import { cn } from '@repo/utils';
 
-import { scoreToAlphabet } from '@/utils';
+import { scoreToAlphabet } from '../scoreUtils';
 
 type SemesterKey = '1_1' | '1_2' | '2_1' | '2_2' | '3_1' | '3_2';
 
@@ -17,6 +17,10 @@ const semesterLabels: Record<SemesterKey, string> = {
 
 const GeneralSubjectsTable = ({ oneseo }: OneseoStatusType) => {
   const { graduationType } = oneseo.privacyDetail;
+  const isPreview = oneseo.oneseoId === null;
+  const freeSemesterKey = oneseo.middleSchoolAchievement.freeSemester
+    ? (oneseo.middleSchoolAchievement.freeSemester.replace('-', '_') as SemesterKey)
+    : null;
   const { generalSubjectsScoreDetail } = oneseo.calculatedScore;
   const subjects = [...GENERAL_SUBJECTS, ...(oneseo.middleSchoolAchievement.newSubjects ?? [])];
 
@@ -65,7 +69,7 @@ const GeneralSubjectsTable = ({ oneseo }: OneseoStatusType) => {
                 `achievement${key}` as keyof typeof oneseo.middleSchoolAchievement
               ] as (number | null)[] | undefined;
 
-              if (!scoreDetail) {
+              if (!scoreDetail || freeSemesterKey === key || (!isPreview && !scores?.length)) {
                 if (rowIdx === 0) {
                   return (
                     <td
@@ -97,9 +101,14 @@ const GeneralSubjectsTable = ({ oneseo }: OneseoStatusType) => {
           <td className={cn('border', 'border-black')}>환산점</td>
           {semesters.map((key) => {
             const detailKey = `score${key}` as keyof typeof generalSubjectsScoreDetail;
+            const scores = oneseo.middleSchoolAchievement[
+              `achievement${key}` as keyof typeof oneseo.middleSchoolAchievement
+            ] as (number | null)[] | undefined;
             return (
               <td key={`${key}-total`} className={cn('border', 'border-black')}>
-                {generalSubjectsScoreDetail[detailKey] ?? ''}
+                {freeSemesterKey !== key && (isPreview || scores?.length)
+                  ? (generalSubjectsScoreDetail[detailKey] ?? '')
+                  : ''}
               </td>
             );
           })}

@@ -169,6 +169,22 @@ export interface CalculatedScoreType extends MockScoreType {
   artsPhysicalSubjectsScoreDetail: ArtsPhysicalSubjectsScoreDetailType;
 }
 
+export interface PreviewOneseoType {
+  oneseoId: null;
+  submitCode: null;
+  wantedScreening: ScreeningValueEnum;
+  desiredMajors: DesireMajorsType;
+  privacyDetail: PrivacyDetailType;
+  middleSchoolAchievement: MiddleSchoolAchievementType &
+    GEDAchievementType & {
+      absentDaysCount: number;
+      artsPhysicalSubjects: string[];
+      generalSubjects: string[];
+    };
+  calculatedScore: CalculatedScoreType;
+  step: number | null;
+}
+
 export interface GetMyOneseoType {
   oneseoId: number;
   submitCode: string;
@@ -186,7 +202,7 @@ export interface GetMyOneseoType {
 }
 
 export interface OneseoStatusType {
-  oneseo: GetMyOneseoType;
+  oneseo: GetMyOneseoType | PreviewOneseoType;
 }
 
 export interface OneseoType {

@@ -168,6 +168,8 @@ const StepWrapper = ({ data, step, info, memberId, type }: StepWrapperProps) => 
     '4': step4Schema.safeParse(step4UseForm.watch()).success,
   };
 
+  const isScoreComplete = Object.values(isStepSuccess).every((value) => value === true);
+
   const handleStepError = (step: StepEnum) => {
     setErrorStep((prev) => {
       if (prev === step) {
@@ -436,6 +438,16 @@ const StepWrapper = ({ data, step, info, memberId, type }: StepWrapperProps) => 
     }
   }, [step]);
 
+  const handlePreviewPrint = async () => {
+    if (!isScoreComplete) {
+      handleStepError(StepEnum.FOUR);
+      return;
+    }
+    await patchPersonalInfo(getPersonalInfo());
+    postTempStorage(getOneseo(true), {
+      onSuccess: () => push('/print?preview=true'),
+    });
+  };
   useEffect(() => {
     if (errorStep !== step) clearStepError();
 
@@ -478,6 +490,7 @@ const StepWrapper = ({ data, step, info, memberId, type }: StepWrapperProps) => 
             isStepSuccess={isStepSuccess}
             handleCheckScoreButtonClick={handleCheckScoreButtonClick}
             handleStepError={handleStepError}
+            handlePreviewPrint={isClient ? handlePreviewPrint : undefined}
           />
           <div
             className={cn(

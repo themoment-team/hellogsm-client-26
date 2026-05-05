@@ -1,13 +1,13 @@
 import { cookies } from 'next/headers';
 
 import { oneseoUrl } from '@repo/api/lib';
-import { GetMyOneseoType } from '@repo/types';
+import { GetMyOneseoType, PreviewOneseoType } from '@repo/types';
 
-export const getMyOneseo = async (): Promise<GetMyOneseoType | undefined> => {
+const fetchOneseo = async <T>(preview: boolean): Promise<T | undefined> => {
   const session = cookies().get('SESSION')?.value;
   try {
     const response = await fetch(
-      new URL(oneseoUrl.getMyOneseo(), process.env.NEXT_PUBLIC_API_BASE_URL),
+      new URL(oneseoUrl.getMyOneseo(preview), process.env.NEXT_PUBLIC_API_BASE_URL),
       {
         method: 'GET',
         credentials: 'include',
@@ -26,4 +26,12 @@ export const getMyOneseo = async (): Promise<GetMyOneseoType | undefined> => {
   } catch {
     return undefined;
   }
+};
+
+export const getMyOneseo = async (): Promise<GetMyOneseoType | undefined> => {
+  return fetchOneseo<GetMyOneseoType>(false);
+};
+
+export const getMyOneseoPreview = async (): Promise<PreviewOneseoType | undefined> => {
+  return fetchOneseo<PreviewOneseoType>(true);
 };

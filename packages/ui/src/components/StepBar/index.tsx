@@ -52,6 +52,7 @@ interface StepBarType {
     '4': boolean;
   };
   handleStepError: (step: StepEnum) => void;
+  handlePreviewPrint?: () => void;
 }
 
 const StepBar = ({
@@ -60,8 +61,11 @@ const StepBar = ({
   isStepSuccess,
   handleCheckScoreButtonClick,
   handleStepError,
+  handlePreviewPrint,
 }: StepBarType) => {
   const { push } = useRouter();
+
+  const isScoreComplete = Object.values(isStepSuccess).every((value) => value === true);
 
   const handleCheckNextStep = (step: StepEnum) => {
     if (!isStepSuccess[step]) return handleStepError(step);
@@ -100,6 +104,7 @@ const StepBar = ({
             </div>
           ))}
         </div>
+
         <div className={cn('flex', 'gap-[0.5rem]')}>
           {step !== StepEnum.ONE && (
             <Button variant="ghost" onClick={() => push(`${baseUrl}?step=${Number(step) - 1}`)}>
@@ -108,14 +113,23 @@ const StepBar = ({
           )}
 
           {step === StepEnum.FOUR ? (
-            <Button
-              variant={step === StepEnum.FOUR && isStepSuccess[step] ? 'next' : 'submit'}
-              onClick={
-                isStepSuccess[step] ? handleCheckScoreButtonClick : () => handleCheckNextStep(step)
-              }
-            >
-              내 성적 계산하기
-            </Button>
+            <>
+              {handlePreviewPrint && (
+                <Button variant={isScoreComplete ? 'next' : 'submit'} onClick={handlePreviewPrint}>
+                  원서 미리 출력하기
+                </Button>
+              )}
+              <Button
+                variant={isStepSuccess[step] ? 'next' : 'submit'}
+                onClick={
+                  isStepSuccess[step]
+                    ? handleCheckScoreButtonClick
+                    : () => handleCheckNextStep(step)
+                }
+              >
+                내 성적 계산하기
+              </Button>
+            </>
           ) : (
             <Button
               variant={isStepSuccess[step] ? 'next' : 'submit'}

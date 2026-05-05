@@ -2,12 +2,17 @@ import { redirect } from 'next/navigation';
 
 import { PrintPage } from '@/pageContainer';
 
-import { getMyOneseo } from '../apis';
+import { getMyOneseo, getMyOneseoPreview } from '../apis';
 
-export default async function Home() {
-  const data = await getMyOneseo();
+interface PrintPageProps {
+  searchParams: { preview?: string };
+}
+
+export default async function Home({ searchParams }: PrintPageProps) {
+  const isPreview = searchParams.preview === 'true';
+  const data = isPreview ? await getMyOneseoPreview() : await getMyOneseo();
 
   if (!data) redirect('/');
 
-  return <PrintPage initialData={data} />;
+  return <PrintPage initialData={data} isPreview={isPreview} />;
 }
