@@ -88,7 +88,7 @@ const ArtPhysicalForm = ({
     if (!isFreeSemester) return;
     const indices = getFreeSemesterIndices(freeSemester);
     indices.forEach((index) => {
-      setValue(`artsPhysicalAchievement.${index}`, null);
+      setValue(`artsPhysicalAchievement.${index}`, 0);
     });
   }, [freeSemester, isFreeSemester, setValue, getFreeSemesterIndices]);
 

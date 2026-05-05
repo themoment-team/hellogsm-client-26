@@ -22,7 +22,7 @@ const achievementSchema = (minLength: number) =>
 const artsPhysicalAchievementSchema = (minLength: number) =>
   z.nullable(
     z
-      .array(z.nullable(z.number().refine((value) => MAX_SCORE >= value && value >= MIN_SCORE)))
+      .array(z.number().refine((value) => MAX_SCORE >= value && value >= MIN_SCORE))
       .min(minLength),
   );
 

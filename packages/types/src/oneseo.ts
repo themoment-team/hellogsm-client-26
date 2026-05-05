@@ -79,7 +79,7 @@ export interface MiddleSchoolAchievementType {
   achievement3_1: number[];
   achievement3_2: number[];
   newSubjects: string[] | undefined;
-  artsPhysicalAchievement: (number | null)[];
+  artsPhysicalAchievement: number[];
   absentDays: number[];
   attendanceDays: number[];
   volunteerTime: number[];
