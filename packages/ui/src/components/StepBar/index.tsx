@@ -115,10 +115,7 @@ const StepBar = ({
           {step === StepEnum.FOUR ? (
             <>
               {handlePreviewPrint && (
-                <Button
-                  variant={isScoreComplete ? 'next' : 'submit'}
-                  onClick={handlePreviewPrint}
-                >
+                <Button variant={isScoreComplete ? 'next' : 'submit'} onClick={handlePreviewPrint}>
                   원서 미리 출력하기
                 </Button>
               )}

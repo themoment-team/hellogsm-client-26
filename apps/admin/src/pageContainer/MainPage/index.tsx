@@ -12,6 +12,9 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
+  Table,
+  TableBody,
+  TableHeader,
 } from '@repo/ui/shadcn';
 import { cn } from '@repo/utils';
 
@@ -133,20 +136,25 @@ const MainPage = ({
               'overflow-scroll',
             )}
           >
-            <ApplicantTH />
-            <div className={cn('bg-zinc-200', 'w-full', 'h-[1px]')} />
-            {data?.oneseos &&
-              data.oneseos.map((oneseo) => (
-                <ApplicantTR
-                  {...oneseo}
-                  key={oneseo.memberId}
-                  editableData={editableData}
-                  oneseoRefetch={oneseoRefetch}
-                  editableRefetch={editableRefetch}
-                  is역량검사처리기간={is역량검사처리기간}
-                  is심층면접처리기간={is심층면접처리기간}
-                />
-              ))}
+            <Table>
+              <TableHeader>
+                <ApplicantTH />
+              </TableHeader>
+              <TableBody>
+                {data?.oneseos &&
+                  data.oneseos.map((oneseo) => (
+                    <ApplicantTR
+                      {...oneseo}
+                      key={oneseo.memberId}
+                      editableData={editableData}
+                      oneseoRefetch={oneseoRefetch}
+                      editableRefetch={editableRefetch}
+                      is역량검사처리기간={is역량검사처리기간}
+                      is심층면접처리기간={is심층면접처리기간}
+                    />
+                  ))}
+              </TableBody>
+            </Table>
           </div>
 
           {totalPages ? (
