@@ -1,5 +1,6 @@
 'use client';
 
+import { useCallback, useEffect } from 'react';
 import { UseFormSetValue, UseFormWatch } from 'react-hook-form';
 
 import {
@@ -7,12 +8,13 @@ import {
   getArtPhysicalArray,
   getArtPhysicalIndexArray,
 } from '@repo/constants';
-import { GraduationTypeValueEnum, Step4FormType } from '@repo/types';
+import { GraduationTypeValueEnum, Step4FormType, FreeSemesterValueEnum } from '@repo/types';
 import { cn } from '@repo/utils';
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../shadcn';
 
 interface ArtPhysicalFormProps {
+  freeSemester: FreeSemesterValueEnum | null;
   setValue: UseFormSetValue<Step4FormType>;
   watch: UseFormWatch<Step4FormType>;
   isFreeGrade: boolean;
@@ -44,6 +46,7 @@ const rowStyle = [
 ];
 
 const ArtPhysicalForm = ({
+  freeSemester,
   setValue,
   isFreeGrade,
   isFreeSemester,
@@ -63,6 +66,31 @@ const ArtPhysicalForm = ({
     isFreeSemester,
     isFreeGrade,
   });
+
+  const getFreeSemesterIndices = useCallback((semester: FreeSemesterValueEnum | null) => {
+    if (!semester) return [];
+    const semesterParts = semester.split('-');
+    const grade = Number(semesterParts[0]);
+    const sem = Number(semesterParts[1]);
+    if (!Number.isFinite(grade) || !Number.isFinite(sem)) return [];
+
+    // 재학생: 1학년부터 시작 (grade - 1), 졸업자: 2학년부터 시작 (grade - 2)
+    const gradeOffset = isGraduate ? 2 : 1;
+    const semesterNumber = (grade - gradeOffset) * 2 + (sem - 1);
+
+    if (semesterNumber < 0) return []; // 유효하지 않은 학기
+    return [semesterNumber * 3, semesterNumber * 3 + 1, semesterNumber * 3 + 2];
+  }, [isGraduate]);
+
+  const disabledIndices = isFreeSemester ? getFreeSemesterIndices(freeSemester) : [];
+
+  useEffect(() => {
+    if (!isFreeSemester) return;
+    const indices = getFreeSemesterIndices(freeSemester);
+    indices.forEach((index) => {
+      setValue(`artsPhysicalAchievement.${index}`, 0);
+    });
+  }, [freeSemester, isFreeSemester, setValue, getFreeSemesterIndices]);
 
   return (
     <div className={cn('flex', 'flex-col', 'w-full')}>
@@ -106,6 +134,7 @@ const ArtPhysicalForm = ({
           <div className={cn('flex')}>
             {registerIndexList.map((registerIndex) => {
               const score = watch(`artsPhysicalAchievement.${registerIndex}`);
+              const isDisabled = disabledIndices.includes(registerIndex);
 
               return (
                 <div
@@ -115,39 +144,56 @@ const ArtPhysicalForm = ({
                     isGraduate ? 'w-[9.34rem]' : isFreeGrade ? 'w-[12.46rem]' : 'w-[7.47rem]',
                   ])}
                 >
-                  <Select
-                    onValueChange={(value) =>
-                      setValue(`artsPhysicalAchievement.${registerIndex}`, Number(value))
-                    }
-                    value={score !== undefined && score !== null ? String(score) : ''}
-                  >
-                    <SelectTrigger
-                      className={cn([
-                        'h-[2rem]',
+                  {isDisabled ? (
+                    <div
+                      className={cn(
+                        'px-[0.25rem]',
+                        'py-[0.125rem]',
+                        'text-gray-500',
                         'text-sm',
-                        'font-normal',
+                        'font-medium',
                         'leading-5',
-                        'bg-white',
-                        'data-[placeholder]:text-slate-500',
-                        'text-slate-900',
-                        'px-[0.5rem]',
-                        'border-slate-300',
-                        isGraduate ? 'w-[7.34rem]' : isFreeGrade ? 'w-[10.46rem]' : 'w-[5.47rem]',
-                        watch(`artsPhysicalAchievement.${registerIndex}`) === undefined &&
-                          showError &&
-                          '!border-red-600',
-                      ])}
+                        'rounded-[0.25rem]',
+                        'bg-gray-100',
+                      )}
                     >
-                      <SelectValue placeholder="성적 선택" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {ART_PHYSICAL_SCORE_VALUES.map(({ name, value }) => (
-                        <SelectItem value={String(value)} key={value}>
-                          {name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                      자유학기제
+                    </div>
+                  ) : (
+                    <Select
+                      onValueChange={(value) =>
+                        setValue(`artsPhysicalAchievement.${registerIndex}`, Number(value))
+                      }
+                      value={score !== undefined && score !== null ? String(score) : ''}
+                    >
+                      <SelectTrigger
+                        className={cn([
+                          'h-[2rem]',
+                          'text-sm',
+                          'font-normal',
+                          'leading-5',
+                          'bg-white',
+                          'data-[placeholder]:text-slate-500',
+                          'text-slate-900',
+                          'px-[0.5rem]',
+                          'border-slate-300',
+                          isGraduate ? 'w-[7.34rem]' : isFreeGrade ? 'w-[10.46rem]' : 'w-[5.47rem]',
+                          watch(`artsPhysicalAchievement.${registerIndex}`) === undefined &&
+                            showError &&
+                            '!border-red-600',
+                        ])}
+                      >
+                        <SelectValue placeholder="성적 선택" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {ART_PHYSICAL_SCORE_VALUES.map(({ name, value }) => (
+                          <SelectItem value={String(value)} key={value}>
+                            {name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
                 </div>
               );
             })}
