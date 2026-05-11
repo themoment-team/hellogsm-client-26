@@ -19,7 +19,7 @@ export const authUrl = {
 
 export const oneseoUrl = {
   postMockScore: (type: GraduationType) => `/oneseo/v3/calculate-mock-score?graduationType=${type}`,
-  getMyOneseo: () => '/oneseo/v3/oneseo/me',
+  getMyOneseo: (preview?: boolean) => `/oneseo/v3/oneseo/me${preview ? '?preview=true' : ''}`,
   postTempStorage: (step: number) => `/oneseo/v3/temp-storage?step=${step}`,
   postMyOneseo: () => '/oneseo/v3/oneseo/me',
   putMyOneseo: () => '/oneseo/v3/oneseo/me',

@@ -1,6 +1,7 @@
 export * from './useGetAdmissionTickets';
 export * from './useGetEditability';
 export * from './useGetMyOneseo';
+export * from './useGetMyOneseoPreview';
 export * from './useGetOneseoList';
 export * from './usePatchAgreeDocStatus';
 export * from './usePatchArrivedStatus';

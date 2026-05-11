@@ -23,7 +23,9 @@ const Provider = ({ children }: PropsWithChildren) => {
       <div className={cn('min-h-screen', 'flex', 'flex-col')}>
         {children}
         <ChannelTalk />
-        <ToastContainer />
+        <div className="print:hidden">
+          <ToastContainer />
+        </div>
       </div>
     </QueryClientProvider>
   );

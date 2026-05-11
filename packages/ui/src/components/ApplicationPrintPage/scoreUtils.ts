@@ -1,9 +1,9 @@
-import { GetMyOneseoType } from '@repo/types';
+import { GetMyOneseoType, PreviewOneseoType } from '@repo/types';
 
 export const scoreToAlphabet = ['없음', 'E', 'D', 'C', 'B', 'A'] as const;
 export const semesterArray = ['1-1', '1-2', '2-1', '2-2', '3-1', '3-2'] as const;
 
-export const getArtPhysicalScores = (oneseo: GetMyOneseoType) => {
+export const getArtPhysicalScores = (oneseo: GetMyOneseoType | PreviewOneseoType) => {
   if (!oneseo || oneseo.privacyDetail.graduationType === 'GED') {
     return [null, null, null, null, null, null];
   }
@@ -22,8 +22,11 @@ export const getArtPhysicalScores = (oneseo: GetMyOneseoType) => {
       achievements.slice(6, 9),
       achievements.slice(9, 12),
     ];
-  } else if (isCandidate) {
+  }
+
+  if (isCandidate) {
     const { liberalSystem } = oneseo.middleSchoolAchievement;
+
     if (liberalSystem === '자유학년제') {
       return [
         null,
@@ -34,6 +37,7 @@ export const getArtPhysicalScores = (oneseo: GetMyOneseoType) => {
         null,
       ];
     }
+
     return [
       achievements.slice(0, 3),
       achievements.slice(3, 6),

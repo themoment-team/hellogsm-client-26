@@ -40,7 +40,10 @@ const LiberalSystemSwitch = ({
   >
     <button
       type="button"
-      onClick={() => setValue('liberalSystem', LiberalSystemValueEnum.FREE_GRADE)}
+      onClick={() => {
+        setValue('liberalSystem', LiberalSystemValueEnum.FREE_GRADE);
+        setValue('freeSemester', null);
+      }}
       className={cn(...buttonStyle(isFreeGrade))}
     >
       자유학년제
