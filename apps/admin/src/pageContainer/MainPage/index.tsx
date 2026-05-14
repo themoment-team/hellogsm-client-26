@@ -66,7 +66,7 @@ const MainPage = ({
       size: PER_PAGE,
       testResultTag: testResultTag === 'REQUEST' ? 'ALL' : testResultTag,
       screeningTag: screeningTag,
-      isSubmitted: testResultTag === 'REQUEST' ? 'ALL' : isSubmitted,
+      isSubmitted: testResultTag === 'REQUEST' ? '' : isSubmitted,
       keyword: debouncedKeyword,
       status: testResultTag === 'REQUEST' ? requested : undefined,
     },
