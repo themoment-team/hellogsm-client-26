@@ -3,11 +3,11 @@
 import { PropsWithChildren } from 'react';
 
 import { useLogout } from '@repo/api/hooks';
-import { TestResultType } from '@repo/types';
 import { Button } from '@repo/ui/shadcn';
 import { cn } from '@repo/utils';
 
 import { ChevronsLeft, Exit, Puzzle } from '@/assets';
+import { SideBarType } from '@/schemas';
 
 const Item = ({ children }: PropsWithChildren) => (
   <div
@@ -69,6 +69,12 @@ const ManageTypeArray = [
     value: 'ALL',
   },
   {
+    borderStyle: 'border-[#4DC7FC]',
+    textStyle: 'text-blue-900',
+    type: '원서 수정 요청 관리',
+    value: 'REQUEST',
+  },
+  {
     borderStyle: 'border-amber-300',
     textStyle: 'text-amber-600',
     type: '1차 전형 합격자 관리',
@@ -91,8 +97,8 @@ const ManageTypeArray = [
 interface SideMenuProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  testResultTag: TestResultType;
-  setTestResultTag: React.Dispatch<React.SetStateAction<TestResultType>>;
+  testResultTag: SideBarType;
+  setTestResultTag: React.Dispatch<React.SetStateAction<SideBarType>>;
 }
 
 const SideMenu = ({ isOpen, setIsOpen, testResultTag, setTestResultTag }: SideMenuProps) => {

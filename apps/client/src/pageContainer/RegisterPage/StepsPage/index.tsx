@@ -9,9 +9,10 @@ interface RegisterStepsPageProps {
   data: GetMyOneseoType | undefined;
   info: MyMemberInfoType;
   step: StepEnum;
+  isModifyApproved: boolean;
 }
 
-const RegisterStepsPage = ({ data, step, info }: RegisterStepsPageProps) => {
+const RegisterStepsPage = ({ data, step, info, isModifyApproved }: RegisterStepsPageProps) => {
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       event.preventDefault();
@@ -31,7 +32,13 @@ const RegisterStepsPage = ({ data, step, info }: RegisterStepsPageProps) => {
   return (
     <>
       <ComputerRecommendedPage type="register" />
-      <StepWrapper data={data} info={info} step={step} type="client" />
+      <StepWrapper
+        data={data}
+        info={info}
+        step={step}
+        type="client"
+        isModifyApproved={isModifyApproved}
+      />
     </>
   );
 };

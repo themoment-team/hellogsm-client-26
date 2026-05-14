@@ -6,7 +6,7 @@ import { getKoreanDate, isTimeAfter, isTimeBefore } from '@repo/utils';
 
 import { RegisterStepsPage } from '@/pageContainer';
 
-import { getMyMemberInfo, getMyOneseo } from '../apis';
+import { getEditability, getMyMemberInfo, getMyOneseo } from '../apis';
 
 interface RegisterProps {
   searchParams?: { [key: string]: string | undefined };
@@ -15,10 +15,11 @@ interface RegisterProps {
 export default async function Register({ searchParams }: RegisterProps) {
   const step = searchParams?.step;
 
-  const [data, info, dateList] = await Promise.all([
+  const [data, info, dateList, editability] = await Promise.all([
     getMyOneseo(),
     getMyMemberInfo('/'),
     getDate(),
+    getEditability(),
   ]);
 
   const currentTime = getKoreanDate();
@@ -31,9 +32,18 @@ export default async function Register({ searchParams }: RegisterProps) {
     }) &&
     isTimeBefore({ baseTime: new Date(dateList.oneseoSubmissionEnd), compareTime: currentTime });
 
-  if (!info || (data && !data.step) || !isOneseoWrite) redirect('/');
+  const isModifyApproved = editability?.oneseoEditStatus === 'APPROVED';
+
+  if (!info || (data && !data.step && !isModifyApproved) || !isOneseoWrite) redirect('/');
 
   if (!step || !['1', '2', '3', '4'].includes(step)) redirect('/register?step=1');
 
-  return <RegisterStepsPage data={data} info={info} step={step as StepEnum} />;
+  return (
+    <RegisterStepsPage
+      data={data}
+      info={info}
+      step={step as StepEnum}
+      isModifyApproved={isModifyApproved}
+    />
+  );
 }

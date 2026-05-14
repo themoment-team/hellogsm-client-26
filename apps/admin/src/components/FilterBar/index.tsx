@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import { useGetOperation, usePostExcel } from '@repo/api/hooks';
 import { oneseoUrl } from '@repo/api/lib';
 import { useModalStore } from '@repo/store';
-import { ScreeningType, YesNo } from '@repo/types';
+import { OneseoEditStatusTag, ScreeningType, YesNo } from '@repo/types';
 import { PrintIcon } from '@repo/ui/icons';
 import {
   Button,
@@ -23,6 +23,7 @@ import {
 import { cn } from '@repo/utils';
 
 import { CloverIcon, FileIcon, MedalIcon, SearchIcon, UploadIcon } from '@/assets';
+import { SideBarType } from '@/schemas';
 
 interface FilterBarProps {
   keyword: string;
@@ -31,6 +32,9 @@ interface FilterBarProps {
   setIsSubmitted: React.Dispatch<React.SetStateAction<YesNo | string>>;
   screeningTag: ScreeningType | string;
   setScreeningTag: React.Dispatch<React.SetStateAction<ScreeningType | string>>;
+  requested: OneseoEditStatusTag;
+  setRequested: React.Dispatch<React.SetStateAction<OneseoEditStatusTag>>;
+  testResultTag: SideBarType;
   isAfterFirstResults: boolean;
   isAfterSecondResults: boolean;
 }
@@ -42,6 +46,9 @@ const FilterBar = ({
   setIsSubmitted,
   setScreeningTag,
   screeningTag,
+  requested,
+  setRequested,
+  testResultTag,
   isAfterFirstResults,
   isAfterSecondResults,
 }: FilterBarProps) => {
@@ -70,6 +77,10 @@ const FilterBar = ({
     }
   };
 
+  const handleRequestedChange = (value: OneseoEditStatusTag) => {
+    setRequested(value);
+  };
+
   const handleScreeningTagChange = (value: string) => {
     if (value === 'GENERAL' || value === 'SPECIAL' || value === 'EXTRA') {
       setScreeningTag(value);
@@ -80,6 +91,7 @@ const FilterBar = ({
     setIsSubmitted('');
     setScreeningTag('');
     setKeyword('');
+    setRequested('ANY_EDIT');
   };
 
   const printExcel = () => {
@@ -141,18 +153,34 @@ const FilterBar = ({
               </SelectContent>
             </Select>
 
-            <Select value={isSubmitted} onValueChange={handleSubmittedChange}>
-              <SelectTrigger className={cn('w-[180px]')}>
-                <SelectValue placeholder="서류 제출 여부" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>서류 제출 여부</SelectLabel>
-                  <SelectItem value="NO">제출 전</SelectItem>
-                  <SelectItem value="YES">제출 완료</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+            {testResultTag === 'REQUEST' ? (
+              <Select value={requested} onValueChange={handleRequestedChange}>
+                <SelectTrigger className={cn('w-[180px]')}>
+                  <SelectValue placeholder="권한 승인 여부 선택" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>권한 승인 여부</SelectLabel>
+                    <SelectItem value="ANY_EDIT">전체</SelectItem>
+                    <SelectItem value="REQUESTED">요청</SelectItem>
+                    <SelectItem value="APPROVED">승인된</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            ) : (
+              <Select value={isSubmitted} onValueChange={handleSubmittedChange}>
+                <SelectTrigger className={cn('w-[180px]')}>
+                  <SelectValue placeholder="서류 제출 여부" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>서류 제출 여부</SelectLabel>
+                    <SelectItem value="NO">제출 전</SelectItem>
+                    <SelectItem value="YES">제출 완료</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            )}
 
             <Button onClick={resetFilterData} variant="ghost" className={cn('text-slate-400')}>
               필터 초기화

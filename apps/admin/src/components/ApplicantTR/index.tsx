@@ -4,12 +4,14 @@ import { QueryObserverResult, RefetchOptions } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 import {
   usePatchAgreeDocStatus,
   usePatchArrivedStatus,
   usePatchCompetencyScore,
   usePatchInterviewScore,
+  usePatchOneseoApproval,
 } from '@repo/api/hooks';
 import { useDebounce } from '@repo/hooks';
 import { useModalStore } from '@repo/store';
@@ -17,6 +19,8 @@ import { EditabilityType, OneseoListType, OneseoType, ScreeningEnum } from '@rep
 import { CheckIcon } from '@repo/ui/icons';
 import { Badge, Button, TableCell, TableRow, Toggle } from '@repo/ui/shadcn';
 import { cn, formatScore } from '@repo/utils';
+
+import { SideBarType } from '@/schemas';
 
 import TextField from '../TextField';
 
@@ -30,6 +34,7 @@ interface ApplicationTRProps extends OneseoType {
   ) => Promise<QueryObserverResult<EditabilityType, Error>>;
   is역량검사처리기간: boolean;
   is심층면접처리기간: boolean;
+  testResultTag: SideBarType;
 }
 
 const ApplicantTR = ({
@@ -50,6 +55,8 @@ const ApplicantTR = ({
   editableRefetch,
   is역량검사처리기간,
   is심층면접처리기간,
+  oneseoEditStatus,
+  testResultTag,
 }: ApplicationTRProps) => {
   const {
     setDocumentSubmissionChangeModal,
@@ -94,6 +101,17 @@ const ApplicantTR = ({
     onSuccess: () => {
       oneseoRefetch();
       editableRefetch();
+    },
+  });
+
+  const { mutate: patchOneseoApproval } = usePatchOneseoApproval(memberId, {
+    onSuccess: () => {
+      oneseoRefetch();
+      editableRefetch();
+      toast.success('원서 수정 승인이 완료되었습니다.');
+    },
+    onError: () => {
+      toast.error('원서 수정 승인에 실패했습니다.');
     },
   });
 
@@ -266,9 +284,19 @@ const ApplicantTR = ({
         </Button>
       </TableCell>
       <TableCell className={cn('h-16', 'w-[121px]', 'p-4', 'text-right')}>
-        <Button onClick={handleOneseoEdit} variant="outline">
-          성적 수정
-        </Button>
+        {testResultTag === 'REQUEST' ? (
+          <Button
+            onClick={() => patchOneseoApproval()}
+            variant={oneseoEditStatus === 'APPROVED' ? 'subtitle' : 'outline'}
+            disabled={oneseoEditStatus === 'APPROVED'}
+          >
+            {oneseoEditStatus === 'REQUESTED' ? '원서 수정 승인' : '승인 완료'}
+          </Button>
+        ) : (
+          <Button onClick={handleOneseoEdit} variant="outline">
+            성적 수정
+          </Button>
+        )}
       </TableCell>
     </TableRow>
   );

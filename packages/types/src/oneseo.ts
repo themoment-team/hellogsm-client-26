@@ -121,7 +121,7 @@ export interface PrivacyDetailType {
   profileImg: string;
 }
 
-export interface PostOneseoType {
+export interface BaseOneseoApiType {
   name?: string;
   birth?: string;
   sex?: SexType;
@@ -145,6 +145,9 @@ export interface PostOneseoType {
   screening?: ScreeningValueEnum;
   step?: number;
 }
+
+export type PostOneseoType = BaseOneseoApiType;
+export type PutOneseoType = BaseOneseoApiType;
 
 export interface GeneralSubjectsScoreDetailType {
   score1_1: number | null;
@@ -205,6 +208,10 @@ export interface OneseoStatusType {
   oneseo: GetMyOneseoType | PreviewOneseoType;
 }
 
+export type OneseoEditStatusType = 'NONE' | 'REQUESTED' | 'APPROVED';
+
+export type OneseoEditStatusTag = 'ANY_EDIT' | 'REQUESTED' | 'APPROVED';
+
 export interface OneseoType {
   memberId: number;
   submitCode: string | null;
@@ -221,6 +228,7 @@ export interface OneseoType {
   interviewScore: number | null;
   secondTestPassYn: YesNo | null;
   examinationNumber: number | null;
+  oneseoEditStatus: OneseoEditStatusType;
 }
 
 export interface OneseoListType {
@@ -240,6 +248,7 @@ export interface TicketType {
 
 export interface EditabilityType {
   oneseoEditability: boolean;
+  oneseoEditStatus: OneseoEditStatusType;
 }
 
 export interface PatchPersonalInfoType {

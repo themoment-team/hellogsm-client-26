@@ -1,7 +1,7 @@
 import { GraduationType } from '@repo/types';
 
-const addParameters = (key: string, value: number | string | undefined) => {
-  if (!value) {
+const addParameters = (key: string, value: number | string | boolean | undefined) => {
+  if (value === undefined || value === null || value === '') {
     return '';
   }
 
@@ -22,6 +22,7 @@ export const oneseoUrl = {
   getMyOneseo: (preview?: boolean) => `/oneseo/v3/oneseo/me${preview ? '?preview=true' : ''}`,
   postTempStorage: (step: number) => `/oneseo/v3/temp-storage?step=${step}`,
   postMyOneseo: () => '/oneseo/v3/oneseo/me',
+  putMyOneseo: () => '/oneseo/v3/oneseo/me',
   postImage: () => '/oneseo/v3/image',
   getOneseoByMemberId: (memberId: number) => `/oneseo/v3/oneseo/${memberId}`,
   putOneseoByMemberId: (memberId: number) => `/oneseo/v3/oneseo/${memberId}`,
@@ -32,8 +33,9 @@ export const oneseoUrl = {
     screeningTag?: string,
     isSubmitted?: string,
     keyword?: string,
+    status?: string,
   ) =>
-    `/oneseo/v3/oneseo/search?page=${page}&size=${size}&testResultTag=${testResultTag}${addParameters('screeningTag', screeningTag)}${addParameters('isSubmitted', isSubmitted)}${addParameters('keyword', keyword)}`,
+    `/oneseo/v3/oneseo/search?page=${page}&size=${size}&testResultTag=${testResultTag}${addParameters('screeningTag', screeningTag)}${addParameters('isSubmitted', isSubmitted)}${addParameters('keyword', keyword)}${addParameters('status', status)}`,
   getExcel: () => '/oneseo/v3/excel',
   patchArrivedStatus: (memberId: number) => `/oneseo/v3/arrived-status/${memberId}`,
   patchAgreeDocStatus: (memberId: number) => `/oneseo/v3/entrance-intention/${memberId}`,
@@ -42,6 +44,8 @@ export const oneseoUrl = {
   getAdmissionTickets: () => '/oneseo/v3/admission-tickets',
   getEditability: () => '/oneseo/v3/editability',
   postExcel: () => '/oneseo/v3/excel',
+  postOneseoModifyRequest: () => '/oneseo/v3/oneseo/me/request',
+  patchOneseoApproval: (memberId: number) => `/oneseo/v3/oneseo/${memberId}/approval`,
   patchPersonalInfo: () => '/oneseo/v3/personal-info/me',
   patchPersonalInfoByMemberId: (memberId: number) => `/oneseo/v3/personal-info/${memberId}`,
 } as const;

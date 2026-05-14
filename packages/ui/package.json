@@ -38,6 +38,7 @@
     "@repo/types": "workspace:*",
     "@repo/utils": "workspace:*",
     "@repo/hooks": "workspace:*",
+    "@tanstack/react-query": "^5.90.21",
     "axios": "^1.13.5",
     "class-variance-authority": "^0.7.1",
     "lucide-react": "^0.564.0",

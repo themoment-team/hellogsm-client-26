@@ -1,15 +1,24 @@
 'use client';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 
-import { useGetMyAuthInfo, useGetMyMemberInfo, useGetMyOneseo } from '@repo/api/hooks';
+import {
+  useGetEditability,
+  useGetMyAuthInfo,
+  useGetMyMemberInfo,
+  useGetMyOneseo,
+} from '@repo/api/hooks';
+import { oneseoQueryKeys } from '@repo/api/lib';
 import { useModalStore } from '@repo/store';
-import { GetMyOneseoType } from '@repo/types';
+import { EditabilityType, GetMyOneseoType } from '@repo/types';
 import { Button } from '@repo/ui/shadcn';
 import { cn } from '@repo/utils';
 
 import { BlueStarIcon, CloverIcon, CopyIcon } from '@/assets';
 import { Footer } from '@/components';
+import { usePostOneseoModifyRequest } from '@/hooks/api';
 
 const textStyle = ['text-[1.25rem]/[1.75rem]', 'font-semibold'];
 
@@ -197,32 +206,69 @@ const List = ({
 interface GuideProps {
   initialData: GetMyOneseoType | undefined;
   isOneseoWrite: boolean;
+  initialEditability: EditabilityType | undefined;
 }
 
-const GuidePage = ({ initialData, isOneseoWrite }: GuideProps) => {
-  const { setLoginRequiredModal } = useModalStore();
+const GuidePage = ({ initialData, isOneseoWrite, initialEditability }: GuideProps) => {
+  const { setLoginRequiredModal, setOneseoModifyRequestModal } = useModalStore();
   const { data: authInfo } = useGetMyAuthInfo();
   const { data: memberInfo } = useGetMyMemberInfo();
+  const queryClient = useQueryClient();
 
   const { data } = useGetMyOneseo({
-    initialData: initialData,
+    initialData,
   });
 
-  const [buttonText, buttonVariant]: [string, 'submit' | 'fill' | 'reverseFill'] = (() => {
-    if (!isOneseoWrite) return ['원서 작성을 할 수 없는 기간입니다.', 'submit'];
-
-    if (!data) return ['원서 작성하기', 'fill'];
-
-    if (data && data.step) return ['원서 이어서 작성하기', 'fill'];
-
-    if (data && !data.step) return ['최종제출을 이미 완료하였습니다.', 'reverseFill'];
-
-    return ['원서 작성하기', 'fill'];
-  })();
-
-  const isTempOneseo = data && !data.step;
+  const { data: editability } = useGetEditability({
+    initialData: initialEditability,
+  });
 
   const { push } = useRouter();
+
+  const { mutate: postOneseoModify } = usePostOneseoModifyRequest({
+    onSuccess: () => {
+      setOneseoModifyRequestModal(false);
+      queryClient.invalidateQueries({ queryKey: oneseoQueryKeys.getMyOneseo() });
+      queryClient.invalidateQueries({ queryKey: oneseoQueryKeys.getEditability() });
+      toast.success('원서 수정 권한 요청이 성공했습니다.');
+    },
+  });
+
+  const isSubmittedOneseo = data && !data.step;
+
+  const isOneseoModifyRequestTime = (() => {
+    const now = new Date();
+    const kst = new Date(now.getTime() + (now.getTimezoneOffset() + 540) * 60000);
+    const hour = kst.getHours();
+    return hour >= 9 && hour < 16;
+  })();
+
+  const [buttonText, buttonVariant, isButtonDisabled]: [
+    string,
+    'submit' | 'fill' | 'reverseFill',
+    boolean,
+  ] = (() => {
+    if (!isOneseoWrite && data) return ['최종제출을 이미 완료하였습니다', 'reverseFill', true];
+
+    if (!isOneseoWrite) return ['원서 접수 기간이 아닙니다.', 'submit', true];
+
+    if (!isOneseoModifyRequestTime && editability?.oneseoEditStatus === 'NONE')
+      return ['9시부터 16시 이외에는 수정 권한 요청이 제한됩니다', 'submit', true];
+
+    if (!data) return ['원서 작성하기', 'fill', false];
+
+    if (data.step && editability?.oneseoEditStatus === 'APPROVED')
+      return ['원서 이어서 수정하기', 'fill', false];
+
+    if (data.step) return ['원서 이어서 작성하기', 'fill', false];
+
+    if (editability?.oneseoEditStatus === 'REQUESTED')
+      return ['원서 수정 권한을 아직 받지 못했습니다', 'submit', true];
+
+    if (editability?.oneseoEditStatus === 'APPROVED') return ['원서 수정하기', 'fill', false];
+
+    return ['원서 수정 권한 요청하기', 'reverseFill', false];
+  })();
 
   return (
     <div className={cn('w-full', 'flex', 'flex-col', 'justify-center', 'items-center')}>
@@ -310,7 +356,7 @@ const GuidePage = ({ initialData, isOneseoWrite }: GuideProps) => {
 
       <Button
         variant={buttonVariant}
-        disabled={buttonVariant === 'fill' ? false : true}
+        disabled={isButtonDisabled}
         className={cn([
           'sticky',
           'bottom-10',
@@ -322,15 +368,22 @@ const GuidePage = ({ initialData, isOneseoWrite }: GuideProps) => {
           'mb-[10rem]',
           'text-[1.25rem]/[1.75rem]',
           'rounded-[0.75rem]',
-          isTempOneseo && ['cursor-not-allowed', 'opacity-100'],
+          isSubmittedOneseo && ['opacity-100'],
+          isButtonDisabled && ['cursor-not-allowed'],
         ])}
         onClick={() => {
+          if (isButtonDisabled) return;
+
           if (!authInfo?.authReferrerType) {
             setLoginRequiredModal(true);
             return;
           }
           if (!memberInfo?.name) {
             push('/signup');
+            return;
+          }
+          if (isSubmittedOneseo && editability?.oneseoEditStatus !== 'APPROVED') {
+            setOneseoModifyRequestModal(true, () => postOneseoModify());
             return;
           }
           push('/register?step=1');
