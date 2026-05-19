@@ -6,7 +6,7 @@
 
 ```bash
 # 1. 저장소 클론
-$ git clone https://github.com/themoment-team/hellogsm-front-25.git
+$ git clone https://github.com/themoment-team/hellogsm-front-26.git
 
 # 2. 의존성 설치
 $ pnpm install
