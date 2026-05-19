@@ -22,12 +22,13 @@ const createInitialClientModals = (): ClientModals => ({
   applicationPeriodModal: { isOpen: false },
   oneseoNotSubmittedModal: { isOpen: false },
   resultNotAnnouncedModal: { isOpen: false },
+  oneseoModifyRequestModal: { isOpen: false, onConfirm: () => {} },
 });
 
 const createInitialSharedModals = (): SharedModals => ({
   systemInspectionModal: { isOpen: false },
   scoreCalculationCompleteModal: { isOpen: false, data: null, type: 'mock' },
-  applicationSubmitModal: { isOpen: false, type: 'client' },
+  applicationSubmitModal: { isOpen: false, type: 'client', isModify: false },
   imageUploadSizeLimitModal: { isOpen: false },
 });
 
@@ -87,6 +88,9 @@ export const useModalStore = create<ModalStore>((set) => ({
   setResultNotAnnouncedModal: (isOpen) => {
     set({ resultNotAnnouncedModal: { isOpen } });
   },
+  setOneseoModifyRequestModal: (isOpen, onConfirm = () => {}) => {
+    set({ oneseoModifyRequestModal: { isOpen, onConfirm } });
+  },
 
   // shared modal action
   setSystemInspectionModal: (isOpen) => {
@@ -95,8 +99,14 @@ export const useModalStore = create<ModalStore>((set) => ({
   setScoreCalculationCompleteModal: (isOpen, data = null, type = 'mock') => {
     set({ scoreCalculationCompleteModal: { isOpen, data, type } });
   },
-  setApplicationSubmitModal: (isOpen, type = 'client') => {
-    set({ applicationSubmitModal: { isOpen, type } });
+  setApplicationSubmitModal: (isOpen, type, isModify) => {
+    set((state) => ({
+      applicationSubmitModal: {
+        isOpen,
+        type: type ?? state.applicationSubmitModal.type,
+        isModify: isModify ?? state.applicationSubmitModal.isModify,
+      },
+    }));
   },
   setImageUploadSizeLimitModal: (isOpen) => {
     set({ imageUploadSizeLimitModal: { isOpen } });

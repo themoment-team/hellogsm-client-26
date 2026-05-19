@@ -22,8 +22,11 @@ export const getArtPhysicalScores = (oneseo: GetMyOneseoType | PreviewOneseoType
       achievements.slice(6, 9),
       achievements.slice(9, 12),
     ];
-  } else if (isCandidate) {
+  }
+
+  if (isCandidate) {
     const { liberalSystem } = oneseo.middleSchoolAchievement;
+
     if (liberalSystem === '자유학년제') {
       return [
         null,
@@ -34,6 +37,7 @@ export const getArtPhysicalScores = (oneseo: GetMyOneseoType | PreviewOneseoType
         null,
       ];
     }
+
     return [
       achievements.slice(0, 3),
       achievements.slice(3, 6),

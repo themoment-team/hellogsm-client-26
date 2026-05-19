@@ -2,7 +2,7 @@ import { ARTS_PHYSICAL_SUBJECTS } from '@repo/constants';
 import { OneseoStatusType } from '@repo/types';
 import { cn } from '@repo/utils';
 
-import { getArtPhysicalScores, scoreToAlphabet, semesterArray } from '@/utils';
+import { getArtPhysicalScores, scoreToAlphabet, semesterArray } from '../scoreUtils';
 
 const ArtsPhysicalTable = ({ oneseo }: OneseoStatusType) => {
   const artPhysicalScores = getArtPhysicalScores(oneseo);

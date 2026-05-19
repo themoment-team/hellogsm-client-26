@@ -1,7 +1,7 @@
-import { Button } from '@repo/ui/shadcn';
 import { cn } from '@repo/utils';
 
-import { PrintIcon } from '@/assets';
+import { PrintIcon } from '../../../icons';
+import { Button } from '../../../shadcn';
 
 interface PrintButtonProps {
   isPreview?: boolean;

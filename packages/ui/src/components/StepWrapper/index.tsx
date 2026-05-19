@@ -3,6 +3,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -14,8 +15,10 @@ import {
   usePostMockScore,
   usePostMyOneseo,
   usePostTempStorage,
+  usePutMyOneseo,
   usePutOneseoByMemberId,
 } from '@repo/api/hooks';
+import { oneseoQueryKeys } from '@repo/api/lib';
 import { ARTS_PHYSICAL_SUBJECTS, GENERAL_SUBJECTS } from '@repo/constants';
 import { useModalStore } from '@repo/store';
 import {
@@ -52,10 +55,12 @@ interface StepWrapperProps {
   step: StepEnum;
   memberId?: number;
   type: 'client' | 'admin';
+  isModifyApproved?: boolean;
 }
 
-const StepWrapper = ({ data, step, info, memberId, type }: StepWrapperProps) => {
+const StepWrapper = ({ data, step, info, memberId, type, isModifyApproved }: StepWrapperProps) => {
   const { setScoreCalculationCompleteModal, setApplicationSubmitModal } = useModalStore();
+  const queryClient = useQueryClient();
 
   const step1UseForm = useForm<Step1FormType>({
     mode: 'onBlur',
@@ -190,11 +195,27 @@ const StepWrapper = ({ data, step, info, memberId, type }: StepWrapperProps) => 
   );
 
   const { mutate: postMyOneseo } = usePostMyOneseo({
-    onSuccess: () => setApplicationSubmitModal(true, type),
+    onSuccess: () => {
+      setApplicationSubmitModal(true, type);
+      queryClient.invalidateQueries({ queryKey: oneseoQueryKeys.getMyOneseo() });
+      queryClient.invalidateQueries({ queryKey: oneseoQueryKeys.getEditability() });
+    },
+  });
+
+  const { mutate: modifyMyOneseo } = usePutMyOneseo({
+    onSuccess: () => {
+      setApplicationSubmitModal(true, type, isModifyApproved);
+      queryClient.invalidateQueries({ queryKey: oneseoQueryKeys.getMyOneseo() });
+      queryClient.invalidateQueries({ queryKey: oneseoQueryKeys.getEditability() });
+    },
   });
 
   const { mutate: putOneseoByMemberId } = usePutOneseoByMemberId(memberId!, {
-    onSuccess: () => setApplicationSubmitModal(true, type),
+    onSuccess: () => {
+      setApplicationSubmitModal(true, type, true);
+      queryClient.invalidateQueries({ queryKey: oneseoQueryKeys.getMyOneseo() });
+      queryClient.invalidateQueries({ queryKey: oneseoQueryKeys.getEditability() });
+    },
   });
 
   const { mutate: postTempStorage } = usePostTempStorage(Number(step), {
@@ -360,7 +381,13 @@ const StepWrapper = ({ data, step, info, memberId, type }: StepWrapperProps) => 
 
   const handleOneseoSubmitButtonClick = async () => {
     await patchPersonalInfo(getPersonalInfo());
-    postMyOneseo(getOneseo());
+    const body = getOneseo();
+
+    if (isModifyApproved) {
+      modifyMyOneseo(body);
+    } else {
+      postMyOneseo(body);
+    }
   };
 
   const handleTemporarySaveButtonClick = () => {
@@ -542,6 +569,7 @@ const StepWrapper = ({ data, step, info, memberId, type }: StepWrapperProps) => 
           handleOneseoSubmitButtonClick={handleOneseoSubmitButtonClick}
           handleTemporarySaveButtonClick={handleTemporarySaveButtonClick}
           handleStepError={handleStepError}
+          isModifyApproved={isModifyApproved}
         />
       ) : (
         <EditBar

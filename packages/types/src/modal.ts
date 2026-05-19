@@ -23,6 +23,7 @@ export interface ScoreModal extends SimpleModal {
 
 export interface ApplicationModal extends SimpleModal {
   type: 'client' | 'admin';
+  isModify: boolean;
 }
 
 export interface AdminModals {
@@ -45,6 +46,7 @@ export interface ClientModals {
   applicationPeriodModal: SimpleModal;
   oneseoNotSubmittedModal: SimpleModal;
   resultNotAnnouncedModal: SimpleModal;
+  oneseoModifyRequestModal: ConfirmModal;
 }
 
 export interface SharedModals {
@@ -72,6 +74,7 @@ export interface ModalActions {
   setApplicationPeriodModal: (isOpen: boolean) => void;
   setOneseoNotSubmittedModal: (isOpen: boolean) => void;
   setResultNotAnnouncedModal: (isOpen: boolean) => void;
+  setOneseoModifyRequestModal: (isOpen: boolean, onConfirm?: () => void) => void;
 
   setSystemInspectionModal: (isOpen: boolean) => void;
   setScoreCalculationCompleteModal: (
@@ -79,7 +82,7 @@ export interface ModalActions {
     data?: MockScoreType | null,
     type?: 'score' | 'mock',
   ) => void;
-  setApplicationSubmitModal: (isOpen: boolean, type?: 'client' | 'admin') => void;
+  setApplicationSubmitModal: (isOpen: boolean, type?: 'client' | 'admin', isModify?: boolean) => void;
   setImageUploadSizeLimitModal: (isOpen: boolean) => void;
 }
 

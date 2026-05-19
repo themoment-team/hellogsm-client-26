@@ -35,4 +35,3 @@ export const getMyOneseo = async (): Promise<GetMyOneseoType | undefined> => {
 export const getMyOneseoPreview = async (): Promise<PreviewOneseoType | undefined> => {
   return fetchOneseo<PreviewOneseoType>(true);
 };
-

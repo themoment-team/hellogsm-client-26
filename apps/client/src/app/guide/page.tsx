@@ -3,10 +3,14 @@ import { getKoreanDate, isTimeAfter, isTimeBefore } from '@repo/utils';
 
 import { GuidePage } from '@/pageContainer';
 
-import { getMyOneseo } from '../apis';
+import { getEditability, getMyOneseo } from '../apis';
 
 export default async function Guide() {
-  const [data, dateList] = await Promise.all([getMyOneseo(), getDate()]);
+  const [data, dateList, editability] = await Promise.all([
+    getMyOneseo(),
+    getDate(),
+    getEditability(),
+  ]);
 
   const currentTime = getKoreanDate();
 
@@ -19,5 +23,7 @@ export default async function Guide() {
     }) &&
     isTimeBefore({ baseTime: new Date(dateList.oneseoSubmissionEnd), compareTime: currentTime });
 
-  return <GuidePage initialData={data} isOneseoWrite={isOneseoWrite} />;
+  return (
+    <GuidePage initialData={data} isOneseoWrite={isOneseoWrite} initialEditability={editability} />
+  );
 }
