@@ -1,0 +1,69 @@
+name: hello-gsm-client-stage-opennext-cd
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Create client stage env file
+        run: |
+          cat > apps/client/.env << 'EOF'
+          ${{ secrets.STAGE_CLIENT_ENV_FILE }}
+          EOF
+
+      - name: Build client OpenNext output
+        run: pnpm --filter client build:opennext
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Deploy client stage OpenNext stack
+        run: pnpm --filter @hello-gsm/client-stage-infra deploy -- --require-approval never
+        env:
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+
+      - name: Success Discord Notification
+        if: success()
+        uses: sarisia/actions-status-discord@v1.11.0
+        with:
+          webhook: ${{ secrets.WEBHOOK_URL }}
+          title: '✅ HelloGSM client stage OpenNext CD'
+          status: success
+          content: 'client stage OpenNext 배포가 성공적으로 완료되었습니다.'
+          username: HelloGSM-front bot
+          color: 0x4CAF50
+
+      - name: Failure Discord Notification
+        if: failure()
+        uses: sarisia/actions-status-discord@v1.11.0
+        with:
+          webhook: ${{ secrets.WEBHOOK_URL }}
+          title: '❌ HelloGSM client stage OpenNext CD'
+          status: failure
+          content: 'client stage OpenNext 배포 중 에러가 발생했습니다.'
+          username: HelloGSM-front bot
+          color: 0xe74c3c

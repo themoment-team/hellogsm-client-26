@@ -10,6 +10,7 @@ coverage
 
 # next.js
 .next/
+.open-next/
 out/
 build
 .swc/
@@ -35,6 +36,9 @@ yarn-error.log*
 
 # turbo
 .turbo
+
+# aws cdk
+cdk.out/
 
 # ui
 dist/

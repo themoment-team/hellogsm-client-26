@@ -1,0 +1,8 @@
+{
+  "app": "pnpm exec tsx bin/client-stage.ts",
+  "context": {
+    "environment": "stage",
+    "appPath": "../../apps/client",
+    "openNextPath": "../../apps/client/.open-next"
+  }
+}
