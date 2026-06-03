@@ -39,6 +39,11 @@ interface LoginButtonProps
   isAdmin?: boolean;
 }
 
+const getClientOrigin = (origin: string): string => {
+  if (origin === 'http://localhost:3001') return 'http://localhost:3000';
+  return origin.replace('://admin.', '://www.');
+};
+
 const LoginButton = React.forwardRef<HTMLButtonElement, LoginButtonProps>(
   ({ className, variant, children, isAdmin = false, ...props }, ref) => {
     const [redirectUri, setRedirectUri] = React.useState('');
@@ -47,9 +52,10 @@ const LoginButton = React.forwardRef<HTMLButtonElement, LoginButtonProps>(
 
     React.useEffect(() => {
       if (typeof window !== 'undefined') {
-        setRedirectUri(`${window.location.origin}/callback`);
+        const origin = isAdmin ? getClientOrigin(window.location.origin) : window.location.origin;
+        setRedirectUri(`${origin}/callback`);
       }
-    }, []);
+    }, [isAdmin]);
 
     React.useEffect(() => {
       if (redirectUri) {
