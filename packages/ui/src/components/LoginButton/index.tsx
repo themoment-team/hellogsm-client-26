@@ -47,22 +47,7 @@ const LoginButton = React.forwardRef<HTMLButtonElement, LoginButtonProps>(
 
     React.useEffect(() => {
       if (typeof window !== 'undefined') {
-        const currentOrigin = window.location.origin;
-
-        const stageOrigins = [
-          'http://localhost:3000',
-          'http://localhost:3001',
-          'https://www.stage.hellogsm.kr',
-          'https://admin.stage.hellogsm.kr',
-        ];
-
-        const productionOrigins = ['https://www.hellogsm.kr', 'https://admin.hellogsm.kr'];
-
-        if (stageOrigins.includes(currentOrigin)) {
-          setRedirectUri('https://www.stage.hellogsm.kr/callback');
-        } else if (productionOrigins.includes(currentOrigin)) {
-          setRedirectUri('https://www.hellogsm.kr/callback');
-        }
+        setRedirectUri(`${window.location.origin}/callback`);
       }
     }, []);
 
