@@ -40,8 +40,9 @@ interface LoginButtonProps
 }
 
 const getClientOrigin = (origin: string): string => {
-  if (origin === 'http://localhost:3001') return 'http://localhost:3000';
-  return origin.replace('://admin.', '://www.');
+  if (origin.includes('localhost')) return 'http://localhost:3000';
+  if (origin.includes('stage')) return 'https://www.stage.hellogsm.kr';
+  return 'https://www.hellogsm.kr';
 };
 
 const LoginButton = React.forwardRef<HTMLButtonElement, LoginButtonProps>(
