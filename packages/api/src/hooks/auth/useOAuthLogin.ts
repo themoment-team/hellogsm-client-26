@@ -9,11 +9,17 @@ interface ReturnDataType {
   message: string;
 }
 
+interface LoginPayload {
+  code: string;
+  redirectUri: string;
+}
+
 export const useOAuthLogin = (
   provider: 'google' | 'kakao',
-  options?: UseMutationOptions<ReturnDataType, AxiosError, string>,
+  options?: UseMutationOptions<ReturnDataType, AxiosError, LoginPayload>,
 ) =>
   useMutation({
-    mutationFn: (code: string) => post<ReturnDataType>(authUrl.postLogin(provider), { code }),
+    mutationFn: ({ code, redirectUri }: LoginPayload) =>
+      post<ReturnDataType>(authUrl.postLogin(provider), { code, redirectUri }),
     ...options,
   });
