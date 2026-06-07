@@ -39,6 +39,12 @@ interface LoginButtonProps
   isAdmin?: boolean;
 }
 
+const getClientOrigin = (origin: string): string => {
+  if (origin.includes('localhost')) return 'http://localhost:3000';
+  if (origin.includes('stage')) return 'https://www.stage.hellogsm.kr';
+  return 'https://www.hellogsm.kr';
+};
+
 const LoginButton = React.forwardRef<HTMLButtonElement, LoginButtonProps>(
   ({ className, variant, children, isAdmin = false, ...props }, ref) => {
     const [redirectUri, setRedirectUri] = React.useState('');
@@ -47,24 +53,10 @@ const LoginButton = React.forwardRef<HTMLButtonElement, LoginButtonProps>(
 
     React.useEffect(() => {
       if (typeof window !== 'undefined') {
-        const currentOrigin = window.location.origin;
-
-        const stageOrigins = [
-          'http://localhost:3000',
-          'http://localhost:3001',
-          'https://www.stage.hellogsm.kr',
-          'https://admin.stage.hellogsm.kr',
-        ];
-
-        const productionOrigins = ['https://www.hellogsm.kr', 'https://admin.hellogsm.kr'];
-
-        if (stageOrigins.includes(currentOrigin)) {
-          setRedirectUri('https://www.stage.hellogsm.kr/callback');
-        } else if (productionOrigins.includes(currentOrigin)) {
-          setRedirectUri('https://www.hellogsm.kr/callback');
-        }
+        const origin = isAdmin ? getClientOrigin(window.location.origin) : window.location.origin;
+        setRedirectUri(`${origin}/callback`);
       }
-    }, []);
+    }, [isAdmin]);
 
     React.useEffect(() => {
       if (redirectUri) {
