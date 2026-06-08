@@ -115,6 +115,7 @@ const CalculatePage = () => {
     step4UseForm.reset({
       liberalSystem: LiberalSystemValueEnum.FREE_SEMESTER,
       freeSemester: null,
+      gedAvgScore: null,
     });
     setErrorStep(null);
     setGraduationType(null);
