@@ -36,6 +36,7 @@ const CalculatePage = () => {
     defaultValues: {
       liberalSystem: LiberalSystemValueEnum.FREE_SEMESTER,
       freeSemester: null,
+      gedAvgScore: null,
     },
   });
 
