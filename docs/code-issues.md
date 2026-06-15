@@ -1,18 +1,18 @@
 # 코드베이스 개선/수정 필요 항목
 
-> 분석 일자: 2026-06-15  
+> 분석 일자: 2026-06-15
 > 대상: `apps/client`, `apps/admin`, `packages/*` 전체
 
 ---
 
 ## 심각도 기준
 
-| 심각도 | 기준 |
-|---|---|
-| 🔴 Critical | 즉시 수정. 기능 버그 또는 데이터 소실 |
-| 🟠 High | 빠른 수정 권고. 잠재적 런타임 오류 또는 심각한 설계 결함 |
-| 🟡 Medium | 개선 권고. 코드 품질, 유지보수성, 일관성 문제 |
-| 🔵 Low | 사소한 정리. 빌드/런타임에 영향 없음 |
+| 심각도      | 기준                                                     |
+| ----------- | -------------------------------------------------------- |
+| 🔴 Critical | 즉시 수정. 기능 버그 또는 데이터 소실                    |
+| 🟠 High     | 빠른 수정 권고. 잠재적 런타임 오류 또는 심각한 설계 결함 |
+| 🟡 Medium   | 개선 권고. 코드 품질, 유지보수성, 일관성 문제            |
+| 🔵 Low      | 사소한 정리. 빌드/런타임에 영향 없음                     |
 
 ---
 
@@ -31,6 +31,7 @@
 - **파일:** `apps/client/src/app/provider.tsx:13`, `apps/admin/src/app/provider.tsx:9`
 - **문제:** `QueryClient`를 컴포넌트 본문에서 직접 생성 → `Provider` 리렌더링마다 새 인스턴스 생성, 캐시 전체 소실.
 - **수정:**
+
   ```tsx
   // Before
   const queryClient = new QueryClient({ ... });
@@ -411,13 +412,13 @@
 
 ## 우선순위 요약
 
-| 순위 | 항목 | 파일 |
-|---|---|---|
-| 1 | `isTimeBefore` 인수 순서 불일치 | `register/page.tsx`, `mypage/page.tsx` |
-| 2 | admin redirect 경로 오류 | `edit/[memberId]/page.tsx` |
-| 3 | `QueryClient` 재생성 | `provider.tsx` (client + admin) |
-| 4 | `check-result` 변수명 반전 | `check-result/page.tsx` |
-| 5 | `.env.example` 업데이트 | client + admin |
-| 6 | 서버 fetch 패턴 중복 제거 | `app/apis/` 전체 |
-| 7 | 한글 변수/prop명 영문화 | `admin/MainPage` |
-| 8 | `.DS_Store` git 추적 제거 | 루트 `.gitignore` |
+| 순위 | 항목                            | 파일                                   |
+| ---- | ------------------------------- | -------------------------------------- |
+| 1    | `isTimeBefore` 인수 순서 불일치 | `register/page.tsx`, `mypage/page.tsx` |
+| 2    | admin redirect 경로 오류        | `edit/[memberId]/page.tsx`             |
+| 3    | `QueryClient` 재생성            | `provider.tsx` (client + admin)        |
+| 4    | `check-result` 변수명 반전      | `check-result/page.tsx`                |
+| 5    | `.env.example` 업데이트         | client + admin                         |
+| 6    | 서버 fetch 패턴 중복 제거       | `app/apis/` 전체                       |
+| 7    | 한글 변수/prop명 영문화         | `admin/MainPage`                       |
+| 8    | `.DS_Store` git 추적 제거       | 루트 `.gitignore`                      |

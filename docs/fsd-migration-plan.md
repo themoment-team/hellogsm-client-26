@@ -1,7 +1,7 @@
 # FSD 마이그레이션 플랜
 
-> 기준: Feature-Sliced Design v2 (`pages` → `views` 로 rename)  
-> 대상: `apps/client`, `apps/admin`  
+> 기준: Feature-Sliced Design v2 (`pages` → `views` 로 rename)
+> 대상: `apps/client`, `apps/admin`
 > 작성일: 2026-06-15
 
 ---
@@ -575,8 +575,8 @@ export { getMyMemberInfo } from './api/getMyMemberInfo';
 
 ```ts
 // 외부에서 사용 시
-import { MemberType } from '@/entities/member';  // ✅
-import { MemberType } from '@/entities/member/model/types';  // ❌
+import { MemberType } from '@/entities/member'; // ✅
+import { MemberType } from '@/entities/member/model/types'; // ❌
 ```
 
 ### Entities 간 cross-import (`@x` 표기법)
@@ -591,13 +591,13 @@ export type { MemberType } from '../model/types';
 
 ### 세그먼트 구성 기준
 
-| 세그먼트 | 포함 내용 |
-|---|---|
-| `ui/` | React 컴포넌트, CSS |
-| `api/` | fetch 함수, TQ 훅, 타입 |
-| `model/` | Zod 스키마, 타입, Zustand 스토어 |
-| `lib/` | 슬라이스 내부 유틸 |
-| `config/` | 상수, 환경변수 |
+| 세그먼트  | 포함 내용                        |
+| --------- | -------------------------------- |
+| `ui/`     | React 컴포넌트, CSS              |
+| `api/`    | fetch 함수, TQ 훅, 타입          |
+| `model/`  | Zod 스키마, 타입, Zustand 스토어 |
+| `lib/`    | 슬라이스 내부 유틸               |
+| `config/` | 상수, 환경변수                   |
 
 ### import 순서 컨벤션
 
@@ -622,18 +622,18 @@ import { SignupForm } from './ui/SignupForm';
 
 ## 예상 일정
 
-| Phase | 내용 | 예상 기간 |
-|---|---|---|
-| Phase 0 | 사전 준비, alias 설정 | 1~2일 |
-| Phase 1 | `shared` 레이어 (client) | 2~3일 |
-| Phase 2 | `entities` 레이어 (client) | 2~3일 |
-| Phase 3 | `features` 레이어 (client) | 3~4일 |
-| Phase 4 | `widgets` 레이어 (client) | 1~2일 |
-| Phase 5 | `views` 레이어 + app re-export (client) | 2~3일 |
-| Phase 6 | admin 전체 | 3~4일 |
-| Phase 7 | `packages/` 정리 | 1~2일 |
-| Phase 8 | 최종 검증 | 1일 |
-| **합계** | | **16~24일** |
+| Phase    | 내용                                    | 예상 기간   |
+| -------- | --------------------------------------- | ----------- |
+| Phase 0  | 사전 준비, alias 설정                   | 1~2일       |
+| Phase 1  | `shared` 레이어 (client)                | 2~3일       |
+| Phase 2  | `entities` 레이어 (client)              | 2~3일       |
+| Phase 3  | `features` 레이어 (client)              | 3~4일       |
+| Phase 4  | `widgets` 레이어 (client)               | 1~2일       |
+| Phase 5  | `views` 레이어 + app re-export (client) | 2~3일       |
+| Phase 6  | admin 전체                              | 3~4일       |
+| Phase 7  | `packages/` 정리                        | 1~2일       |
+| Phase 8  | 최종 검증                               | 1일         |
+| **합계** |                                         | **16~24일** |
 
 > 각 Phase가 끝날 때마다 `pnpm check-types && pnpm lint && pnpm build`를 실행하여 회귀 방지.
 
