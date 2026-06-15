@@ -1,3 +1,4 @@
+import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 import { MainPage } from '@/pageContainer';
@@ -24,8 +25,12 @@ export default async function Home({ searchParams }: { searchParams?: { isAdmin?
   const isAdminRole = authInfo?.role === 'ADMIN' || authInfo?.role === 'ROOT';
 
   if (isAdminRequested && isAdminRole) {
-    const isStage = process.env.NEXT_PUBLIC_API_BASE_URL?.includes('stage');
-    const adminUrl = isStage ? 'https://admin.stage.hellogsm.kr' : 'https://admin.hellogsm.kr';
+    const host = headers().get('host') ?? '';
+    const adminUrl = host.includes('localhost')
+      ? 'http://localhost:3001'
+      : host.includes('stage')
+        ? 'https://admin.stage.hellogsm.kr'
+        : 'https://admin.hellogsm.kr';
     redirect(adminUrl);
   }
 

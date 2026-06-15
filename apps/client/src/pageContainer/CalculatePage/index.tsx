@@ -36,6 +36,7 @@ const CalculatePage = () => {
     defaultValues: {
       liberalSystem: LiberalSystemValueEnum.FREE_SEMESTER,
       freeSemester: null,
+      gedAvgScore: null,
     },
   });
 
@@ -111,6 +112,16 @@ const CalculatePage = () => {
     }
   };
 
+  const handleBackClick = () => {
+    step4UseForm.reset({
+      liberalSystem: LiberalSystemValueEnum.FREE_SEMESTER,
+      freeSemester: null,
+      gedAvgScore: null,
+    });
+    setErrorStep(null);
+    setGraduationType(null);
+  };
+
   return (
     <>
       <ComputerRecommendedPage type="calculate" />
@@ -131,7 +142,7 @@ const CalculatePage = () => {
                 'border-gray-100',
               )}
             >
-              <Button onClick={() => setGraduationType(null)} variant="ghost">
+              <Button onClick={handleBackClick} variant="ghost">
                 이전
               </Button>
               <Button

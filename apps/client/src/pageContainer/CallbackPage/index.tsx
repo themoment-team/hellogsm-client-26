@@ -22,10 +22,10 @@ const CallbackPage = ({ code, provider }: { code: string; provider: string }) =>
   const handleLoginSuccess = async () => {
     await queryClient.invalidateQueries({ queryKey: memberQueryKeys.getMyMemberInfo() });
 
-    const currentOrigin = window.location.origin;
-    const isStage = currentOrigin.includes('stage');
-    const clientBaseUrl = isStage ? 'https://www.stage.hellogsm.kr' : 'https://www.hellogsm.kr';
-    const nextUrl = provider === 'admin' ? `${clientBaseUrl}/?isAdmin=true` : clientBaseUrl;
+    const nextUrl =
+      provider === 'admin'
+        ? `${window.location.origin}/?isAdmin=true`
+        : window.location.origin;
     router.replace(nextUrl);
   };
 
@@ -59,10 +59,12 @@ const CallbackPage = ({ code, provider }: { code: string; provider: string }) =>
       return;
     }
 
+    const redirectUri = `${window.location.origin}/callback`;
+
     if (provider === 'google' || provider === 'admin') {
-      googleLogin(code);
+      googleLogin({ code, redirectUri });
     } else if (provider === 'kakao') {
-      kakaoLogin(code);
+      kakaoLogin({ code, redirectUri });
     } else {
       router.replace('/');
       toast.error('로그인에 실패했습니다.');
