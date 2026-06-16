@@ -1,6 +1,5 @@
 {
   "buildCommand": "pnpm turbo run build --filter=client",
   "outputDirectory": "apps/client/.next",
-  "installCommand": "pnpm install --frozen-lockfile",
-  "framework": "nextjs"
+  "installCommand": "pnpm install --frozen-lockfile"
 }
