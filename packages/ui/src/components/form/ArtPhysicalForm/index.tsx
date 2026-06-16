@@ -67,20 +67,23 @@ const ArtPhysicalForm = ({
     isFreeGrade,
   });
 
-  const getFreeSemesterIndices = useCallback((semester: FreeSemesterValueEnum | null) => {
-    if (!semester) return [];
-    const semesterParts = semester.split('-');
-    const grade = Number(semesterParts[0]);
-    const sem = Number(semesterParts[1]);
-    if (!Number.isFinite(grade) || !Number.isFinite(sem)) return [];
+  const getFreeSemesterIndices = useCallback(
+    (semester: FreeSemesterValueEnum | null) => {
+      if (!semester) return [];
+      const semesterParts = semester.split('-');
+      const grade = Number(semesterParts[0]);
+      const sem = Number(semesterParts[1]);
+      if (!Number.isFinite(grade) || !Number.isFinite(sem)) return [];
 
-    // 재학생: 1학년부터 시작 (grade - 1), 졸업자: 2학년부터 시작 (grade - 2)
-    const gradeOffset = isGraduate ? 2 : 1;
-    const semesterNumber = (grade - gradeOffset) * 2 + (sem - 1);
+      // 재학생: 1학년부터 시작 (grade - 1), 졸업자: 2학년부터 시작 (grade - 2)
+      const gradeOffset = isGraduate ? 2 : 1;
+      const semesterNumber = (grade - gradeOffset) * 2 + (sem - 1);
 
-    if (semesterNumber < 0) return []; // 유효하지 않은 학기
-    return [semesterNumber * 3, semesterNumber * 3 + 1, semesterNumber * 3 + 2];
-  }, [isGraduate]);
+      if (semesterNumber < 0) return []; // 유효하지 않은 학기
+      return [semesterNumber * 3, semesterNumber * 3 + 1, semesterNumber * 3 + 2];
+    },
+    [isGraduate],
+  );
 
   const disabledIndices = isFreeSemester ? getFreeSemesterIndices(freeSemester) : [];
 

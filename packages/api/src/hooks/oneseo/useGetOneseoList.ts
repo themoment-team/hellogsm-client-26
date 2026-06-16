@@ -17,15 +17,7 @@ interface UseGetOneseoListParams {
 }
 
 export const useGetOneseoList = (
-  {
-    page,
-    size,
-    testResultTag,
-    screeningTag,
-    isSubmitted,
-    keyword,
-    status,
-  }: UseGetOneseoListParams,
+  { page, size, testResultTag, screeningTag, isSubmitted, keyword, status }: UseGetOneseoListParams,
   options?: Omit<UseQueryOptions<OneseoListType>, 'queryKey'>,
 ) =>
   useQuery({
