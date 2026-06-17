@@ -53,7 +53,7 @@ jobs:
         with:
           webhook: ${{ secrets.WEBHOOK_URL }}
           title: '❌ CI 실패'
-          content: '에러를 확인해주세요.'
           status: failure
+          content: '에러를 확인해주세요.'
           username: hellogsm-client bot
           color: 0xe74c3c
