@@ -72,13 +72,24 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  notify:
-    needs: create-pr
-    uses: ./.github/workflows/reusable-notifications.yml
-    with:
-      workflow_name: regular deploy PR 생성
-      workflow_type: ''
-      success_message: '정기 배포 PR이 성공적으로 생성되었습니다.'
-      failure_message: '정기 배포 PR 생성 중 에러가 발생했습니다.'
-    secrets:
-      WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+      - name: Success Discord Notification
+        uses: sarisia/actions-status-discord@v1.15.5
+        if: success()
+        with:
+          webhook: ${{ secrets.WEBHOOK_URL }}
+          title: '✅ 정기 배포 PR 생성 성공'
+          status: success
+          content: '정기 배포 PR이 성공적으로 생성되었습니다.'
+          username: hellogsm-client bot
+          color: 0x4CAF50
+
+      - name: Failure Discord Notification
+        uses: sarisia/actions-status-discord@v1.15.5
+        if: failure()
+        with:
+          webhook: ${{ secrets.WEBHOOK_URL }}
+          title: '❌ 정기 배포 PR 생성 실패'
+          status: failure
+          content: '에러를 확인해주세요.'
+          username: hellogsm-client bot
+          color: 0xe74c3c

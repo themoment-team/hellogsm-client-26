@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main, develop]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  lint-and-build:
+    name: Lint and Build
+    runs-on: ubuntu-latest
+    env:
+      HUSKY: 0
+      NEXT_PUBLIC_API_BASE_URL: ${{ secrets.NEXT_PUBLIC_API_BASE_URL }}
+      NEXT_PUBLIC_IMAGE_URL: ${{ secrets.NEXT_PUBLIC_IMAGE_URL }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run Lint
+        run: pnpm lint
+
+      - name: Build
+        run: pnpm build
+
+      - name: Success Discord Notification
+        uses: sarisia/actions-status-discord@v1.15.5
+        if: success()
+        with:
+          webhook: ${{ secrets.WEBHOOK_URL }}
+          title: '✅ CI 성공'
+          status: success
+          content: 'PR을 확인해주세요.'
+          username: hellogsm-client bot
+          color: 0x4CAF50
+
+      - name: Failure Discord Notification
+        uses: sarisia/actions-status-discord@v1.15.5
+        if: failure()
+        with:
+          webhook: ${{ secrets.WEBHOOK_URL }}
+          title: '❌ CI 실패'
+          status: failure
+          content: '에러를 확인해주세요.'
+          username: hellogsm-client bot
+          color: 0xe74c3c
