@@ -36,17 +36,15 @@ export const getOneseoList = async ({
     },
   );
 
-  const oneseoList = await response.json();
-
-  const isNotFound = response.status === 404;
-
-  if (isNotFound) {
+  if (response.status === 404) {
     return undefined;
   }
 
   if (!response.ok) {
     return redirect(redirectUrl);
   }
+
+  const oneseoList = await response.json();
 
   return oneseoList.data;
 };
