@@ -23,9 +23,7 @@ const CallbackPage = ({ code, provider }: { code: string; provider: string }) =>
     await queryClient.invalidateQueries({ queryKey: memberQueryKeys.getMyMemberInfo() });
 
     const nextUrl =
-      provider === 'admin'
-        ? `${window.location.origin}/?isAdmin=true`
-        : window.location.origin;
+      provider === 'admin' ? `${window.location.origin}/?isAdmin=true` : window.location.origin;
     router.replace(nextUrl);
   };
 

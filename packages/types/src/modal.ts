@@ -82,7 +82,11 @@ export interface ModalActions {
     data?: MockScoreType | null,
     type?: 'score' | 'mock',
   ) => void;
-  setApplicationSubmitModal: (isOpen: boolean, type?: 'client' | 'admin', isModify?: boolean) => void;
+  setApplicationSubmitModal: (
+    isOpen: boolean,
+    type?: 'client' | 'admin',
+    isModify?: boolean,
+  ) => void;
   setImageUploadSizeLimitModal: (isOpen: boolean) => void;
 }
 
