@@ -127,7 +127,7 @@ const MobileNavigation = ({
 }: MobileNavProps) => {
   if (isRegisterPath) {
     return (
-      <div className={cn('flex', 'flex-col', 'items-start', 'gap-[2.25rem]')}>
+      <div className={cn('flex', 'flex-col', 'items-end', 'gap-[2.25rem]')}>
         {links.map((link) => {
           const IconComponent = link.icon;
           return (
@@ -162,7 +162,7 @@ const MobileNavigation = ({
   }
 
   return (
-    <div className={cn('flex', 'flex-col', 'items-start', 'gap-[2.25rem]')}>
+    <div className={cn('flex', 'flex-col', 'items-end', 'gap-[2.25rem]')}>
       {links.map((link) => {
         const IconComponent = link.icon;
         return (
@@ -469,11 +469,11 @@ const Header = ({ isServerHealthy }: HeaderProps) => {
             'left-0',
             'w-full',
             'h-[calc(100vh-4.625rem)]',
-            'pl-[3rem]',
+            'pr-[3rem]',
             'pt-[1.5rem]',
             'pb-[3.75rem]',
             'flex-col',
-            'items-start',
+            'items-end',
             'justify-between',
             'bg-white',
             'z-20',
