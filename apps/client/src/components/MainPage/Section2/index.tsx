@@ -113,49 +113,48 @@ const Section2 = () => {
             'uhd:px-[32.5rem]',
           )}
         >
-          <h1
-            className={cn(
-              'text-[#0F2E4D]',
-              'font-semibold',
-              'text-center',
-              'smx:text-left',
-              'text-[1.25rem]/[1.25rem]',
-              'xs:text-[1.5rem]/[2rem]',
-              'sm:text-[2rem]/[2.5rem]',
-            )}
-          >
-            광주소프트웨어마이스터고등학교
-            <br />
-            2026 신입생 모집절차
-          </h1>
-          <div className={cn('flex', 'flex-col', 'gap-2')}>
-            <p
+          <div className={cn('flex', 'flex-col', 'items-center', 'gap-4')}>
+            <h1
               className={cn(
-                'text-gray-600',
-                'font-normal',
-                'text-[1.25rem]/[1.75rem]',
+                'text-[#0F2E4D]',
+                'font-semibold',
                 'text-center',
-                'smx:text-left',
-                'underline',
-                'cursor-pointer',
-              )}
-              onClick={() => {
-                push(`${process.env.NEXT_PUBLIC_CDN_URL}/2026_입학_요강.hwp`);
-              }}
-            >
-              입학요강 다운로드
-            </p>
-            <p
-              className={cn(
-                'text-gray-600',
-                'font-normal',
-                'text-[1.25rem]/[1.75rem]',
-                'text-center',
-                'smx:text-left',
+                'text-[1.25rem]/[1.25rem]',
+                'xs:text-[1.5rem]/[2rem]',
+                'sm:text-[2rem]/[2.5rem]',
               )}
             >
-              우리 학교에 입학하기 위해 필요한 절차를 소개해드릴게요!
-            </p>
+              광주소프트웨어마이스터고등학교
+              <br />
+              2026 신입생 모집절차
+            </h1>
+            <div className={cn('flex', 'flex-col', 'gap-2')}>
+              <p
+                className={cn(
+                  'text-gray-600',
+                  'font-normal',
+                  'text-[1.25rem]/[1.75rem]',
+                  'text-center',
+                )}
+              >
+                우리 학교에 입학하기 위해 필요한 절차를 소개해드릴게요!
+              </p>
+              <p
+                className={cn(
+                  'text-gray-600',
+                  'font-normal',
+                  'text-[1.25rem]/[1.75rem]',
+                  'text-center',
+                  'underline',
+                  'cursor-pointer',
+                )}
+                onClick={() => {
+                  push(`${process.env.NEXT_PUBLIC_CDN_URL}/2026_입학_요강.hwp`);
+                }}
+              >
+                입학요강 다운로드
+              </p>
+            </div>
           </div>
           <div
             className={cn(
