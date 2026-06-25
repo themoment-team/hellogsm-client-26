@@ -230,7 +230,9 @@ const Section2 = () => {
             ))}
           </div>
 
-          <div className={cn('flex', 'justify-around', 'mt-[3.25rem]', 'hidden', 'smx:flex')}>
+          <div
+            className={cn('flex', 'justify-around', 'mt-[3.25rem]', 'relative', 'hidden', 'smx:flex')}
+          >
             {stepsData.slice(4).map((step, index) => (
               <div
                 key={index}
@@ -281,11 +283,10 @@ const Section2 = () => {
                   <div
                     className={cn(
                       'absolute',
-                      'lg:bottom-[32.5%]',
-                      'bottom-[33%]',
-                      'sm:right-[calc(17%+4rem)]',
-                      'md: right-[calc(19%+4rem)]',
-                      'xl:right-[calc(23%+4rem)]',
+                      'top-[2rem]',
+                      'sm:right-[calc(17%+1.525rem)]',
+                      'md:right-[calc(19%-0.96rem)]',
+                      'xl:right-[calc(23%-4.64rem)]',
                       'w-[100vw]',
                       'h-[2px]',
                       'bg-blue-200',
