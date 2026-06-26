@@ -33,11 +33,9 @@ const Section3 = ({ isServerHealthy }: Section3Props) => {
           'lg:flex-row',
           'lg:gap-0',
           'px-6',
-          'xs:px-[3.75rem]',
-          'md:px-[8rem]',
-          'xl:px-[16rem]',
+          'sm:px-[2.5rem]',
+          'md:px-[6.25rem]',
           'fhd:px-[20rem]',
-          'uhd:px-[32.5rem]',
         )}
       >
         <div className={cn('text-left', 'flex', 'lg:inline', 'flex-col')}>

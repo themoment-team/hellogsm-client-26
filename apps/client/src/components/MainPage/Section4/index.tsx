@@ -137,8 +137,10 @@ const Section4 = () => {
           'items-center',
           'gap-[0.75rem]',
           'justify-center',
-          'px-4',
-          'xs:px-[3.75rem]',
+          'px-6',
+          'sm:px-[2.5rem]',
+          'md:px-[6.25rem]',
+          'fhd:px-[20rem]',
         )}
       >
         {TITLES.map(({ firstText, lastText, icon }) => (
