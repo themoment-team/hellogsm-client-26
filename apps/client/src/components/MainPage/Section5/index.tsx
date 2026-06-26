@@ -50,14 +50,12 @@ const Section5 = () => {
             'flex-col',
             'items-center',
             'gap-[1rem]',
-            'pl-[8rem]',
             'px-4',
             'xs:px-[3.75rem]',
             'md:px-[8rem]',
             'xl:px-[16rem]',
             'fhd:px-[20rem]',
             'uhd:px-[32.5rem]',
-            'xl:items-start',
           )}
         >
           <div className={cn('flex', 'items-end')}>
@@ -65,7 +63,6 @@ const Section5 = () => {
               className={cn(
                 'text-gray-900',
                 'font-semibold',
-                'xl:text-left',
                 'text-center',
                 'text-[1.25rem]/[1.25rem]',
                 'xs:text-[1.5rem]/[2rem]',
