@@ -20,7 +20,6 @@ const stepsData = [
     date: (
       <>
         <span className={cn('whitespace-nowrap')}>2025. 10. 20.(월)~</span>
-        <br className={cn('lg:hidden', 'smx:block', 'hidden')} />
         <span className={cn('whitespace-nowrap')}>23.(목) 09:00 ~ 16:30</span>
       </>
     ),
@@ -32,7 +31,6 @@ const stepsData = [
     date: (
       <>
         <span className={cn('whitespace-nowrap')}>2025. 10. 20.(월)~</span>
-        <br className={cn('lg:hidden', 'smx:block', 'hidden')} />
         <span className={cn('whitespace-nowrap')}>23.(목) 09:00 ~ 16:30</span>
       </>
     ),
@@ -68,7 +66,6 @@ const stepsData = [
     date: (
       <>
         <span className={cn('whitespace-nowrap')}>2025. 11. 5.(수) ~</span>
-        <br className={cn('lg:hidden', 'smx:block', 'hidden')} />
         <span className={cn('whitespace-nowrap')}>11. 10.(월) 16:30</span>
         <br />
         <span className={cn('whitespace-nowrap')}>
@@ -164,7 +161,7 @@ const Section2 = () => {
               'grid-cols-4',
               'relative',
               'hidden',
-              'smx:flex',
+              'lg:flex',
             )}
           >
             {stepsData.slice(0, 4).map((step, index) => (
@@ -231,7 +228,7 @@ const Section2 = () => {
           </div>
 
           <div
-            className={cn('flex', 'justify-around', 'mt-[3.25rem]', 'relative', 'hidden', 'smx:flex')}
+            className={cn('flex', 'justify-around', 'mt-[3.25rem]', 'relative', 'hidden', 'lg:flex')}
           >
             {stepsData.slice(4).map((step, index) => (
               <div
@@ -297,7 +294,7 @@ const Section2 = () => {
               </div>
             ))}
           </div>
-          <div className={cn('flex', 'smx:hidden', 'mt-[5.5rem]', 'gap-8')}>
+          <div className={cn('flex', 'lg:hidden', 'mt-[5.5rem]', 'gap-8')}>
             <div className={cn('flex', 'flex-col', 'items-center')}>
               {stepsData.map((step, index) => (
                 <div key={index} className={cn('flex', 'flex-col', 'items-center')}>
@@ -335,6 +332,7 @@ const Section2 = () => {
                     className={cn(
                       'text-slate-800',
                       'sm:text-[1.5rem]/[2rem]',
+                      'md:text-[1.25rem]/[1.75rem]',
                       'text-[1rem]/[1.75rem]',
                       'font-semibold',
                     )}
@@ -347,7 +345,6 @@ const Section2 = () => {
                       'sm:text-[1rem]/[1.75rem]',
                       'text-[0.75rem]/[1.5rem]',
                       'font-normal',
-                      'smx:text-center',
                       'text-left',
                     )}
                   >
