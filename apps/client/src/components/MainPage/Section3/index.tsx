@@ -101,7 +101,7 @@ const Section3 = ({ isServerHealthy }: Section3Props) => {
                 'smx:inline',
                 'col-span-2',
                 'row-span-1',
-                'rounded-3xl',
+                'rounded-[0.75rem]',
                 'bg-lime-400 p-6',
               )}
             >
@@ -117,7 +117,7 @@ const Section3 = ({ isServerHealthy }: Section3Props) => {
                 'flex',
                 'flex-col',
                 'justify-between',
-                'rounded-3xl',
+                'rounded-[0.75rem]',
                 'p-6',
                 'smx:bg-sky-800',
                 'bg-[#92DA1A]',
@@ -147,7 +147,7 @@ const Section3 = ({ isServerHealthy }: Section3Props) => {
                 'flex',
                 'flex-col',
                 'justify-between',
-                'rounded-3xl',
+                'rounded-[0.75rem]',
                 'bg-sky-400',
                 'p-6',
               )}
@@ -179,7 +179,7 @@ const Section3 = ({ isServerHealthy }: Section3Props) => {
                 'flex',
                 'flex-col',
                 'justify-between',
-                'rounded-3xl',
+                'rounded-[0.75rem]',
                 'p-6',
               )}
               style={{
@@ -213,7 +213,7 @@ const Section3 = ({ isServerHealthy }: Section3Props) => {
                 'row-span-1',
                 'flex-col',
                 'justify-between',
-                'rounded-3xl',
+                'rounded-[0.75rem]',
                 'bg-sky-800',
                 'p-6',
               )}
@@ -252,7 +252,7 @@ const Section3 = ({ isServerHealthy }: Section3Props) => {
                 'hidden',
                 'smx:inline',
                 'row-span-1',
-                'rounded-3xl',
+                'rounded-[0.75rem]',
                 'bg-lime-400',
                 'p-6',
               )}
