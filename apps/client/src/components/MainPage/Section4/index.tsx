@@ -88,15 +88,20 @@ const TitleCard = ({ firstText, lastText, icon }: TitleCardProps) => (
       'rounded-[0.75rem]',
       'shadow-lg',
       'gap-[1.8125rem]',
-      'w-[30rem]',
-      'sm:w-full',
-      'md:w-[calc(50%-0.375rem)]',
-      'mdx:w-[20rem]',
+      'w-[calc(50%-0.375rem)]',
+      'lg:w-[calc(25%-0.5625rem)]',
       'bg-white',
     )}
   >
-    <div className={cn('flex', 'w-[16.4375rem]', 'flex-col', 'items-start')}>
-      <p className={cn('text-sky-800', 'font-[600]', 'text-[1.5rem]/[2.25rem]')}>
+    <div className={cn('flex', 'w-full', 'flex-col', 'items-start')}>
+      <p
+        className={cn(
+          'text-sky-800',
+          'font-[600]',
+          'text-[1.25rem]/[1.875rem]',
+          'sm:text-[1.5rem]/[2.25rem]',
+        )}
+      >
         {firstText}
         <br />
         {lastText}
