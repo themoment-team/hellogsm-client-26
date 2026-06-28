@@ -89,8 +89,9 @@ const TitleCard = ({ firstText, lastText, icon }: TitleCardProps) => (
       'shadow-lg',
       'gap-[1.8125rem]',
       'w-[30rem]',
-      'sm:w-[25.1875rem]',
-      'md:w-[20rem]',
+      'sm:w-full',
+      'md:w-[calc(50%-0.375rem)]',
+      'mdx:w-[20rem]',
       'bg-white',
     )}
   >

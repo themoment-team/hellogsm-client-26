@@ -80,6 +80,8 @@ const Section5 = () => {
           className={cn(
             'flex',
             'flex-wrap',
+            'sm:flex-col',
+            'mdx:flex-row',
             'w-full',
             'justify-center',
             'items-start',
@@ -100,6 +102,8 @@ const Section5 = () => {
               className={cn(
                 'flex',
                 'w-[26rem]',
+                'sm:w-full',
+                'mdx:w-[26rem]',
                 'flex-col',
                 'items-start',
                 'gap-6',
@@ -111,6 +115,7 @@ const Section5 = () => {
                 alt={`${element.department} Image`}
                 width={418}
                 height={232}
+                className={cn('w-full', 'h-auto')}
               />
               <div className={cn('w-full', 'flex', 'flex-col', 'flex-start', 'gap-3')}>
                 <div className={cn('w-full', 'flex', 'flex-col', 'items-start', 'gap-4')}>

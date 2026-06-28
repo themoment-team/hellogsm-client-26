@@ -51,6 +51,7 @@ const MainPage = ({ memberInfo, resultInfo, isServerHealthy }: MainPageProps) =>
       <Section2 />
       <Section3 isServerHealthy={isServerHealthy} />
       <Section4 />
+      
       <Section5 />
       <Footer />
       <TestResultDialog
