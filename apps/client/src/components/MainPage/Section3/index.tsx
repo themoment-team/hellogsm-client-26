@@ -85,18 +85,14 @@ const Section3 = ({ isServerHealthy }: Section3Props) => {
           <div
             className={cn(
               'grid',
-              'grid-cols-1',
-              'grid-rows-[repeat(3, auto)]',
-              'smx:grid-cols-6',
-              'smx:grid-rows-3',
+              'grid-cols-6',
+              'grid-rows-3',
               'gap-[0.75rem]',
               'min-h-[39rem]',
             )}
           >
             <div
               className={cn(
-                'hidden',
-                'smx:inline',
                 'col-span-2',
                 'row-span-1',
                 'rounded-[0.75rem]',
@@ -109,16 +105,14 @@ const Section3 = ({ isServerHealthy }: Section3Props) => {
             </div>
             <div
               className={cn(
-                'col-span-3',
-                'smx:col-span-4',
+                'col-span-4',
                 'row-span-1',
                 'flex',
                 'flex-col',
                 'justify-between',
                 'rounded-[0.75rem]',
                 'p-6',
-                'smx:bg-sky-800',
-                'bg-[#92DA1A]',
+                'bg-sky-800',
               )}
             >
               <p
@@ -205,8 +199,7 @@ const Section3 = ({ isServerHealthy }: Section3Props) => {
             </div>
             <div
               className={cn(
-                'hidden',
-                'smx:flex',
+                'flex',
                 'col-span-4',
                 'row-span-1',
                 'flex-col',
@@ -247,8 +240,6 @@ const Section3 = ({ isServerHealthy }: Section3Props) => {
             <div
               className={cn(
                 'col-span-2',
-                'hidden',
-                'smx:inline',
                 'row-span-1',
                 'rounded-[0.75rem]',
                 'bg-lime-400',
