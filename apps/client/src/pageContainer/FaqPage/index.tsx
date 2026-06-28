@@ -125,16 +125,23 @@ const FaqPage = ({ data, openIndex }: FaqPageProps) => {
                 type="text"
                 value={keyword}
                 onChange={handleSearchChange}
-                className={cn('w-full', 'h-12', 'pl-8', 'outline-none')}
+                className={cn(
+                  'w-full',
+                  'h-12',
+                  'pl-8',
+                  'outline-none',
+                  'text-[#292b2f]',
+                  'placeholder:text-slate-400',
+                )}
                 placeholder="검색하실 질문을 입력해주세요"
               />
               <div
                 className={cn('items-center', 'pointer-events-none', 'absolute', 'left-0', 'flex')}
               >
-                <SearchIcon />
+                <SearchIcon color={keyword ? '#292b2f' : '#94a3b8'} />
               </div>
             </div>
-            <div className={cn('w-full', 'h-[0.0625rem]', 'bg-slate-300')} />
+            <div className={cn('w-full', 'h-[0.0625rem]', keyword ? 'bg-[#292b2f]' : 'bg-slate-400')} />
             <div className={cn('flex', 'flex-col', 'gap-4', 'pt-8')}>
               {currentItems.map((faq, index) => {
                 const globalIndex = (currentPage - 1) * ITEMS_PER_PAGE + index;
