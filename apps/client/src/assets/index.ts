@@ -40,3 +40,4 @@ export { default as Section2Icon3 } from './Section2/Section2Icon3';
 export { default as Section2Icon4 } from './Section2/Section2Icon4';
 export { default as Section2Icon5 } from './Section2/Section2Icon5';
 export { default as Section2Icon6 } from './Section2/Section2Icon6';
+export { default as FirstResultCheckIcon } from './FirstResultCheckIcon';

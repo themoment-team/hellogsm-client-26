@@ -2,7 +2,6 @@
 
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 
 import {
   useGetMyFirstTestResultInfo,
@@ -25,8 +24,7 @@ import {
 } from '@repo/ui/shadcn';
 import { cn } from '@repo/utils';
 
-import { AlertIcon, DocumentIcon, ParticleIcon, PrintIcon, ProfileIcon } from '@/assets';
-import { PassResultDialog } from '@/components';
+import { AlertIcon, DocumentIcon, FirstResultCheckIcon, PrintIcon, ProfileIcon } from '@/assets';
 
 interface MyInfoProps {
   initialData: GetMyOneseoType | undefined;
@@ -34,8 +32,6 @@ interface MyInfoProps {
 }
 
 const MyPage = ({ initialData, isOneseoWrite }: MyInfoProps) => {
-  const [isPassOpen, setIsPassOpen] = useState<boolean>(false);
-
   const { push } = useRouter();
 
   const queryClient = useQueryClient();
@@ -67,8 +63,6 @@ const MyPage = ({ initialData, isOneseoWrite }: MyInfoProps) => {
   const wantedScreening = oneseoInfo?.wantedScreening;
   const desiredMajors = oneseoInfo?.desiredMajors;
   const name = memberInfo?.name;
-
-  const isFinishFirstTest = resultInfo?.secondTestPassYn === null ? true : false;
 
   const departments = [
     desiredMajors?.firstDesiredMajor,
@@ -105,7 +99,18 @@ const MyPage = ({ initialData, isOneseoWrite }: MyInfoProps) => {
 
   const screeningLabel = wantedScreening ? screeningLabels[wantedScreening] : '전형 없음';
 
-  const buttonStyle = ['px-[0.75rem]', 'py-[0.375rem]', 'text-[0.75rem]/[1.25rem]', 'h-8'];
+  const buttonStyle = [
+    'bg-white',
+    'border',
+    'border-[#4a80f8]',
+    'text-[#4a80f8]',
+    'font-semibold',
+    'px-4',
+    'py-2',
+    'rounded-[0.5rem]',
+    'text-[0.875rem]/[1.25rem]',
+    'h-auto',
+  ];
 
   return (
     <div className={cn('flex', 'w-full', 'min-h-screen', 'justify-center', 'bg-white', 'pb-10')}>
@@ -221,10 +226,10 @@ const MyPage = ({ initialData, isOneseoWrite }: MyInfoProps) => {
                     className={cn(
                       'flex',
                       'flex-col',
-                      'py-4',
+                      'py-[0.62rem]',
                       'justify-center',
                       'items-center',
-                      'rounded-[0.375rem]',
+                      'rounded-[0.5rem]',
                       'border',
                       'border-solid',
                       'border-slate-300',
@@ -238,47 +243,28 @@ const MyPage = ({ initialData, isOneseoWrite }: MyInfoProps) => {
                 ))}
               </div>
               {resultInfo && resultInfo.firstTestPassYn !== null && (
-                <div className={cn('flex', 'flex-col', 'w-full')}>
-                  <div className={cn('flex', 'flex-col', 'gap-2')}>
-                    <div
-                      className={cn(
-                        'flex',
-                        'p-4',
-                        'items-center',
-                        'justify-between',
-                        'rounded-[0.375rem]',
-                        'border',
-                        'border-solid',
-                        'border-slate-300',
-                      )}
-                    >
-                      <div className={cn('flex', 'items-center', 'gap-3')}>
-                        <ParticleIcon />
-                        <p className={cn('text-slate-900', 'text-[1rem]/[1.75rem]', 'font-normal')}>
-                          {isFinishFirstTest
-                            ? '1차 서류전형 합격자 확인하기'
-                            : '최종 합격자 확인하기'}
-                        </p>
-                      </div>
-
-                      <Button
-                        onClick={() => setIsPassOpen(true)}
-                        variant="download"
-                        className={cn([...buttonStyle])}
-                      >
-                        바로가기
-                      </Button>
-                    </div>
-                  </div>
+                <div
+                  className={cn(
+                    'flex',
+                    'p-4',
+                    'items-center',
+                    'justify-between',
+                    'rounded-[0.5rem]',
+                    'border',
+                    'border-solid',
+                    'border-slate-300',
+                  )}
+                >
+                  <FirstResultCheckIcon />
+                  <Button
+                    onClick={() => push('/check-result')}
+                    variant="outline"
+                    className={cn([...buttonStyle])}
+                  >
+                    바로가기
+                  </Button>
                 </div>
               )}
-              <PassResultDialog
-                isPassOpen={isPassOpen}
-                setIsPassOpen={setIsPassOpen}
-                resultInfo={resultInfo}
-                isFinishFirstTest={isFinishFirstTest}
-                memberInfo={memberInfo}
-              />
             </div>
 
             <div className={cn('w-full', 'flex', 'flex-col', 'gap-3')}>
@@ -295,7 +281,7 @@ const MyPage = ({ initialData, isOneseoWrite }: MyInfoProps) => {
                         'p-4',
                         'items-center',
                         'justify-between',
-                        'rounded-[0.375rem]',
+                        'rounded-[0.5rem]',
                         'border',
                         'border-solid',
                         'border-slate-300',
@@ -310,7 +296,7 @@ const MyPage = ({ initialData, isOneseoWrite }: MyInfoProps) => {
 
                       <Button
                         onClick={() => push(doc.path)}
-                        variant="download"
+                        variant="outline"
                         className={cn([...buttonStyle])}
                       >
                         다운로드
@@ -326,7 +312,7 @@ const MyPage = ({ initialData, isOneseoWrite }: MyInfoProps) => {
                   'py-4',
                   'items-start',
                   'gap-2',
-                  'rounded-[0.375rem]',
+                  'rounded-[0.5rem]',
                   'bg-slate-100',
                 )}
               >
