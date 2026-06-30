@@ -294,7 +294,17 @@ const Section2 = () => {
               </div>
             ))}
           </div>
-          <div className={cn('flex', 'lg:hidden', 'mt-[5.5rem]', 'gap-8')}>
+          <div
+            className={cn(
+              'flex',
+              'lg:hidden',
+              'mt-[5.5rem]',
+              'gap-8',
+              'md:border-l-[0.25rem]',
+              'md:border-l-[#BFDBFE]',
+              'md:pl-[2.5rem]',
+            )}
+          >
             <div className={cn('flex', 'flex-col', 'items-center')}>
               {stepsData.map((step, index) => (
                 <div key={index} className={cn('flex', 'flex-col', 'items-center')}>
