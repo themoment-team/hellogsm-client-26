@@ -1,7 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-
 import { cn } from '@repo/utils';
 
 import {
@@ -78,7 +76,6 @@ const stepsData = [
 ];
 
 const Section2 = () => {
-  const { push } = useRouter();
   return (
     <div
       id="section2"
@@ -146,7 +143,7 @@ const Section2 = () => {
                   'cursor-pointer',
                 )}
                 onClick={() => {
-                  push(`${process.env.NEXT_PUBLIC_CDN_URL}/2026_입학_요강.hwp`);
+                  window.open(`${process.env.NEXT_PUBLIC_CDN_URL}/2026_입학_요강.hwp`, '_blank');
                 }}
               >
                 입학요강 다운로드
