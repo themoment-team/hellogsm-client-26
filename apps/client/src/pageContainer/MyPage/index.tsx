@@ -259,7 +259,7 @@ const MyPage = ({ initialData, isOneseoWrite }: MyInfoProps) => {
                   <Button
                     onClick={() => push('/check-result')}
                     variant="outline"
-                    className={cn([...buttonStyle])}
+                    className={cn(buttonStyle)}
                   >
                     바로가기
                   </Button>
@@ -297,7 +297,7 @@ const MyPage = ({ initialData, isOneseoWrite }: MyInfoProps) => {
                       <Button
                         onClick={() => push(doc.path)}
                         variant="outline"
-                        className={cn([...buttonStyle])}
+                        className={cn(buttonStyle)}
                       >
                         다운로드
                       </Button>
