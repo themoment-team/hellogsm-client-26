@@ -1,0 +1,159 @@
+
+> hellogsm-front-v2@ build C:\Users\user\git\hellogsm-front-25
+> turbo run build "--force"
+
+• Packages in scope: @repo/api, @repo/constants, @repo/eslint-config, @repo/hooks, @repo/store, @repo/tailwind-config, @repo/types, @repo/typescript-config, @repo/ui, @repo/utils, admin, client
+• Running build in 12 packages
+• Remote caching disabled
+@repo/ui:build:components: cache bypass, force executing c601bedab0ecda9a
+@repo/ui:build:styles: cache bypass, force executing 6979d29405f3b907
+@repo/constants:build: cache bypass, force executing c9a5b6101ede2f64
+@repo/hooks:build: cache bypass, force executing 848b02acb23cbba3
+@repo/ui:build:styles: 
+@repo/ui:build:styles: > @repo/ui@0.0.0 build:styles C:\Users\user\git\hellogsm-front-25\packages\ui
+@repo/ui:build:styles: > tailwindcss -i ./src/styles.css -o ./dist/index.css
+@repo/ui:build:styles: 
+@repo/ui:build:components: 
+@repo/ui:build:components: > @repo/ui@0.0.0 build:components C:\Users\user\git\hellogsm-front-25\packages\ui
+@repo/ui:build:components: > tsc
+@repo/ui:build:components: 
+@repo/constants:build: 
+@repo/constants:build: > @repo/constants@0.0.0 build C:\Users\user\git\hellogsm-front-25\packages\constants
+@repo/constants:build: > tsc
+@repo/constants:build: 
+@repo/hooks:build: 
+@repo/hooks:build: > @repo/hooks@0.0.0 build C:\Users\user\git\hellogsm-front-25\packages\hooks
+@repo/hooks:build: > tsc
+@repo/hooks:build: 
+@repo/utils:build: cache bypass, force executing 62bf4c89650c95a3
+@repo/ui:build:styles: 
+@repo/ui:build:styles: Rebuilding...
+@repo/utils:build: 
+@repo/utils:build: > @repo/utils@0.0.0 build C:\Users\user\git\hellogsm-front-25\packages\utils
+@repo/utils:build: > tsc
+@repo/utils:build: 
+@repo/ui:build:styles: 
+@repo/ui:build:styles: Done in 739ms.
+@repo/types:build: cache bypass, force executing 0e06d3e4d3c3ffe7
+@repo/types:build: 
+@repo/types:build: > @repo/types@0.0.0 build C:\Users\user\git\hellogsm-front-25\packages\types
+@repo/types:build: > tsc
+@repo/types:build: 
+@repo/api:build: cache bypass, force executing 9f24a5bb3903020a
+@repo/store:build: cache bypass, force executing d969c0122b32e52d
+@repo/store:build: 
+@repo/store:build: > @repo/store@0.0.0 build C:\Users\user\git\hellogsm-front-25\packages\store
+@repo/store:build: > tsc
+@repo/store:build: 
+@repo/api:build: 
+@repo/api:build: > @repo/api@0.0.0 build C:\Users\user\git\hellogsm-front-25\packages\api
+@repo/api:build: > tsc
+@repo/api:build: 
+admin:build: cache bypass, force executing e3b3903b7e56516a
+client:build: cache bypass, force executing 4fadc8f30e2fa081
+client:build: 
+client:build: > client@1.0.0 build C:\Users\user\git\hellogsm-front-25\apps\client
+client:build: > next build
+client:build: 
+admin:build: 
+admin:build: > admin@1.0.0 build C:\Users\user\git\hellogsm-front-25\apps\admin
+admin:build: > next build
+admin:build: 
+client:build:   ▲ Next.js 14.2.35
+client:build:   - Environments: .env.local
+client:build: 
+client:build:    Creating an optimized production build ...
+admin:build:   ▲ Next.js 14.2.35
+admin:build:   - Environments: .env.local
+admin:build: 
+admin:build:    Creating an optimized production build ...
+admin:build:  ✓ Compiled successfully
+admin:build:    Linting and checking validity of types ...
+client:build:  ✓ Compiled successfully
+client:build:    Linting and checking validity of types ...
+admin:build: 
+admin:build: ./src/pageContainer/MainPage/index.tsx
+admin:build: 93:6  Warning: React Hook useEffect has a missing dependency: 'oneseoRefetch'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+admin:build: 
+admin:build: ./src/pageContainer/TicketPage/index.tsx
+admin:build: 89:21  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+admin:build: 
+admin:build: info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
+admin:build:    Collecting page data ...
+admin:build:    Generating static pages (0/6) ...
+admin:build:    Generating static pages (1/6) 
+admin:build:    Generating static pages (2/6) 
+admin:build:    Generating static pages (4/6) 
+admin:build:  ✓ Generating static pages (6/6)
+admin:build:    Finalizing page optimization ...
+admin:build:    Collecting build traces ...
+client:build: 
+client:build: ./src/pageContainer/CallbackPage/index.tsx
+client:build: 70:6  Warning: React Hook useEffect has missing dependencies: 'googleLogin', 'kakaoLogin', and 'router'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+client:build: 
+client:build: ./src/pageContainer/CheckResultPage/index.tsx
+client:build: 93:13  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+client:build: 97:13  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+client:build: 
+client:build: ./src/pageContainer/MainPage/index.tsx
+client:build: 43:6  Warning: React Hook useEffect has a missing dependency: 'resultInfo'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+client:build: 
+client:build: ./src/pageContainer/SignUpPage/index.tsx
+client:build: 114:6  Warning: React Hook useEffect has a missing dependency: 'formMethods'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+client:build: 
+client:build: info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
+client:build:    Collecting page data ...
+client:build:    Generating static pages (0/14) ...
+client:build:    Generating static pages (3/14) 
+client:build:    Generating static pages (6/14) 
+client:build:    Generating static pages (10/14) 
+client:build:  ✓ Generating static pages (14/14)
+client:build:    Finalizing page optimization ...
+client:build:    Collecting build traces ...
+admin:build: 
+admin:build: Route (app)                              Size     First Load JS
+admin:build: ┌ ƒ /                                    143 B           246 kB
+admin:build: ├ ○ /_not-found                          870 B          88.2 kB
+admin:build: ├ ƒ /edit/[memberId]                     302 B           235 kB
+admin:build: ├ ƒ /print                               143 B           246 kB
+admin:build: ├ ƒ /print/[memberId]                    302 B           235 kB
+admin:build: └ ○ /signin                              143 B           246 kB
+admin:build: + First Load JS shared by all            87.3 kB
+admin:build:   ├ chunks/470-4dc72e61caeca17a.js       31.7 kB
+admin:build:   ├ chunks/ba96a577-ad89a710b4fb5b94.js  53.6 kB
+admin:build:   └ other shared chunks (total)          1.97 kB
+admin:build: 
+admin:build: 
+admin:build: ○  (Static)   prerendered as static content
+admin:build: ƒ  (Dynamic)  server-rendered on demand
+admin:build: 
+client:build: 
+client:build: Route (app)                              Size     First Load JS
+client:build: ┌ ƒ /                                    148 B           308 kB
+client:build: ├ ○ /_not-found                          138 B          87.5 kB
+client:build: ├ ƒ /callback                            147 B           308 kB
+client:build: ├ ƒ /check-result                        147 B           308 kB
+client:build: ├ ƒ /faq                                 147 B           308 kB
+client:build: ├ ƒ /guide                               147 B           308 kB
+client:build: ├ ○ /introduce                           148 B           308 kB
+client:build: ├ ƒ /mypage                              147 B           308 kB
+client:build: ├ ○ /oneseo/calculate                    147 B           308 kB
+client:build: ├ ƒ /print                               148 B           308 kB
+client:build: ├ ƒ /register                            147 B           308 kB
+client:build: └ ○ /signup                              147 B           308 kB
+client:build: + First Load JS shared by all            87.3 kB
+client:build:   ├ chunks/470-3529fdf011bbd5e7.js       31.7 kB
+client:build:   ├ chunks/ba96a577-25e51386d62d8948.js  53.6 kB
+client:build:   └ other shared chunks (total)          1.97 kB
+client:build: 
+client:build: 
+client:build: ○  (Static)   prerendered as static content
+client:build: ƒ  (Dynamic)  server-rendered on demand
+client:build: 
+
+ Tasks:    10 successful, 10 total
+Cached:    0 cached, 10 total
+  Time:    1m2.417s 
+
+
+• turbo 2.8.11
