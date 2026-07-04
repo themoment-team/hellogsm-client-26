@@ -200,6 +200,8 @@ const MobileNavigation = ({
 const Logo = ({ isRegisterPath }: { isRegisterPath: boolean }) => {
   if (isRegisterPath) {
     return (
+      // 원서 작성 중에는 전체 리로드로 이동해야 하므로 의도적으로 <a>를 사용
+      // eslint-disable-next-line @next/next/no-html-link-for-pages
       <a href="/">
         <I.HelloGSMLogo />
       </a>
