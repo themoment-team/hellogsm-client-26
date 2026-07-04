@@ -5,10 +5,11 @@ import { PrintPage } from '@/pageContainer';
 import { getMyOneseo, getMyOneseoPreview } from '../apis';
 
 interface PrintPageProps {
-  searchParams: { preview?: string };
+  searchParams: Promise<{ preview?: string }>;
 }
 
-export default async function Home({ searchParams }: PrintPageProps) {
+export default async function Home(props: PrintPageProps) {
+  const searchParams = await props.searchParams;
   const isPreview = searchParams.preview === 'true';
   const data = isPreview ? await getMyOneseoPreview() : await getMyOneseo();
 

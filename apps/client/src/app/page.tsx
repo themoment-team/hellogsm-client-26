@@ -11,7 +11,8 @@ import {
   getMySecondTestResult,
 } from './apis';
 
-export default async function Home({ searchParams }: { searchParams?: { isAdmin?: string } }) {
+export default async function Home(props: { searchParams?: Promise<{ isAdmin?: string }> }) {
+  const searchParams = await props.searchParams;
   const [memberInfo, authInfo, firstResultInfo, secondResultInfo, isServerHealthy] =
     await Promise.all([
       getMyMemberInfo('/'),
@@ -25,7 +26,7 @@ export default async function Home({ searchParams }: { searchParams?: { isAdmin?
   const isAdminRole = authInfo?.role === 'ADMIN' || authInfo?.role === 'ROOT';
 
   if (isAdminRequested && isAdminRole) {
-    const host = headers().get('host') ?? '';
+    const host = (await headers()).get('host') ?? '';
     const adminUrl = host.includes('localhost')
       ? 'http://localhost:3001'
       : host.includes('stage')

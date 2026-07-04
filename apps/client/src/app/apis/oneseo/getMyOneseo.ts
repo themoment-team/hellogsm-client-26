@@ -4,7 +4,7 @@ import { oneseoUrl } from '@repo/api/lib';
 import { GetMyOneseoType, PreviewOneseoType } from '@repo/types';
 
 const fetchOneseo = async <T>(preview: boolean): Promise<T | undefined> => {
-  const session = cookies().get('SESSION')?.value;
+  const session = (await cookies()).get('SESSION')?.value;
   try {
     const response = await fetch(
       new URL(oneseoUrl.getMyOneseo(preview), process.env.NEXT_PUBLIC_API_BASE_URL),

@@ -5,10 +5,16 @@ import { ApplicationPrintPage } from '@repo/ui/components';
 import { getOneseoByMemberId } from '@/app/apis';
 
 interface PrintProps {
-  params: { memberId: string };
+  params: Promise<{ memberId: string }>;
 }
 
-export default async function Print({ params: { memberId } }: PrintProps) {
+export default async function Print(props: PrintProps) {
+  const params = await props.params;
+
+  const {
+    memberId
+  } = params;
+
   const id = Number(memberId);
 
   if (Number.isNaN(id)) redirect('/');

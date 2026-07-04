@@ -19,7 +19,7 @@ interface GetOneseoListParams {
 export const getOneseoList = async ({
   redirectUrl,
 }: GetOneseoListParams): Promise<OneseoListType | undefined> => {
-  const session = cookies().get('SESSION')?.value;
+  const session = (await cookies()).get('SESSION')?.value;
 
   const response = await fetch(
     new URL(

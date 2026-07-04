@@ -16,7 +16,7 @@ interface GetMyAuthInfoParams {
 export const getMyAuthInfo = async ({
   redirectUrl,
 }: GetMyAuthInfoParams): Promise<MyAuthInfoType | undefined> => {
-  const session = cookies().get('SESSION')?.value;
+  const session = (await cookies()).get('SESSION')?.value;
 
   const response = await fetch(
     new URL(`${memberUrl.getMyAuthInfo()}`, process.env.NEXT_PUBLIC_API_BASE_URL),

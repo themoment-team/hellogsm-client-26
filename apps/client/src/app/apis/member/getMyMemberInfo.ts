@@ -12,7 +12,7 @@ import { MyMemberInfoType } from '@repo/types';
 export const getMyMemberInfo = async (
   redirectUrl: string,
 ): Promise<MyMemberInfoType | undefined> => {
-  const session = cookies().get('SESSION')?.value;
+  const session = (await cookies()).get('SESSION')?.value;
 
   try {
     const response = await fetch(

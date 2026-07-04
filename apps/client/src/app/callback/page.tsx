@@ -1,9 +1,10 @@
 import { CallbackPage } from '@/pageContainer';
 
-export default function Callback({
-  searchParams,
-}: {
-  searchParams: { code: string; state: string };
-}) {
+export default async function Callback(
+  props: {
+    searchParams: Promise<{ code: string; state: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   return <CallbackPage code={searchParams.code} provider={searchParams.state} />;
 }
