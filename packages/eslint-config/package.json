@@ -9,7 +9,7 @@
   },
   "devDependencies": {
     "@cspell/eslint-plugin": "^9.6.4",
-    "@next/eslint-plugin-next": "^14.2.35",
+    "@next/eslint-plugin-next": "^15.5.20",
     "@typescript-eslint/eslint-plugin": "^8.56.0",
     "@typescript-eslint/parser": "^8.56.0",
     "eslint": "^8.57.1",
