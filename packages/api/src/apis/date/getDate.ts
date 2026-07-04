@@ -1,3 +1,4 @@
+/// <reference types="next" />
 import { DateType } from '@repo/types';
 
 import { dateUrl } from '../../libs';
