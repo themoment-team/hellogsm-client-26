@@ -97,6 +97,7 @@ HG(hellogsm-front-25)에 React Compiler를 도입하는 마이그레이션(Next 
 | 날짜 | Stage | 작업 내용 | 커밋/태그 |
 |---|---|---|---|
 | 2026-07-03 | stage-0 | 브랜치 생성, 측정 스크립트(`scripts/measure/build-time.mjs`) 추가, T0 빌드 시간 10회 측정(평균 66.7s) + 번들 수치 기록 | 태그 `upgrade/t0-baseline` |
+| 2026-07-05 | stage-0 | Playwright 스모크 E2E 6개 추가(client 4: 메인/FAQ/원서조회/회원가입, admin 2: signin 리다이렉트 origin·OAuth redirect_uri — #419~422 회귀 직격 검증) + CI 스텝 추가. 로컬 6/6 green (12.2s) | 태그 `upgrade/stage-0-done` |
 
 ## 이슈 로그
 
@@ -104,4 +105,5 @@ HG(hellogsm-front-25)에 React Compiler를 도입하는 마이그레이션(Next 
 
 | 날짜 | 문제 | 원인 | 해결 | 소요 |
 |---|---|---|---|---|
-| - | - | - | - | - |
+| 2026-07-05 | `pnpm add @playwright/test` 직후 `pnpm build` 실패 — `@repo/api`에서 `Cannot find name 'process'`, `Cannot find module 'next/navigation'` | 4월에 생성된 `packages/api/node_modules`의 next/react 심링크가 오래된 `.pnpm` 해시 경로를 가리키고 있었는데, 새 install이 해당 경로를 정리하면서 심링크가 깨짐 (stale node_modules) | `pnpm install` 전체 재실행으로 심링크 재생성 | ~10분 |
+| 2026-07-05 | Playwright webServer 기동 실패 — `EADDRINUSE :3000` | client/admin 둘 다 `start` 스크립트가 포트 미지정 `next start`(기본 3000)라 동시 기동 시 충돌 (`dev`만 3000/3001 분리돼 있었음) | playwright.config.ts의 webServer command에 `--port 3000/3001` 명시 | ~5분 |
