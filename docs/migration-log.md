@@ -98,6 +98,20 @@ HG(hellogsm-front-25)에 React Compiler를 도입하는 마이그레이션(Next 
 |---|---|---|---|
 | 2026-07-03 | stage-0 | 브랜치 생성, 측정 스크립트(`scripts/measure/build-time.mjs`) 추가, T0 빌드 시간 10회 측정(평균 66.7s) + 번들 수치 기록 | 태그 `upgrade/t0-baseline` |
 | 2026-07-05 | stage-0 | Playwright 스모크 E2E 6개 추가(client 4: 메인/FAQ/원서조회/회원가입, admin 2: signin 리다이렉트 origin·OAuth redirect_uri — #419~422 회귀 직격 검증) + CI 스텝 추가. 로컬 6/6 green (12.2s) | 태그 `upgrade/stage-0-done` |
+| 2026-07-05 | stage-1 | **Next 14.2.35→15.5.20, React 18.3.1→19.2.7** 업그레이드. 의존성 bump(앱 2 + packages 3 peerDeps ^19 + @types/react 19 overrides 단일화) → `next-async-request-api` codemod 17개 파일 자동 전환(cookies/headers 11 + params/searchParams 6) → 수동 보정은 lint 룰 예외 1건뿐 → images.domains→remotePatterns → fetch 캐싱 결정(아래 표) → radix-ui 6종 최신화. 검증: check-types 9/9, lint 9/9, build 10/10, 스모크 6/6 green | 태그 `upgrade/stage-1-done` |
+
+### Stage 1 fetch 캐싱 결정 (Next 15 기본값 force-cache→no-store 반전 대응)
+
+| 대상 | 결정 | 근거 |
+|---|---|---|
+| 세션 쿠키 API 10곳 (`apps/*/src/app/apis/**`) | 기본값(no-store) 그대로 | 사용자별 원서/회원/인증 데이터 — 14에서 암묵 캐싱되던 것이 오히려 위험했음. 새 기본값이 정답 |
+| `apps/client/src/app/faq/page.tsx` (Notion API) | 변경 없음 | 이미 `next: { revalidate: 3600 }` 명시돼 있어 기본값 반전 무영향 |
+| `packages/api getDate()` (전형 일정, 공개 데이터) | `revalidate: 60` 명시 | 전 페이지에서 호출되는 공통 데이터 — no-store면 요청마다 API 타격. 단 마감/발표 시각 판별에 쓰여 오차 60초로 제한 |
+
+### Stage 1 번들 변화 참고 (webpack, 공식 비교는 T1에서)
+
+- client First Load JS: 308kB → **321kB** (+13kB), admin: 246kB → **258kB** (+12kB) — React 19 + Next 15 런타임 증가분. shared 청크 87.3→102kB
+- React 19 콘솔 경고: 프로덕션 스모크 기준 0건 (radix 선최신화로 ref 경고 미발생). dev 모드 경고는 수동 QA 시 확인 예정
 
 ## 이슈 로그
 
@@ -107,3 +121,5 @@ HG(hellogsm-front-25)에 React Compiler를 도입하는 마이그레이션(Next 
 |---|---|---|---|---|
 | 2026-07-05 | `pnpm add @playwright/test` 직후 `pnpm build` 실패 — `@repo/api`에서 `Cannot find name 'process'`, `Cannot find module 'next/navigation'` | 4월에 생성된 `packages/api/node_modules`의 next/react 심링크가 오래된 `.pnpm` 해시 경로를 가리키고 있었는데, 새 install이 해당 경로를 정리하면서 심링크가 깨짐 (stale node_modules) | `pnpm install` 전체 재실행으로 심링크 재생성 | ~10분 |
 | 2026-07-05 | Playwright webServer 기동 실패 — `EADDRINUSE :3000` | client/admin 둘 다 `start` 스크립트가 포트 미지정 `next start`(기본 3000)라 동시 기동 시 충돌 (`dev`만 3000/3001 분리돼 있었음) | playwright.config.ts의 webServer command에 `--port 3000/3001` 명시 | ~5분 |
+| 2026-07-05 | Next 15 업그레이드 후 admin `next start`가 `TypeError: Cannot read properties of undefined (reading 'filter')`로 즉사 | admin의 `.next`가 Next 14 시절 빌드 산출물이었음(작업 셸의 cwd가 apps/client에 남아 turbo 빌드 스코프가 client로 좁혀졌던 것) — Next 15 서버가 14의 manifest를 읽다 크래시 | 두 앱 `.next` 삭제 후 루트에서 전체 재빌드. 교훈: **Next 메이저 업그레이드 후 `.next` 잔재는 반드시 청소** | ~15분 |
+| 2026-07-05 | `@repo/api` tsc 빌드 실패 — `'next' does not exist in type 'RequestInit'` | getDate에 `next: { revalidate }` 추가했는데, 순수 tsc로 컴파일되는 패키지엔 Next의 RequestInit 전역 확장이 로드되지 않음(앱은 next-env.d.ts로 로드됨) | `/// <reference types="next" />` 추가 | ~10분 |
