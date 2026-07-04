@@ -6,10 +6,12 @@
     "dev": "turbo run dev --concurrency=11",
     "lint": "turbo run lint",
     "check-types": "turbo run check-types",
+    "test:e2e": "playwright test",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,md}\"",
     "lint:fix": "turbo run lint -- --fix"
   },
   "devDependencies": {
+    "@playwright/test": "^1.61.1",
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "turbo": "^2.8.9"
