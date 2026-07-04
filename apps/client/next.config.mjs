@@ -2,8 +2,13 @@
 
 const nextConfig = {
   images: {
-    domains: ['github.com'],
     remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'github.com',
+        port: '',
+        pathname: '/**',
+      },
       {
         protocol: 'https',
         hostname: process.env.NEXT_PUBLIC_IMAGE_URL || '',
