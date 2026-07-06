@@ -1,7 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-
 import { cn } from '@repo/utils';
 
 import {
@@ -20,7 +18,6 @@ const stepsData = [
     date: (
       <>
         <span className={cn('whitespace-nowrap')}>2025. 10. 20.(월)~</span>
-        <br className={cn('lg:hidden', 'smx:block', 'hidden')} />
         <span className={cn('whitespace-nowrap')}>23.(목) 09:00 ~ 16:30</span>
       </>
     ),
@@ -32,7 +29,6 @@ const stepsData = [
     date: (
       <>
         <span className={cn('whitespace-nowrap')}>2025. 10. 20.(월)~</span>
-        <br className={cn('lg:hidden', 'smx:block', 'hidden')} />
         <span className={cn('whitespace-nowrap')}>23.(목) 09:00 ~ 16:30</span>
       </>
     ),
@@ -68,7 +64,6 @@ const stepsData = [
     date: (
       <>
         <span className={cn('whitespace-nowrap')}>2025. 11. 5.(수) ~</span>
-        <br className={cn('lg:hidden', 'smx:block', 'hidden')} />
         <span className={cn('whitespace-nowrap')}>11. 10.(월) 16:30</span>
         <br />
         <span className={cn('whitespace-nowrap')}>
@@ -81,7 +76,6 @@ const stepsData = [
 ];
 
 const Section2 = () => {
-  const { push } = useRouter();
   return (
     <div
       id="section2"
@@ -113,49 +107,48 @@ const Section2 = () => {
             'uhd:px-[32.5rem]',
           )}
         >
-          <h1
-            className={cn(
-              'text-[#0F2E4D]',
-              'font-semibold',
-              'text-center',
-              'smx:text-left',
-              'text-[1.25rem]/[1.25rem]',
-              'xs:text-[1.5rem]/[2rem]',
-              'sm:text-[2rem]/[2.5rem]',
-            )}
-          >
-            광주소프트웨어마이스터고등학교
-            <br />
-            2026 신입생 모집절차
-          </h1>
-          <div className={cn('flex', 'flex-col', 'gap-2')}>
-            <p
+          <div className={cn('flex', 'flex-col', 'items-center', 'gap-4')}>
+            <h1
               className={cn(
-                'text-gray-600',
-                'font-normal',
-                'text-[1.25rem]/[1.75rem]',
+                'text-[#0F2E4D]',
+                'font-semibold',
                 'text-center',
-                'smx:text-left',
-                'underline',
-                'cursor-pointer',
-              )}
-              onClick={() => {
-                push(`${process.env.NEXT_PUBLIC_CDN_URL}/2026_입학_요강.hwp`);
-              }}
-            >
-              입학요강 다운로드
-            </p>
-            <p
-              className={cn(
-                'text-gray-600',
-                'font-normal',
-                'text-[1.25rem]/[1.75rem]',
-                'text-center',
-                'smx:text-left',
+                'text-[1.25rem]/[1.25rem]',
+                'xs:text-[1.5rem]/[2rem]',
+                'sm:text-[2rem]/[2.5rem]',
               )}
             >
-              우리 학교에 입학하기 위해 필요한 절차를 소개해드릴게요!
-            </p>
+              광주소프트웨어마이스터고등학교
+              <br />
+              2026 신입생 모집절차
+            </h1>
+            <div className={cn('flex', 'flex-col', 'gap-2')}>
+              <p
+                className={cn(
+                  'text-gray-600',
+                  'font-normal',
+                  'text-[1.25rem]/[1.75rem]',
+                  'text-center',
+                )}
+              >
+                우리 학교에 입학하기 위해 필요한 절차를 소개해드릴게요!
+              </p>
+              <p
+                className={cn(
+                  'text-gray-600',
+                  'font-normal',
+                  'text-[1.25rem]/[1.75rem]',
+                  'text-center',
+                  'underline',
+                  'cursor-pointer',
+                )}
+                onClick={() => {
+                  window.open(`${process.env.NEXT_PUBLIC_CDN_URL}/2026_입학_요강.hwp`, '_blank');
+                }}
+              >
+                입학요강 다운로드
+              </p>
+            </div>
           </div>
           <div
             className={cn(
@@ -165,7 +158,7 @@ const Section2 = () => {
               'grid-cols-4',
               'relative',
               'hidden',
-              'smx:flex',
+              'lg:flex',
             )}
           >
             {stepsData.slice(0, 4).map((step, index) => (
@@ -231,7 +224,9 @@ const Section2 = () => {
             ))}
           </div>
 
-          <div className={cn('flex', 'justify-around', 'mt-[3.25rem]', 'hidden', 'smx:flex')}>
+          <div
+            className={cn('flex', 'justify-around', 'mt-[3.25rem]', 'relative', 'hidden', 'lg:flex')}
+          >
             {stepsData.slice(4).map((step, index) => (
               <div
                 key={index}
@@ -282,11 +277,10 @@ const Section2 = () => {
                   <div
                     className={cn(
                       'absolute',
-                      'lg:bottom-[32.5%]',
-                      'bottom-[33%]',
-                      'sm:right-[calc(17%+4rem)]',
-                      'md: right-[calc(19%+4rem)]',
-                      'xl:right-[calc(23%+4rem)]',
+                      'top-[2rem]',
+                      'sm:right-[calc(17%+1.525rem)]',
+                      'md:right-[calc(19%-0.96rem)]',
+                      'xl:right-[calc(23%-4.64rem)]',
                       'w-[100vw]',
                       'h-[2px]',
                       'bg-blue-200',
@@ -297,7 +291,17 @@ const Section2 = () => {
               </div>
             ))}
           </div>
-          <div className={cn('flex', 'smx:hidden', 'mt-[5.5rem]', 'gap-8')}>
+          <div
+            className={cn(
+              'flex',
+              'lg:hidden',
+              'mt-[5.5rem]',
+              'gap-8',
+              'md:border-l-[0.25rem]',
+              'md:border-l-[#BFDBFE]',
+              'md:pl-[2.5rem]',
+            )}
+          >
             <div className={cn('flex', 'flex-col', 'items-center')}>
               {stepsData.map((step, index) => (
                 <div key={index} className={cn('flex', 'flex-col', 'items-center')}>
@@ -335,6 +339,7 @@ const Section2 = () => {
                     className={cn(
                       'text-slate-800',
                       'sm:text-[1.5rem]/[2rem]',
+                      'md:text-[1.25rem]/[1.75rem]',
                       'text-[1rem]/[1.75rem]',
                       'font-semibold',
                     )}
@@ -347,7 +352,6 @@ const Section2 = () => {
                       'sm:text-[1rem]/[1.75rem]',
                       'text-[0.75rem]/[1.5rem]',
                       'font-normal',
-                      'smx:text-center',
                       'text-left',
                     )}
                   >

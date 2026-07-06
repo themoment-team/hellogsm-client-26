@@ -33,11 +33,9 @@ const Section3 = ({ isServerHealthy }: Section3Props) => {
           'lg:flex-row',
           'lg:gap-0',
           'px-6',
-          'xs:px-[3.75rem]',
-          'md:px-[8rem]',
-          'xl:px-[16rem]',
+          'sm:px-[2.5rem]',
+          'md:px-[6.25rem]',
           'fhd:px-[20rem]',
-          'uhd:px-[32.5rem]',
         )}
       >
         <div className={cn('text-left', 'flex', 'lg:inline', 'flex-col')}>
@@ -87,21 +85,17 @@ const Section3 = ({ isServerHealthy }: Section3Props) => {
           <div
             className={cn(
               'grid',
-              'grid-cols-1',
-              'grid-rows-[repeat(3, auto)]',
-              'smx:grid-cols-6',
-              'smx:grid-rows-3',
+              'grid-cols-6',
+              'grid-rows-3',
               'gap-[0.75rem]',
               'min-h-[39rem]',
             )}
           >
             <div
               className={cn(
-                'hidden',
-                'smx:inline',
                 'col-span-2',
                 'row-span-1',
-                'rounded-3xl',
+                'rounded-[0.75rem]',
                 'bg-lime-400 p-6',
               )}
             >
@@ -111,16 +105,14 @@ const Section3 = ({ isServerHealthy }: Section3Props) => {
             </div>
             <div
               className={cn(
-                'col-span-3',
-                'smx:col-span-4',
+                'col-span-4',
                 'row-span-1',
                 'flex',
                 'flex-col',
                 'justify-between',
-                'rounded-3xl',
+                'rounded-[0.75rem]',
                 'p-6',
-                'smx:bg-sky-800',
-                'bg-[#92DA1A]',
+                'bg-sky-800',
               )}
             >
               <p
@@ -147,7 +139,7 @@ const Section3 = ({ isServerHealthy }: Section3Props) => {
                 'flex',
                 'flex-col',
                 'justify-between',
-                'rounded-3xl',
+                'rounded-[0.75rem]',
                 'bg-sky-400',
                 'p-6',
               )}
@@ -179,7 +171,7 @@ const Section3 = ({ isServerHealthy }: Section3Props) => {
                 'flex',
                 'flex-col',
                 'justify-between',
-                'rounded-3xl',
+                'rounded-[0.75rem]',
                 'p-6',
               )}
               style={{
@@ -207,13 +199,12 @@ const Section3 = ({ isServerHealthy }: Section3Props) => {
             </div>
             <div
               className={cn(
-                'hidden',
-                'smx:flex',
+                'flex',
                 'col-span-4',
                 'row-span-1',
                 'flex-col',
                 'justify-between',
-                'rounded-3xl',
+                'rounded-[0.75rem]',
                 'bg-sky-800',
                 'p-6',
               )}
@@ -249,10 +240,8 @@ const Section3 = ({ isServerHealthy }: Section3Props) => {
             <div
               className={cn(
                 'col-span-2',
-                'hidden',
-                'smx:inline',
                 'row-span-1',
-                'rounded-3xl',
+                'rounded-[0.75rem]',
                 'bg-lime-400',
                 'p-6',
               )}
