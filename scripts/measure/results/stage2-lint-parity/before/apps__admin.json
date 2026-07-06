@@ -1,0 +1,445 @@
+[
+  {
+    "filePath": "C:\\Users\\user\\git\\hellogsm-front-25\\apps\\admin\\src\\app\\apis\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\user\\git\\hellogsm-front-25\\apps\\admin\\src\\app\\apis\\oneseo\\getAdmissionTickets.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\user\\git\\hellogsm-front-25\\apps\\admin\\src\\app\\apis\\oneseo\\getMyAuthInfo.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\user\\git\\hellogsm-front-25\\apps\\admin\\src\\app\\apis\\oneseo\\getOneseoById.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\user\\git\\hellogsm-front-25\\apps\\admin\\src\\app\\apis\\oneseo\\getOneseoList.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\user\\git\\hellogsm-front-25\\apps\\admin\\src\\app\\apis\\oneseo\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\user\\git\\hellogsm-front-25\\apps\\admin\\src\\app\\edit\\[memberId]\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\user\\git\\hellogsm-front-25\\apps\\admin\\src\\app\\layout.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\user\\git\\hellogsm-front-25\\apps\\admin\\src\\app\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\user\\git\\hellogsm-front-25\\apps\\admin\\src\\app\\print\\[memberId]\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\user\\git\\hellogsm-front-25\\apps\\admin\\src\\app\\print\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\user\\git\\hellogsm-front-25\\apps\\admin\\src\\app\\provider.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\user\\git\\hellogsm-front-25\\apps\\admin\\src\\app\\signin\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\user\\git\\hellogsm-front-25\\apps\\admin\\src\\assets\\icons\\ApplicationTH\\QuestionMark.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\user\\git\\hellogsm-front-25\\apps\\admin\\src\\assets\\icons\\FilterBar\\CloverIcon.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\user\\git\\hellogsm-front-25\\apps\\admin\\src\\assets\\icons\\FilterBar\\FileIcon.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\user\\git\\hellogsm-front-25\\apps\\admin\\src\\assets\\icons\\FilterBar\\MedalIcon.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\user\\git\\hellogsm-front-25\\apps\\admin\\src\\assets\\icons\\FilterBar\\SearchIcon.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\user\\git\\hellogsm-front-25\\apps\\admin\\src\\assets\\icons\\FilterBar\\UploadIcon.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\user\\git\\hellogsm-front-25\\apps\\admin\\src\\assets\\icons\\SideMenu\\ChevronsLeft.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\user\\git\\hellogsm-front-25\\apps\\admin\\src\\assets\\icons\\SideMenu\\Exit.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\user\\git\\hellogsm-front-25\\apps\\admin\\src\\assets\\icons\\SideMenu\\Puzzle.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\user\\git\\hellogsm-front-25\\apps\\admin\\src\\assets\\icons\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\user\\git\\hellogsm-front-25\\apps\\admin\\src\\assets\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\user\\git\\hellogsm-front-25\\apps\\admin\\src\\components\\ApplicantTH\\index.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\user\\git\\hellogsm-front-25\\apps\\admin\\src\\components\\ApplicantTR\\index.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\user\\git\\hellogsm-front-25\\apps\\admin\\src\\components\\FilterBar\\index.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\user\\git\\hellogsm-front-25\\apps\\admin\\src\\components\\SideMenu\\index.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\user\\git\\hellogsm-front-25\\apps\\admin\\src\\components\\TextField\\index.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\user\\git\\hellogsm-front-25\\apps\\admin\\src\\components\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\user\\git\\hellogsm-front-25\\apps\\admin\\src\\pageContainer\\LoginPage\\index.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\user\\git\\hellogsm-front-25\\apps\\admin\\src\\pageContainer\\MainPage\\index.tsx",
+    "messages": [
+      {
+        "ruleId": "react-hooks/exhaustive-deps",
+        "severity": 1,
+        "message": "React Hook useEffect has a missing dependency: 'oneseoRefetch'. Either include it or remove the dependency array.",
+        "line": 93,
+        "column": 6,
+        "nodeType": "ArrayExpression",
+        "endLine": 93,
+        "endColumn": 83,
+        "suggestions": [
+          {
+            "desc": "Update the dependencies array to be: [debouncedKeyword, page, testResultTag, isSubmitted, screeningTag, requested, oneseoRefetch]",
+            "fix": {
+              "range": [
+                2725,
+                2802
+              ],
+              "text": "[debouncedKeyword, page, testResultTag, isSubmitted, screeningTag, requested, oneseoRefetch]"
+            }
+          }
+        ]
+      }
+    ],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 1,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "'use client';\r\n\r\nimport { useEffect, useState } from 'react';\r\n\r\nimport { useGetEditability, useGetOneseoList } from '@repo/api/hooks';\r\nimport { useDebounce } from '@repo/hooks';\r\nimport { OneseoEditStatusTag, OneseoListType, ScreeningType, YesNo } from '@repo/types';\r\nimport {\r\n  Pagination,\r\n  PaginationContent,\r\n  PaginationItem,\r\n  PaginationLink,\r\n  PaginationNext,\r\n  PaginationPrevious,\r\n  Table,\r\n  TableBody,\r\n  TableHeader,\r\n} from '@repo/ui/shadcn';\r\nimport { cn } from '@repo/utils';\r\n\r\nimport { ApplicantTH, ApplicantTR, FilterBar, SideMenu } from '@/components';\r\nimport { SideBarType } from '@/schemas';\r\n\r\ninterface MainPageProps {\r\n  initialData: OneseoListType | undefined;\r\n  isAfterFirstResults: boolean;\r\n  isAfterSecondResults: boolean;\r\n  is역량검사처리기간: boolean;\r\n  is심층면접처리기간: boolean;\r\n}\r\n\r\nconst flexColStyle = ['flex', 'flex-col'] as const;\r\n\r\nconst PER_PAGE = 10;\r\nconst DEFAULT_TEST_RESULT_TAG = 'ALL';\r\n\r\nconst testResultTypeConvertor: { [key: string]: string } = {\r\n  ALL: '전체 지원자 관리',\r\n  REQUEST: '원서 수정 요청 관리',\r\n  FIRST_PASS: '1차 전형 합격자 관리',\r\n  FINAL_PASS: '최종 합격자 관리',\r\n  FALL: '불합격자 관리',\r\n};\r\n\r\nconst MainPage = ({\r\n  initialData,\r\n  isAfterFirstResults,\r\n  isAfterSecondResults,\r\n  is역량검사처리기간,\r\n  is심층면접처리기간,\r\n}: MainPageProps) => {\r\n  const [isOpen, setIsOpen] = useState<boolean>(true);\r\n\r\n  const [keyword, setKeyword] = useState<string>('');\r\n  const [testResultTag, setTestResultTag] = useState<SideBarType>(DEFAULT_TEST_RESULT_TAG);\r\n  const [isSubmitted, setIsSubmitted] = useState<YesNo | string>('');\r\n  const [screeningTag, setScreeningTag] = useState<ScreeningType | string>('');\r\n  const [requested, setRequested] = useState<OneseoEditStatusTag>('ANY_EDIT');\r\n  const [page, setPage] = useState<number>(0);\r\n\r\n  const debouncedKeyword = useDebounce(keyword, 1000);\r\n\r\n  const { data, refetch: oneseoRefetch } = useGetOneseoList(\r\n    {\r\n      page: page,\r\n      size: PER_PAGE,\r\n      testResultTag: testResultTag === 'REQUEST' ? 'ALL' : testResultTag,\r\n      screeningTag: screeningTag,\r\n      isSubmitted: testResultTag === 'REQUEST' ? '' : isSubmitted,\r\n      keyword: debouncedKeyword,\r\n      status: testResultTag === 'REQUEST' ? requested : undefined,\r\n    },\r\n    {\r\n      initialData: initialData,\r\n    },\r\n  );\r\n\r\n  const { data: editableData, refetch: editableRefetch } = useGetEditability();\r\n\r\n  const totalPages = data?.info.totalPages;\r\n\r\n  const startPage = totalPages ? Math.max(0, Math.min(page, data.info.totalPages - 3)) : 0;\r\n\r\n  const pageNumbers = totalPages\r\n    ? Array.from(\r\n        { length: Math.min(3, data.info.totalPages - startPage) },\r\n        (_, i) => startPage + i + 1,\r\n      )\r\n    : [];\r\n\r\n  useEffect(() => {\r\n    oneseoRefetch();\r\n  }, [debouncedKeyword, page, testResultTag, isSubmitted, screeningTag, requested]);\r\n\r\n  useEffect(() => {\r\n    setPage(0);\r\n  }, [debouncedKeyword, testResultTag, isSubmitted, screeningTag, requested]);\r\n  // 필터 조건이 변경 되었을때 1번부터 다시 시작\r\n\r\n  return (\r\n    <main\r\n      className={cn([\r\n        isOpen && 'ml-60',\r\n        isOpen ? 'px-10' : 'pl-20 pr-10',\r\n        'pt-[60px]',\r\n        'pb-8',\r\n        'bg-white',\r\n      ])}\r\n    >\r\n      <SideMenu\r\n        testResultTag={testResultTag}\r\n        setTestResultTag={setTestResultTag}\r\n        isOpen={isOpen}\r\n        setIsOpen={setIsOpen}\r\n      />\r\n      <div className={cn([...flexColStyle, 'gap-8'])}>\r\n        <h1 className={cn('text-gray-900', 'text-3xl', 'font-semibold')}>\r\n          {testResultTypeConvertor[testResultTag]}\r\n        </h1>\r\n        <div className={cn([...flexColStyle, 'gap-5'])}>\r\n          <FilterBar\r\n            screeningTag={screeningTag}\r\n            setScreeningTag={setScreeningTag}\r\n            keyword={keyword}\r\n            setKeyword={setKeyword}\r\n            isSubmitted={isSubmitted}\r\n            setIsSubmitted={setIsSubmitted}\r\n            requested={requested}\r\n            setRequested={setRequested}\r\n            testResultTag={testResultTag}\r\n            isAfterFirstResults={isAfterFirstResults}\r\n            isAfterSecondResults={isAfterSecondResults}\r\n          />\r\n          <div\r\n            className={cn(\r\n              'border',\r\n              'border-solid',\r\n              'border-zinc-200',\r\n              'w-full',\r\n              'rounded-t-md',\r\n              'overflow-hidden',\r\n              'max-h-[calc(100vh-280px)]',\r\n              'overflow-scroll',\r\n            )}\r\n          >\r\n            <Table>\r\n              <TableHeader>\r\n                <ApplicantTH />\r\n              </TableHeader>\r\n              <TableBody>\r\n                {data?.oneseos &&\r\n                  data.oneseos.map((oneseo) => (\r\n                    <ApplicantTR\r\n                      {...oneseo}\r\n                      key={oneseo.memberId}\r\n                      editableData={editableData}\r\n                      oneseoRefetch={oneseoRefetch}\r\n                      editableRefetch={editableRefetch}\r\n                      is역량검사처리기간={is역량검사처리기간}\r\n                      is심층면접처리기간={is심층면접처리기간}\r\n                      testResultTag={testResultTag}\r\n                    />\r\n                  ))}\r\n              </TableBody>\r\n            </Table>\r\n          </div>\r\n\r\n          {totalPages ? (\r\n            <Pagination>\r\n              <PaginationContent>\r\n                <PaginationItem>\r\n                  <PaginationPrevious\r\n                    onClick={() => setPage((prev) => (prev > 0 ? prev - 1 : 0))}\r\n                  />\r\n                </PaginationItem>\r\n                {pageNumbers.map((pageNumber: number) => (\r\n                  <PaginationItem key={pageNumber}>\r\n                    <PaginationLink\r\n                      isActive={pageNumber - 1 === page}\r\n                      onClick={() => setPage(pageNumber - 1)}\r\n                    >\r\n                      {pageNumber}\r\n                    </PaginationLink>\r\n                  </PaginationItem>\r\n                ))}\r\n                <PaginationItem>\r\n                  <PaginationNext\r\n                    onClick={() =>\r\n                      setPage((prev) =>\r\n                        prev < data.info.totalPages - 1 ? prev + 1 : data.info.totalPages - 1,\r\n                      )\r\n                    }\r\n                  />\r\n                </PaginationItem>\r\n              </PaginationContent>\r\n            </Pagination>\r\n          ) : (\r\n            <span className={cn('text-red-500')}>조회된 지원자 데이터가 없습니다.</span>\r\n          )}\r\n        </div>\r\n      </div>\r\n    </main>\r\n  );\r\n};\r\n\r\nexport default MainPage;\r\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\user\\git\\hellogsm-front-25\\apps\\admin\\src\\pageContainer\\TicketPage\\index.tsx",
+    "messages": [
+      {
+        "ruleId": "@next/next/no-img-element",
+        "severity": 1,
+        "message": "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+        "line": 89,
+        "column": 21,
+        "nodeType": "JSXOpeningElement",
+        "endLine": 93,
+        "endColumn": 23
+      }
+    ],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 1,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "'use client';\r\n\r\nimport { useGetAdmissionTickets } from '@repo/api/hooks';\r\nimport {\r\n  NEXT_YEAR,\r\n  passedMemberAnnounceDate,\r\n  visionCampDate,\r\n  심층면접시험기간,\r\n  역량검사시험기간,\r\n} from '@repo/constants';\r\nimport { TicketType } from '@repo/types';\r\nimport { PrintIcon } from '@repo/ui/icons';\r\nimport { Button } from '@repo/ui/shadcn';\r\nimport { cn } from '@repo/utils';\r\n\r\ninterface TicketPageProps {\r\n  initialData: TicketType[];\r\n}\r\n\r\nconst TicketPage = ({ initialData }: TicketPageProps) => {\r\n  const { data: admissionTickets } = useGetAdmissionTickets({\r\n    initialData: initialData,\r\n  });\r\n\r\n  const handlePrint = () => {\r\n    window.print();\r\n  };\r\n\r\n  return (\r\n    <div className={cn('print:exact', 'flex', 'flex-col', 'bg-white', 'print:pt-0')}>\r\n      {admissionTickets?.map((ticket) => (\r\n        <div\r\n          key={ticket.oneseoSubmitCode}\r\n          className={cn(\r\n            'mx-auto',\r\n            'flex',\r\n            'h-[100dvh]',\r\n            'w-[920px]',\r\n            'items-center',\r\n            'font-normal',\r\n            'text-black',\r\n          )}\r\n        >\r\n          <table\r\n            className={cn(\r\n              'h-[350px]',\r\n              'w-full',\r\n              'border-collapse',\r\n              'text-center',\r\n              'text-[0.75rem]',\r\n              'font-light',\r\n              'leading-[1.25rem]',\r\n            )}\r\n          >\r\n            <tbody>\r\n              <tr>\r\n                <td\r\n                  className={cn('w-[55vw]', 'border', 'border-black', 'text-[20px]', 'font-normal')}\r\n                  colSpan={2}\r\n                >\r\n                  수험자 안내사항\r\n                </td>\r\n                <td\r\n                  className={cn('w-[45vw]', 'border', 'border-black', 'text-[20px]', 'font-normal')}\r\n                  colSpan={3}\r\n                >\r\n                  수 험 표\r\n                </td>\r\n              </tr>\r\n              <tr>\r\n                <td className={cn('w-28', 'border', 'border-black', 'font-normal')}>\r\n                  2차 전형 <br />\r\n                  (역량검사)\r\n                </td>\r\n                <td\r\n                  className={cn(\r\n                    'border',\r\n                    'border-black',\r\n                    'pl-[0.625rem]',\r\n                    'text-left',\r\n                    'font-normal',\r\n                  )}\r\n                >\r\n                  {역량검사시험기간}\r\n                </td>\r\n\r\n                <td rowSpan={7} className={cn('h-[200px]', 'w-[150px]', 'border', 'border-black')}>\r\n                  {ticket.profileImg && (\r\n                    <img\r\n                      src={ticket.profileImg}\r\n                      alt=\"증명사진 오류\"\r\n                      className={cn('block', 'h-full', 'w-full')}\r\n                    />\r\n                  )}\r\n                </td>\r\n                <td\r\n                  rowSpan={1}\r\n                  className={cn(\r\n                    'w-[10%]',\r\n                    'border',\r\n                    'border-black',\r\n                    'bg-[#e9e9e9]',\r\n                    'font-medium',\r\n                    'font-normal',\r\n                  )}\r\n                >\r\n                  접수번호\r\n                </td>\r\n                <td rowSpan={1} className={cn('border', 'border-black', 'font-normal')}>\r\n                  {ticket.oneseoSubmitCode}\r\n                </td>\r\n              </tr>\r\n              <tr>\r\n                <td className={cn('w-28', 'border', 'border-black', 'font-normal')}>\r\n                  2차 전형 <br />\r\n                  (심층면접)\r\n                </td>\r\n                <td\r\n                  className={cn(\r\n                    'border',\r\n                    'border-black',\r\n                    'pl-[0.625rem]',\r\n                    'text-left',\r\n                    'font-normal',\r\n                  )}\r\n                >\r\n                  {심층면접시험기간}\r\n                </td>\r\n                <td\r\n                  rowSpan={1}\r\n                  className={cn(\r\n                    'w-[10%]',\r\n                    'border',\r\n                    'border-black',\r\n                    'bg-[#e9e9e9]',\r\n                    'font-medium',\r\n                    'font-normal',\r\n                  )}\r\n                >\r\n                  수험번호\r\n                </td>\r\n                <td rowSpan={1} className={cn('border', 'border-black', 'font-normal')}>\r\n                  {ticket.examinationNumber}\r\n                </td>\r\n              </tr>\r\n              <tr>\r\n                <td rowSpan={2} className={cn('border', 'border-black', 'font-normal')}>\r\n                  합격자 발표\r\n                </td>\r\n                <td\r\n                  className={cn(\r\n                    'border',\r\n                    'border-black',\r\n                    'pl-[0.625rem]',\r\n                    'text-left',\r\n                    'font-normal',\r\n                  )}\r\n                >\r\n                  입학지원 사이트 로그인 후 확인(hellogsm.kr)\r\n                </td>\r\n                <td\r\n                  className={cn(\r\n                    'border',\r\n                    'border-black',\r\n                    'bg-[#e9e9e9]',\r\n                    'font-medium',\r\n                    'font-normal',\r\n                  )}\r\n                >\r\n                  성명\r\n                </td>\r\n                <td className={cn('border', 'border-black')}>{ticket.memberName}</td>\r\n              </tr>\r\n              <tr>\r\n                <td\r\n                  className={cn(\r\n                    'border',\r\n                    'border-black',\r\n                    'pl-[0.625rem]',\r\n                    'text-left',\r\n                    'font-normal',\r\n                  )}\r\n                >\r\n                  {passedMemberAnnounceDate}\r\n                </td>\r\n                <td\r\n                  className={cn(\r\n                    'border',\r\n                    'border-black',\r\n                    'bg-[#e9e9e9]',\r\n                    'font-medium',\r\n                    'font-normal',\r\n                  )}\r\n                  rowSpan={2}\r\n                >\r\n                  생년월일\r\n                </td>\r\n                <td className={cn('border', 'border-black', 'font-normal')} rowSpan={2}>\r\n                  {ticket.memberBirth}\r\n                </td>\r\n              </tr>\r\n              <tr>\r\n                <td rowSpan={2} className={cn('border', 'border-black', 'font-normal')}>\r\n                  합격자 등록 및<br /> 서류 제출\r\n                </td>\r\n                <td\r\n                  className={cn(\r\n                    'border',\r\n                    'border-black',\r\n                    'pl-[0.625rem]',\r\n                    'text-left',\r\n                    'font-normal',\r\n                  )}\r\n                >\r\n                  공문 시행, 방문 제출\r\n                </td>\r\n              </tr>\r\n              <tr>\r\n                <td\r\n                  className={cn(\r\n                    'border',\r\n                    'border-black',\r\n                    'pl-[0.625rem]',\r\n                    'text-left',\r\n                    'font-normal',\r\n                  )}\r\n                >\r\n                  (1) 입학등록동의서 1부\r\n                  <br />\r\n                  (2) 건강진단서 1부\r\n                  <br />\r\n                  2025. 11. 05.(수)~ 11. 10.(월) 16:30\r\n                  <br />\r\n                  (※ 휴무일과 공휴일은 서류 접수하지 않음)\r\n                </td>\r\n                <td\r\n                  rowSpan={2}\r\n                  className={cn(\r\n                    'border',\r\n                    'border-black',\r\n                    'bg-[#e9e9e9]',\r\n                    'font-medium',\r\n                    'font-normal',\r\n                  )}\r\n                >\r\n                  출신학교\r\n                </td>\r\n                {ticket.schoolName ? (\r\n                  <td rowSpan={2} className={cn('border', 'border-black')}>\r\n                    {ticket.schoolName}\r\n                  </td>\r\n                ) : (\r\n                  <td\r\n                    rowSpan={2}\r\n                    className={cn(\r\n                      'bg-[url(&apos;data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\"><line x1=\"0\" y1=\"100%\" x2=\"100%\" y2=\"0\" stroke=\"gray\" /></svg>&apos;)]',\r\n                      'border',\r\n                      'border-black',\r\n                    )}\r\n                  />\r\n                )}\r\n              </tr>\r\n              <tr>\r\n                <td className={cn('border', 'border-black', 'font-normal')}>입학등록동의서 서식</td>\r\n                <td\r\n                  className={cn(\r\n                    'border',\r\n                    'border-black',\r\n                    'pl-[0.625rem]',\r\n                    'text-left',\r\n                    'font-normal',\r\n                  )}\r\n                >\r\n                  본교 홈페이지에서 다운로드\r\n                </td>\r\n              </tr>\r\n              <tr>\r\n                <td className={cn('border', 'border-black', 'font-normal')}>신입생 비전캠프</td>\r\n                <td\r\n                  className={cn(\r\n                    'border',\r\n                    'border-black',\r\n                    'pl-[0.625rem]',\r\n                    'text-left',\r\n                    'font-normal',\r\n                  )}\r\n                >\r\n                  {visionCampDate.startDate} ~ {visionCampDate.endDate} 예정\r\n                </td>\r\n                <td\r\n                  rowSpan={2}\r\n                  colSpan={2}\r\n                  className={cn(\r\n                    'border',\r\n                    'border-black',\r\n                    'pl-2',\r\n                    'pr-[0.625rem]',\r\n                    'text-left',\r\n                    'font-normal',\r\n                  )}\r\n                >\r\n                  위 사람은 {NEXT_YEAR}학년도 <br /> 본교 신입생 입학전형 지원자임을 확인함.\r\n                  <p className={cn('pr-[0.625rem]', 'text-center', 'font-normal')}>\r\n                    2025년 10월 31일\r\n                  </p>\r\n                  <p>광주소프트웨어마이스터고등학교장 [직인생략]</p>\r\n                </td>\r\n                <td\r\n                  className={cn(\r\n                    'border',\r\n                    'border-black',\r\n                    'bg-[#e9e9e9]',\r\n                    'font-medium',\r\n                    'font-normal',\r\n                  )}\r\n                >\r\n                  접수자\r\n                </td>\r\n              </tr>\r\n              <tr>\r\n                <td\r\n                  colSpan={2}\r\n                  className={cn(\r\n                    'border',\r\n                    'border-black',\r\n                    'pl-[0.625rem]',\r\n                    'text-left',\r\n                    'font-normal',\r\n                  )}\r\n                >\r\n                  * 공지 사항: 홈페이지(gsm.gen.hs.kr)-입학 안내 <br />* 문의:062-949-6842\r\n                </td>\r\n                <td className={cn('border', 'border-black', 'font-normal')}>(인)</td>\r\n              </tr>\r\n            </tbody>\r\n          </table>\r\n        </div>\r\n      ))}\r\n      <Button\r\n        className={cn(\r\n          'fixed',\r\n          'bottom-10',\r\n          'right-10',\r\n          'z-50',\r\n          'items-center',\r\n          'gap-2',\r\n          'print:hidden',\r\n        )}\r\n        onClick={handlePrint}\r\n      >\r\n        <PrintIcon />\r\n        <p className={cn('text-[2.1vh]', 'font-bold', 'hover:text-white')}>인쇄하기</p>\r\n      </Button>\r\n    </div>\r\n  );\r\n};\r\n\r\nexport default TicketPage;\r\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\user\\git\\hellogsm-front-25\\apps\\admin\\src\\pageContainer\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\user\\git\\hellogsm-front-25\\apps\\admin\\src\\schemas\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\user\\git\\hellogsm-front-25\\apps\\admin\\src\\schemas\\sideMenu.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\user\\git\\hellogsm-front-25\\apps\\admin\\src\\styles\\pretendard.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  }
+]
