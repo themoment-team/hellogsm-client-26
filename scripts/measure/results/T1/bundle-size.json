@@ -1,0 +1,17 @@
+{
+  "label": "T1",
+  "date": "2026-07-06T05:59:31.899Z",
+  "method": "sum of .next/static/**/*.js bytes",
+  "apps": {
+    "client": {
+      "files": 14,
+      "totalBytes": 1369077,
+      "totalKB": 1337
+    },
+    "admin": {
+      "files": 23,
+      "totalBytes": 1312323,
+      "totalKB": 1282
+    }
+  }
+}

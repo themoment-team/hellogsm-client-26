@@ -80,7 +80,31 @@ HG(hellogsm-front-25)에 React Compiler를 도입하는 마이그레이션(Next 
 
 ## T1 — Next 16 / Turbopack, 컴파일러 OFF
 
-(Stage 3 완료 후 기입)
+- 측정일: 2026-07-06 / 커밋: `764750b4` / 전원: **배터리(방전 중, T0과 동일 조건)** ✅
+- 스택: Next 16.2.10 (Turbopack) / React 19.2.7 / ESLint 9.39.4 flat
+
+### 빌드 시간 (`pnpm build --force`, .next 삭제 후 콜드 빌드 × 10회)
+
+| 회차 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 시간(s) | 43.1 | 40.4 | 40.4 | 41.5 | 43.4 | 43.1 | 46.0 | 48.0 | 49.4 | 50.2 |
+
+- **평균: 44.5s** (T0 66.7s 대비 **-33%**) / 중앙값: 43.3s (T0 59.7s 대비 **-27%**)
+- 최소 40.4 / 최대 50.2. 후반 회차로 갈수록 증가 추세 — 배터리 전원의 열 스로틀링 추정 (T2 측정 시에도 동일 패턴 예상되므로 비교엔 지장 없음, 중앙값 병용)
+- 이 감소분은 **Turbopack 전환 효과이며 React Compiler와 무관** — 별도 성과로 분리 서술할 것
+- 원본: `scripts/measure/results/T1/build-times.json`, 빌드 출력: `last-build-output.txt`
+
+### 번들 크기 (신규 방식: `.next/static/**/*.js` 합산 — T2와 이 방식으로 비교)
+
+| 앱 | JS 파일 수 | 총 크기 |
+|---|---|---|
+| client | 14 | **1,337 KB** |
+| admin | 23 | **1,282 KB** |
+
+- ⚠️ Next 16(Turbopack)이 라우트별 First Load JS 표를 출력에서 제거해 측정 방식 변경.
+  T0의 First Load JS(라우트당 전송량)와 산정 기준이 달라 **T0↔T1 번들 직접 비교 불가**.
+  T1↔T2(컴파일러 ON) 비교가 목적이므로 이 방식으로 통일. 원본: `scripts/measure/results/T1/bundle-size.json`
+- 런타임 지표(리렌더/INP/Lighthouse): T2 직전에 T1 상태로 되돌려 연달아 측정 예정(조건 통제)
 
 ## T2 — React Compiler ON
 
@@ -101,6 +125,8 @@ HG(hellogsm-front-25)에 React Compiler를 도입하는 마이그레이션(Next 
 | 2026-07-05 | stage-1 | **Next 14.2.35→15.5.20, React 18.3.1→19.2.7** 업그레이드. 의존성 bump(앱 2 + packages 3 peerDeps ^19 + @types/react 19 overrides 단일화) → `next-async-request-api` codemod 17개 파일 자동 전환(cookies/headers 11 + params/searchParams 6) → 수동 보정은 lint 룰 예외 1건뿐 → images.domains→remotePatterns → fetch 캐싱 결정(아래 표) → radix-ui 6종 최신화. 검증: check-types 9/9, lint 9/9, build 10/10, 스모크 6/6 green | 태그 `upgrade/stage-1-done` |
 
 | 2026-07-06 | stage-2 | **ESLint 8.57.1→9.39.4 + flat config 전면 전환.** 공유 설정 3파일 재작성(typescript-eslint config 헬퍼, import flatConfigs, react configs.flat, next 플러그인은 legacy preset이라 rules 수동 등록), `.eslintrc.cjs` 9개→`eslint.config.mjs`. react-hooks 4.6.2→**7.1.1**(컴파일러 진단 룰 14종 warn 강등, Stage 4에서 승격 검토). **파리티 검증: 사라진 진단 0건**, 신규 10건 전부 react-hooks v7 컴파일러 진단(`scripts/measure/results/stage2-lint-parity/ANALYSIS.md`). 선행 픽스: react-query undefined 에러(기존 이슈). 검증: types 9/9, lint 9/9, build 10/10(빌드 내 lint가 flat config 읽는 것 확인), 스모크 6/6 | 태그 `upgrade/stage-2-done` |
+
+| 2026-07-06 | stage-3 | **Next 15.5.20→16.2.10 (Turbopack 기본 전환)**, engines >=20.9, packages/ui·api에 @types/node 명시. 컴파일 47s→7.5s. Next 16부터 빌드 내 lint 제거(turbo lint가 게이트), 라우트별 번들 표 제거(측정 방식 변경). 검증: types 9/9, lint 9/9, build 10/10, 스모크 6/6. **T1 측정 완료**: 빌드 평균 44.5s(T0 대비 -33%), 번들 client 1,337KB / admin 1,282KB(신규 방식) | 태그 `upgrade/stage-3-done` |
 
 ### Stage 2 플러그인 flat config 지원 조사 (2026-07-06 기준)
 
@@ -141,3 +167,5 @@ HG(hellogsm-front-25)에 React Compiler를 도입하는 마이그레이션(Next 
 | 2026-07-06 | dev QA에서 react-query "Query data cannot be undefined" 에러 (`['member','first','result']` 등 2건) | **업그레이드와 무관한 기존 이슈** — axios 인터셉터가 `response.data.data` 반환, 결과 미공개 계정에선 undefined | 해당 훅 2개에서 `?? null` 정규화 | ~20분 |
 | 2026-07-06 | flat 전환 후 신규 진단에 ruleId 없는 항목 14건 | ESLint 9부터 `reportUnusedDisableDirectives` 기본 활성화 — 미사용 `eslint-disable` 주석을 보고 | `eslint --fix`로 미사용 지시어 제거(9개 파일, 별도 커밋) | ~10분 |
 | 2026-07-06 | 스모크 첫 실행에서 client 메인 1건 실패 후 재실행 통과 | 서버 콜드스타트 + 외부 API 첫 응답 지연으로 인한 플레이크(로컬은 retries 0) | 재실행 통과 확인. CI는 retries 2라 완충 있음 — 반복되면 대기 로직 보강 예정 | ~5분 |
+| 2026-07-06 | Next 16 첫 빌드에서 `@repo/ui` tsc 실패 — `Cannot find name 'process'` (ui/api 5곳) | ui·api가 @types/node를 선언 없이 써왔는데(전역 process), Next 16 설치로 pnpm 은닉 호이스팅 경로가 재배치되며 잠복 이슈가 드러남 | 사용하는 패키지(ui/api)에 @types/node devDep 명시 — 근본 수정 | ~10분 |
+| 2026-07-06 | Next 16 `next start`가 500 + "React Client Manifest" 에러 연쇄로 전 페이지 다운 | **dev 서버(`next dev`)가 켜진 상태에서 프로덕션 빌드**를 돌려 `.next`가 dev 산출물과 섞여 오염됨 | dev 서버 종료 → `.next` 삭제 → 클린 재빌드로 해결. 교훈: 빌드/측정 전 dev 서버 종료 확인 필수 | ~20분 |
