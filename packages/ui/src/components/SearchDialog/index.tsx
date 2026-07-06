@@ -65,7 +65,7 @@ const SearchDialog = ({ setValue }: SearchDialogProps) => {
     }
 
     if (debouncedKeyword) {
-      // eslint-disable-next-line no-void
+       
       void getSchools();
     } else {
       setSchools([]);

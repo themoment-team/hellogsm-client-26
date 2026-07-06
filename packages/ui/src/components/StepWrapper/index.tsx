@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
+ 
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';

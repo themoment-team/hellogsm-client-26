@@ -183,7 +183,7 @@ const Section3 = ({ isServerHealthy }: Section3Props) => {
                 'p-6',
               )}
               style={{
-                // eslint-disable-next-line quotes
+                 
                 background: "url('/images/Pattern.png') center / 150% no-repeat",
               }}
             >

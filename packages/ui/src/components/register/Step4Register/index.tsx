@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/naming-convention */
+ 
 'use client';
 
 import { useEffect, useRef, useState } from 'react';

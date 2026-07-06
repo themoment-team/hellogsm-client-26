@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/naming-convention */
+ 
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';

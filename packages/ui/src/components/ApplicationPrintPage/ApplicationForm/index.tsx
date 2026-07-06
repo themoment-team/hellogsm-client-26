@@ -1,4 +1,4 @@
-/* eslint-disable-next-line no-restricted-imports */
+ 
 import { NEXT_YEAR } from '@repo/constants';
 import { OneseoStatusType } from '@repo/types';
 import { cn } from '@repo/utils';
@@ -6,7 +6,7 @@ import { cn } from '@repo/utils';
 import ApplicationPledge from '../ApplicationPledge';
 import OneseoStatus from '../OneseoStatus';
 import PersonalInfoTable from '../PersonalInfoTable';
-/* eslint-disable-next-line no-restricted-imports */
+ 
 
 interface ApplicationFormProps extends OneseoStatusType {
   isPreview?: boolean;
