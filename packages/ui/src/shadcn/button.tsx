@@ -57,8 +57,8 @@ const buttonVariants = cva(
           'disabled:opacity-100',
         ),
         download: cn('bg-slate-100', 'text-slate-800'),
-        next: cn('bg-[#4A80F8]', 'text-white', 'hover:bg-[#3a6de8]', 'rounded-[8px]'),
-        prev: cn('border', 'border-[#4A80F8]', 'text-[#4A80F8]', 'bg-white', 'hover:bg-blue-50', 'rounded-[8px]'),
+        next: cn('bg-[#4A80F8]', 'text-white', 'hover:bg-[#3a6de8]', 'rounded-lg'),
+        prev: cn('border', 'border-[#4A80F8]', 'text-[#4A80F8]', 'bg-white', 'hover:bg-blue-50', 'rounded-lg'),
       },
       size: {
         default: cn('h-10', 'px-4', 'py-2'),

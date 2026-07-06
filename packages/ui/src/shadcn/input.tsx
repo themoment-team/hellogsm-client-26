@@ -61,10 +61,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               'pl-3',
               icon ? 'pr-10' : 'pr-4',
               'text-sm',
-              'rounded-[8px]',
+              'rounded-lg',
               'border',
               'bg-white',
-              'border-[#CBD5E1]',
+              'border-slate-300',
               'self-stretch',
               'ring-offset-background',
               'focus-visible:outline-none',
@@ -74,8 +74,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               'file:bg-transparent',
               'file:text-sm',
               'file:font-medium',
-              'placeholder:text-[#94A3B8]',
-              'disabled:placeholder:text-[#D1D5DB]',
+              'placeholder:text-slate-400',
+              'disabled:placeholder:text-gray-300',
             )}
             ref={ref}
             {...props}

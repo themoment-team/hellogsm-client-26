@@ -253,7 +253,6 @@ const Step1Register = ({
                 <Button
                   variant="next"
                   onClick={handleZipCodeButtonClick}
-                  className={cn('gap-[112px]')}
                 >
                   주소 찾기
                 </Button>
