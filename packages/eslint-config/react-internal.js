@@ -1,76 +1,33 @@
-const path = require('path');
+import reactPlugin from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
+import globals from 'globals';
 
-/** @type {import("eslint").Linter.Config} */
-module.exports = {
-  ignorePatterns: ['dist/**', 'node_modules/**', 'build/**'],
-  parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint', 'turbo', '@cspell', 'import', 'unused-imports'],
-  extends: [
-    'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:import/recommended',
-    'plugin:import/typescript',
-    'prettier',
-    'plugin:react/recommended',
-    'plugin:react-hooks/recommended',
-  ],
-  parserOptions: {
-    ecmaFeatures: {
-      jsx: true,
-    },
-  },
-  env: {
-    browser: true,
-    es2021: true,
-  },
-  settings: {
-    react: {
-      version: 'detect',
-    },
-    'import/resolver': {
-      typescript: {
-        alwaysTryTypes: true,
+import { baseConfig } from './base.js';
+import { reactHooksCompilerRulesAsWarn } from './react-hooks-compiler.js';
+
+/** @type {import("eslint").Linter.Config[]} */
+export const reactInternalConfig = [
+  ...baseConfig,
+  reactPlugin.configs.flat.recommended,
+  reactHooks.configs.flat.recommended,
+  {
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.es2021,
       },
     },
-  },
-  rules: {
-    'import/order': [
-      'error',
-      {
-        groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
-        pathGroups: [
-          {
-            pattern: '@repo/**',
-            group: 'internal',
-            position: 'after',
-          },
-          {
-            pattern: '@/**',
-            group: 'internal',
-            position: 'after',
-          },
-        ],
-        pathGroupsExcludedImportTypes: ['builtin'],
-        'newlines-between': 'always',
-        alphabetize: { order: 'asc', caseInsensitive: true },
+    settings: {
+      react: {
+        version: 'detect',
       },
-    ],
-    'import/no-duplicates': 'error',
-    'import/first': 'error',
-    'import/newline-after-import': 'error',
-    'no-console': 'error',
-    'no-unused-vars': 'off',
-    '@typescript-eslint/no-unused-vars': 'off',
-    'unused-imports/no-unused-imports': 'error',
-    'unused-imports/no-unused-vars': 'error',
-    'react/react-in-jsx-scope': 'off',
-    'react/prop-types': 'off',
-    'turbo/no-undeclared-env-vars': 'warn',
-    '@cspell/spellchecker': [
-      'error',
-      {
-        configFile: path.resolve(__dirname, '../../cspell.config.yaml'),
-      },
-    ],
+    },
+    rules: {
+      'react/react-in-jsx-scope': 'off',
+      'react/prop-types': 'off',
+      ...reactHooksCompilerRulesAsWarn,
+    },
   },
-};
+];
+
+export default reactInternalConfig;
