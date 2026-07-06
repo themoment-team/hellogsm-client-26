@@ -250,7 +250,13 @@ const Step1Register = ({
                   variant={showError && errors.address ? 'error' : null}
                 />
 
-                <Button onClick={handleZipCodeButtonClick}>주소 찾기</Button>
+                <Button
+                  variant="next"
+                  onClick={handleZipCodeButtonClick}
+                  className={cn('gap-[112px]')}
+                >
+                  주소 찾기
+                </Button>
               </div>
             </CustomFormItem>
             <Input
