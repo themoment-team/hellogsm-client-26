@@ -20,7 +20,7 @@
     "@repo/constants": "workspace:*",
     "@tanstack/react-query": "^5.90.21",
     "axios": "^1.13.5",
-    "next": "^15.5.20",
+    "next": "^16.2.10",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-hook-form": "^7.71.1",
