@@ -100,6 +100,21 @@ HG(hellogsm-front-25)에 React Compiler를 도입하는 마이그레이션(Next 
 | 2026-07-05 | stage-0 | Playwright 스모크 E2E 6개 추가(client 4: 메인/FAQ/원서조회/회원가입, admin 2: signin 리다이렉트 origin·OAuth redirect_uri — #419~422 회귀 직격 검증) + CI 스텝 추가. 로컬 6/6 green (12.2s) | 태그 `upgrade/stage-0-done` |
 | 2026-07-05 | stage-1 | **Next 14.2.35→15.5.20, React 18.3.1→19.2.7** 업그레이드. 의존성 bump(앱 2 + packages 3 peerDeps ^19 + @types/react 19 overrides 단일화) → `next-async-request-api` codemod 17개 파일 자동 전환(cookies/headers 11 + params/searchParams 6) → 수동 보정은 lint 룰 예외 1건뿐 → images.domains→remotePatterns → fetch 캐싱 결정(아래 표) → radix-ui 6종 최신화. 검증: check-types 9/9, lint 9/9, build 10/10, 스모크 6/6 green | 태그 `upgrade/stage-1-done` |
 
+| 2026-07-06 | stage-2 | **ESLint 8.57.1→9.39.4 + flat config 전면 전환.** 공유 설정 3파일 재작성(typescript-eslint config 헬퍼, import flatConfigs, react configs.flat, next 플러그인은 legacy preset이라 rules 수동 등록), `.eslintrc.cjs` 9개→`eslint.config.mjs`. react-hooks 4.6.2→**7.1.1**(컴파일러 진단 룰 14종 warn 강등, Stage 4에서 승격 검토). **파리티 검증: 사라진 진단 0건**, 신규 10건 전부 react-hooks v7 컴파일러 진단(`scripts/measure/results/stage2-lint-parity/ANALYSIS.md`). 선행 픽스: react-query undefined 에러(기존 이슈). 검증: types 9/9, lint 9/9, build 10/10(빌드 내 lint가 flat config 읽는 것 확인), 스모크 6/6 | 태그 `upgrade/stage-2-done` |
+
+### Stage 2 플러그인 flat config 지원 조사 (2026-07-06 기준)
+
+| 플러그인 | 버전 | flat 지원 형태 |
+|---|---|---|
+| typescript-eslint (통합) | 8.62.1 | `tseslint.config()` 헬퍼 + `configs.recommended` — parser/plugin 별도 설치 대체 |
+| eslint-plugin-import | 2.32.0 | `flatConfigs.recommended/typescript` (import-x 전환 불필요했음) |
+| eslint-plugin-react | 7.37.5 | `configs.flat.recommended` |
+| eslint-plugin-react-hooks | 7.1.1 | `configs.flat.recommended` (v7부터 컴파일러 진단 룰 포함) |
+| @next/eslint-plugin-next | 15.5.20 | **flat preset 없음(legacy 배열)** → plugins 수동 등록 + rules 스프레드 |
+| @cspell/eslint-plugin | 10.0.1 | plugins 수동 등록, `configFile` 옵션 스키마 유지 |
+| eslint-plugin-turbo / unused-imports / config-prettier | 2.10.3 / 4.4.1 / 10.1.8 | plugins 수동 등록 / flat 배열에 그대로 삽입 가능 |
+| eslint | 9.39.4 채택 | ESLint 10(10.6.0) 존재하나 Next 15 공식 지원 범위(9)로 결정 |
+
 ### Stage 1 fetch 캐싱 결정 (Next 15 기본값 force-cache→no-store 반전 대응)
 
 | 대상 | 결정 | 근거 |
@@ -123,3 +138,6 @@ HG(hellogsm-front-25)에 React Compiler를 도입하는 마이그레이션(Next 
 | 2026-07-05 | Playwright webServer 기동 실패 — `EADDRINUSE :3000` | client/admin 둘 다 `start` 스크립트가 포트 미지정 `next start`(기본 3000)라 동시 기동 시 충돌 (`dev`만 3000/3001 분리돼 있었음) | playwright.config.ts의 webServer command에 `--port 3000/3001` 명시 | ~5분 |
 | 2026-07-05 | Next 15 업그레이드 후 admin `next start`가 `TypeError: Cannot read properties of undefined (reading 'filter')`로 즉사 | admin의 `.next`가 Next 14 시절 빌드 산출물이었음(작업 셸의 cwd가 apps/client에 남아 turbo 빌드 스코프가 client로 좁혀졌던 것) — Next 15 서버가 14의 manifest를 읽다 크래시 | 두 앱 `.next` 삭제 후 루트에서 전체 재빌드. 교훈: **Next 메이저 업그레이드 후 `.next` 잔재는 반드시 청소** | ~15분 |
 | 2026-07-05 | `@repo/api` tsc 빌드 실패 — `'next' does not exist in type 'RequestInit'` | getDate에 `next: { revalidate }` 추가했는데, 순수 tsc로 컴파일되는 패키지엔 Next의 RequestInit 전역 확장이 로드되지 않음(앱은 next-env.d.ts로 로드됨) | `/// <reference types="next" />` 추가 | ~10분 |
+| 2026-07-06 | dev QA에서 react-query "Query data cannot be undefined" 에러 (`['member','first','result']` 등 2건) | **업그레이드와 무관한 기존 이슈** — axios 인터셉터가 `response.data.data` 반환, 결과 미공개 계정에선 undefined | 해당 훅 2개에서 `?? null` 정규화 | ~20분 |
+| 2026-07-06 | flat 전환 후 신규 진단에 ruleId 없는 항목 14건 | ESLint 9부터 `reportUnusedDisableDirectives` 기본 활성화 — 미사용 `eslint-disable` 주석을 보고 | `eslint --fix`로 미사용 지시어 제거(9개 파일, 별도 커밋) | ~10분 |
+| 2026-07-06 | 스모크 첫 실행에서 client 메인 1건 실패 후 재실행 통과 | 서버 콜드스타트 + 외부 API 첫 응답 지연으로 인한 플레이크(로컬은 retries 0) | 재실행 통과 확인. CI는 retries 2라 완충 있음 — 반복되면 대기 로직 보강 예정 | ~5분 |
