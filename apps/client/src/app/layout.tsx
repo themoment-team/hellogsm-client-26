@@ -5,6 +5,7 @@ import '@repo/ui/styles.css';
 
 import '@/styles/globals.css';
 import { Header } from '@/components';
+import PerfTools from '@/components/PerfTools';
 import { GoogleAnalytics } from '@/lib';
 import { pretendardFont } from '@/styles/pretendard';
 import { getIsServerHealthy } from '@/utils';
@@ -58,6 +59,7 @@ export default async function RootLayout({
         </>
       )}
       <body className={pretendardFont.className}>
+        <PerfTools />
         {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS && (
           <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS} />
         )}
