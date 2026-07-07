@@ -24,7 +24,8 @@ HG(hellogsm-front-25)에 React Compiler를 도입하는 마이그레이션(Next 
 - 빌드 시간: `node scripts/measure/build-time.mjs <label> 10`
   - 매 회 `apps/client/.next`, `apps/admin/.next` 삭제 후 `pnpm build --force` (turbo 캐시 우회) → 10회 모두 동일 조건의 콜드 빌드.
   - `turbo run build`는 apps/client + apps/admin + apps/storybook + packages/* 전체 파이프라인을 포함.
-- 런타임 지표(리렌더/INP/Lighthouse): production build + `next start`, 시크릿 창, 확장 off, CPU 4x throttle, 5회 중앙값 (T1 시점부터 세팅 예정).
+- 런타임 지표(리렌더/INP): 로그인 필요로 자동화 불가 → 수동 측정. 절차·시나리오 3개(원서 폼 타이핑/모달 열닫/admin 리스트 필터링)는 `docs/runtime-measurement-guide.md` 참조.
+  - 리렌더: dev 모드 + react-scan(측정 전용 브랜치 `bg/react-scan-setup`의 계측 커밋 — 마이그레이션 브랜치엔 미포함, T2 때 cherry-pick 재사용), INP: production build + `next start` + Web Vitals 로거, 시크릿 창, 확장 off, CPU 4x throttle. 시나리오당 5회 중앙값. 결과: `scripts/measure/results/{T1,T2}/runtime.md`.
 - 동일 머신·동일 전원 조건에서만 시점 간 비교 유효 (아래 환경 기록 참조).
 
 ## 측정 환경
@@ -127,6 +128,8 @@ HG(hellogsm-front-25)에 React Compiler를 도입하는 마이그레이션(Next 
 | 2026-07-06 | stage-2 | **ESLint 8.57.1→9.39.4 + flat config 전면 전환.** 공유 설정 3파일 재작성(typescript-eslint config 헬퍼, import flatConfigs, react configs.flat, next 플러그인은 legacy preset이라 rules 수동 등록), `.eslintrc.cjs` 9개→`eslint.config.mjs`. react-hooks 4.6.2→**7.1.1**(컴파일러 진단 룰 14종 warn 강등, Stage 4에서 승격 검토). **파리티 검증: 사라진 진단 0건**, 신규 10건 전부 react-hooks v7 컴파일러 진단(`scripts/measure/results/stage2-lint-parity/ANALYSIS.md`). 선행 픽스: react-query undefined 에러(기존 이슈). 검증: types 9/9, lint 9/9, build 10/10(빌드 내 lint가 flat config 읽는 것 확인), 스모크 6/6 | 태그 `upgrade/stage-2-done` |
 
 | 2026-07-06 | stage-3 | **Next 15.5.20→16.2.10 (Turbopack 기본 전환)**, engines >=20.9, packages/ui·api에 @types/node 명시. 컴파일 47s→7.5s. Next 16부터 빌드 내 lint 제거(turbo lint가 게이트), 라우트별 번들 표 제거(측정 방식 변경). 검증: types 9/9, lint 9/9, build 10/10, 스모크 6/6. **T1 측정 완료**: 빌드 평균 44.5s(T0 대비 -33%), 번들 client 1,337KB / admin 1,282KB(신규 방식) | 태그 `upgrade/stage-3-done` |
+
+| 2026-07-07 | stage-4 준비 | **T1↔T2 런타임 측정 세팅**: react-scan 0.5.7 계측 코드(PerfTools, env 게이트)를 측정 전용 브랜치 `bg/react-scan-setup`에 격리(마이그레이션 브랜치 미포함, 측정 후 폐기). 수동 측정 가이드 `docs/runtime-measurement-guide.md` 작성(시나리오 3개: 원서 폼 타이핑/모달 열닫/admin 리스트 필터링, 리렌더는 dev+react-scan·INP는 prod+Web Vitals 분리 측정) | 브랜치 `bg/react-scan-setup` |
 
 ### Stage 2 플러그인 flat config 지원 조사 (2026-07-06 기준)
 
