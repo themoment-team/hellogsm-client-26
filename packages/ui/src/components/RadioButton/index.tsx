@@ -72,7 +72,7 @@ const RadioButton = <T,>({
                 'transition-transform',
                 disabled
                   ? ['cursor-not-allowed', 'after:bg-slate-400']
-                  : ['cursor-pointer', 'after:bg-black'],
+                  : ['cursor-pointer', 'after:bg-[#4A80F8]'],
                 error && !selectedValue && '!border-red-600',
               ])}
             />

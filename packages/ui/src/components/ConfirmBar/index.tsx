@@ -150,7 +150,7 @@ const ConfirmBar = ({
         </span>
       </div>
       <div className={cn('flex', 'items-center', 'gap-[0.5rem]')}>
-        <Button onClick={handleTemporarySaveButtonClick} variant="outline">
+        <Button onClick={handleTemporarySaveButtonClick} variant="prev">
           임시저장
         </Button>
         <FinalSubmitDialog

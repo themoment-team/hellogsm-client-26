@@ -17,8 +17,6 @@ interface StepCircleType {
 }
 
 const StepCircle = ({ step, isActive, isCompleted }: StepCircleType) => {
-  const isActiveOrCompleted = isActive || isCompleted;
-
   return (
     <div
       className={cn([
@@ -33,7 +31,11 @@ const StepCircle = ({ step, isActive, isCompleted }: StepCircleType) => {
         'transition-all',
         'duration-500',
         'transform',
-        isActiveOrCompleted ? 'bg-blue-500 text-white' : 'border-[1px] text-slate-300',
+        isCompleted
+          ? 'bg-white border border-blue-500 text-blue-500'
+          : isActive
+            ? 'bg-blue-500 text-white'
+            : 'border-[1px] text-slate-300',
       ])}
     >
       {isCompleted ? <StepCheckIcon /> : step}
@@ -107,7 +109,7 @@ const StepBar = ({
 
         <div className={cn('flex', 'gap-[0.5rem]')}>
           {step !== StepEnum.ONE && (
-            <Button variant="ghost" onClick={() => push(`${baseUrl}?step=${Number(step) - 1}`)}>
+            <Button variant="prev" onClick={() => push(`${baseUrl}?step=${Number(step) - 1}`)}>
               이전
             </Button>
           )}

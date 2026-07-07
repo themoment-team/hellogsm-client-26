@@ -55,16 +55,17 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             className={cn(
               inputVariants({ variant }),
               'm-0',
-              'h-10',
               'w-full',
-              'px-3',
-              'py-2',
-              'pr-10',
+              'pt-2',
+              'pb-2',
+              'pl-3',
+              icon ? 'pr-10' : 'pr-4',
               'text-sm',
-              'rounded-md',
+              'rounded-lg',
               'border',
               'bg-white',
-              'border-input',
+              'border-slate-300',
+              'self-stretch',
               'ring-offset-background',
               'focus-visible:outline-none',
               'disabled:cursor-not-allowed',
@@ -73,7 +74,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               'file:bg-transparent',
               'file:text-sm',
               'file:font-medium',
-              'placeholder:text-muted-foreground',
+              'placeholder:text-slate-400',
+              'disabled:placeholder:text-gray-300',
             )}
             ref={ref}
             {...props}
