@@ -139,6 +139,23 @@ HG(hellogsm-front-25)에 React Compiler를 도입하는 마이그레이션(Next 
 
 | 2026-07-07 | stage-4 준비 | **T1↔T2 런타임 측정 세팅**: react-scan 0.5.7 계측 코드(PerfTools, env 게이트)를 측정 전용 브랜치 `bg/react-scan-setup`에 격리(마이그레이션 브랜치 미포함, 측정 후 폐기). 수동 측정 가이드 `docs/runtime-measurement-guide.md` 작성(시나리오 3개: 원서 폼 타이핑/모달 열닫/admin 리스트 필터링, 리렌더는 dev+react-scan·INP는 prod+Web Vitals 분리 측정) | 브랜치 `bg/react-scan-setup` |
 
+| 2026-07-09 | stage-4 | **react-compiler-healthcheck 실행** (컴파일러 ON 전 사전 진단, 코드 변경 없음). 결과는 아래 표 참조 — 3개 워크스페이스 전부 100% 컴파일 성공, 차단 요소 없음 → 컴파일러 활성화 진행 결정 | |
+
+### Stage 4 react-compiler-healthcheck 결과 (2026-07-09, `npx react-compiler-healthcheck@latest`)
+
+| 워크스페이스 | 컴파일 성공 | StrictMode | 비호환 라이브러리 |
+|---|---|---|---|
+| apps/client | **104 / 104** | "not found" (아래 주석) | 0건 |
+| apps/admin | **26 / 26** | "not found" | 0건 |
+| packages/ui | **108 / 108** | "not found" | 0건 |
+
+- 총 238개 컴포넌트 컴파일 성공, 실패 0 → 컴파일러 도입 차단 요소 없음.
+- **StrictMode "not found"는 오탐**: healthcheck는 소스에서 `<StrictMode>` 태그를 grep하는데,
+  Next App Router는 `reactStrictMode` 기본 true(설정 파일 레벨)라 감지 못함. 실제로는 활성
+  (T1 runtime.md에서 dev StrictMode 하 onCommitFiberRoot 동작을 이미 관측).
+- **비호환 라이브러리 0건도 healthcheck의 알려진 패턴 grep 기준**일 뿐 — lint
+  `react-hooks/incompatible-library` 4건(RHF `watch()`)은 별개로 유효하며 Stage 5에서 처리 예정.
+
 ### Stage 2 플러그인 flat config 지원 조사 (2026-07-06 기준)
 
 | 플러그인 | 버전 | flat 지원 형태 |
