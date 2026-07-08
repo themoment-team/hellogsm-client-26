@@ -106,6 +106,14 @@ HG(hellogsm-front-25)에 React Compiler를 도입하는 마이그레이션(Next 
   T0의 First Load JS(라우트당 전송량)와 산정 기준이 달라 **T0↔T1 번들 직접 비교 불가**.
   T1↔T2(컴파일러 ON) 비교가 목적이므로 이 방식으로 통일. 원본: `scripts/measure/results/T1/bundle-size.json`
 - 런타임 지표(리렌더/INP/Lighthouse): T2 직전에 T1 상태로 되돌려 연달아 측정 예정(조건 통제)
+- **T1 런타임 측정 완료 (2026-07-08, `bg/react-scan-setup`)** → 결과 `scripts/measure/results/T1/runtime.md` (untracked).
+  ⚠️ **가이드(`docs/runtime-measurement-guide.md`, `79898428`)와 실측 방식이 일부 다름**:
+  ① 리렌더는 react-scan 툴바 육안 판독 대신 DevTools `onCommitFiberRoot` 훅 스크립트로 집계(판정 로직은 bippy `didFiberRender` 동일),
+  ② 회차 리셋은 새로고침 대신 `__mcReset()`,
+  ③ INP는 CPU 4x **미적용(옵션 B)** + `PerformanceObserver('event')` 이벤트 지연 최댓값을 주지표로(web-vitals INP는 보조),
+  ④ **시크릿 창/확장 off 미충족** — Claude in Chrome 확장 자동화라 확장이 필수(확장 오버헤드 포함 가능).
+  INP 3개(S1 656 / S2 80 / S3 104ms)는 모두 **배터리**에서 확정(최초 AC 측정분은 무효 처리·재측정).
+  → **T2는 이 가이드가 아니라 `runtime.md`의 부록 스크립트·조건을 그대로 따를 것**(그래야 T1↔T2 통제됨).
 
 ## T2 — React Compiler ON
 
