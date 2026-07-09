@@ -117,7 +117,36 @@ HG(hellogsm-front-25)에 React Compiler를 도입하는 마이그레이션(Next 
 
 ## T2 — React Compiler ON
 
-(Stage 4 완료 후 기입)
+- 측정일: 2026-07-09 / 커밋: `23ad8ffe` / 전원: **배터리(방전 중 34%, T0·T1과 동일 조건)** ✅
+- 스택: T1 + babel-plugin-react-compiler 1.0.0, `reactCompiler: true` (두 앱)
+- 측정 전 상태: hydration 호환 픽스(`6ec92eed`) 포함 — 공백/스타일 태그 치환뿐이라 성능 영향 없음
+
+### 빌드 시간 (`pnpm build --force`, .next 삭제 후 콜드 빌드 × 10회)
+
+| 회차 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 시간(s) | 54.0 | 54.0 | 50.9 | 60.4 | 48.7 | 48.1 | 55.3 | 48.7 | 46.7 | 55.5 |
+
+- **평균: 52.2s** (T1 44.5s 대비 **+7.7s, +17%**) / 중앙값: 52.4s (T1 43.3s 대비 +21%)
+- 최소 46.7 / 최대 60.4 — **컴파일러 변환 비용**(babel 패스가 파일마다 추가 실행). 예상된 트레이드오프로,
+  T0(webpack) 66.7s 대비로는 여전히 **-22%**. "Turbopack 이득(-33%)의 일부를 컴파일러 비용(+17%)과 교환" 구도.
+- 원본: `scripts/measure/results/T2/build-times.json`, 빌드 출력: `last-build-output.txt`
+
+### 번들 크기 (`.next/static/**/*.js` 합산 — T1과 동일 방식)
+
+| 앱 | JS 파일 수 | 총 크기 | T1 대비 |
+|---|---|---|---|
+| client | 15 | **1,424 KB** | +87 KB (**+6.5%**) |
+| admin | 23 | **1,355 KB** | +73 KB (**+5.7%**) |
+
+- 컴파일러가 삽입하는 메모화 코드(`_c(n)` 캐시 슬롯 + 비교 분기)의 크기 비용. 원본: `scripts/measure/results/T2/bundle-size.json`
+- 요약: **빌드 +17%, 번들 +6%대의 비용을 지불하고 런타임 리렌더/INP 개선을 사는 거래** — 손익은 아래 런타임 지표로 판단.
+
+### 런타임 (리렌더·INP) — 측정 예정
+
+- `bg/react-scan-setup`의 계측 커밋(`51716fb0`)을 T2 HEAD 위에 cherry-pick한 측정 브랜치에서
+  **T1 `runtime.md` 부록 스크립트·조건 그대로** 수행 예정 (배터리, 확장 on 일반 창, 시나리오 3개 × 5회 중앙값,
+  admin 데이터 5행 유지 여부 사전 확인). 결과: `scripts/measure/results/T2/runtime.md`
 
 ## T3 — 최종 (수동 메모 제거 + 안정화)
 
@@ -142,6 +171,8 @@ HG(hellogsm-front-25)에 React Compiler를 도입하는 마이그레이션(Next 
 | 2026-07-09 | stage-4 | **react-compiler-healthcheck 실행** (컴파일러 ON 전 사전 진단, 코드 변경 없음). 결과는 아래 표 참조 — 3개 워크스페이스 전부 100% 컴파일 성공, 차단 요소 없음 → 컴파일러 활성화 진행 결정 | `8697a03c` |
 
 | 2026-07-09 | stage-4 | **React Compiler 활성화**: babel-plugin-react-compiler@1.0.0 + 두 앱 `reactCompiler: true`(Next 16 top-level 안정 옵션). 스위치 단독 커밋으로 격리(revert 1회 = T1 복귀). 직후 스모크에서 hydration 불일치 2종 발견·수정(이슈 로그 참조). 검증: types 9/9, lint 9/9(0 err), build 10/10, 스모크 6/6, 프로덕션 5페이지 hydration 에러 0. **@repo/ui 소스도 컴파일 적용 확인** — 소스 export(`./src/*.ts`) + pnpm 심링크 구조라 Turbopack이 직접 트랜스파일하며 컴파일러 패스 포함(dev 청크에서 ui 모듈들의 `react/compiler-runtime` import 확인, transpilePackages 불필요) | `8573284e`, `6ec92eed` |
+
+| 2026-07-09 | stage-4 | **T2 측정(빌드·번들)**: 빌드 평균 52.2s(T1 대비 +17% — 컴파일러 변환 비용, T0 대비는 -22%), 번들 client 1,424KB(+6.5%)/admin 1,355KB(+5.7%). 배터리(방전 중) 조건 준수. 런타임(리렌더·INP)은 cherry-pick 측정 브랜치에서 별도 수행 예정 | |
 
 ### Stage 4 react-compiler-healthcheck 결과 (2026-07-09, `npx react-compiler-healthcheck@latest`)
 
