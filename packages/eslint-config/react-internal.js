@@ -3,7 +3,7 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import globals from 'globals';
 
 import { baseConfig } from './base.js';
-import { reactHooksCompilerRulesAsWarn } from './react-hooks-compiler.js';
+import { reactHooksCompilerRules } from './react-hooks-compiler.js';
 
 /** @type {import("eslint").Linter.Config[]} */
 export const reactInternalConfig = [
@@ -25,7 +25,7 @@ export const reactInternalConfig = [
     rules: {
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
-      ...reactHooksCompilerRulesAsWarn,
+      ...reactHooksCompilerRules,
     },
   },
 ];

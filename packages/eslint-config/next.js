@@ -4,7 +4,7 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import globals from 'globals';
 
 import { baseConfig } from './base.js';
-import { reactHooksCompilerRulesAsWarn } from './react-hooks-compiler.js';
+import { reactHooksCompilerRules } from './react-hooks-compiler.js';
 
 /** @type {import("eslint").Linter.Config[]} */
 export const nextJsConfig = [
@@ -39,7 +39,7 @@ export const nextJsConfig = [
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
       'react/no-unknown-property': ['error', { ignore: ['jsx', 'global'] }],
-      ...reactHooksCompilerRulesAsWarn,
+      ...reactHooksCompilerRules,
     },
   },
 ];
