@@ -172,7 +172,9 @@ HG(hellogsm-front-25)에 React Compiler를 도입하는 마이그레이션(Next 
 
 | 2026-07-09 | stage-4 | **React Compiler 활성화**: babel-plugin-react-compiler@1.0.0 + 두 앱 `reactCompiler: true`(Next 16 top-level 안정 옵션). 스위치 단독 커밋으로 격리(revert 1회 = T1 복귀). 직후 스모크에서 hydration 불일치 2종 발견·수정(이슈 로그 참조). 검증: types 9/9, lint 9/9(0 err), build 10/10, 스모크 6/6, 프로덕션 5페이지 hydration 에러 0. **@repo/ui 소스도 컴파일 적용 확인** — 소스 export(`./src/*.ts`) + pnpm 심링크 구조라 Turbopack이 직접 트랜스파일하며 컴파일러 패스 포함(dev 청크에서 ui 모듈들의 `react/compiler-runtime` import 확인, transpilePackages 불필요) | `8573284e`, `6ec92eed` |
 
-| 2026-07-09 | stage-4 | **T2 측정(빌드·번들)**: 빌드 평균 52.2s(T1 대비 +17% — 컴파일러 변환 비용, T0 대비는 -22%), 번들 client 1,424KB(+6.5%)/admin 1,355KB(+5.7%). 배터리(방전 중) 조건 준수. 런타임(리렌더·INP)은 cherry-pick 측정 브랜치에서 별도 수행 예정 | |
+| 2026-07-09 | stage-4 | **T2 측정(빌드·번들)**: 빌드 평균 52.2s(T1 대비 +17% — 컴파일러 변환 비용, T0 대비는 -22%), 번들 client 1,424KB(+6.5%)/admin 1,355KB(+5.7%). 배터리(방전 중) 조건 준수. 런타임(리렌더·INP)은 cherry-pick 측정 브랜치에서 별도 수행 예정 | `ae501a0d` |
+
+| 2026-07-09 | stage-4 | **react-hooks 컴파일러 진단 룰 error 승격**: 위반 0건인 11개 룰 warn→error. 위반 잔존 3종(`set-state-in-effect`×5, `incompatible-library`×4 RHF watch, `static-components`×1)은 코드 수정이 런타임 동작을 바꿀 수 있어 warn 유지 + Stage 5 이월 주석(T2 순수성 유지 목적). export명 `reactHooksCompilerRulesAsWarn`→`reactHooksCompilerRules` 정리. 검증: lint 9/9, 0 errors | `97d10bfc` |
 
 ### Stage 4 react-compiler-healthcheck 결과 (2026-07-09, `npx react-compiler-healthcheck@latest`)
 
