@@ -133,7 +133,7 @@ const Section3 = ({ isServerHealthy }: Section3Props) => {
                 )}
               >
                 최종 합격하려면 중학교 내신 성적이
-                <br /> 최소 몇 %가 되어야 할까?&nbsp; 🤷🏻‍♀️
+                <br /> 최소 몇 %가 되어야 할까?{'\u00A0'} 🤷🏻‍♀️
               </p>
               <Link href="/faq" className={cn([...buttonStyle, 'self-end'])}>
                 FAQ 바로가기
