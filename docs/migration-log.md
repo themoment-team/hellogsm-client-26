@@ -139,7 +139,9 @@ HG(hellogsm-front-25)에 React Compiler를 도입하는 마이그레이션(Next 
 
 | 2026-07-07 | stage-4 준비 | **T1↔T2 런타임 측정 세팅**: react-scan 0.5.7 계측 코드(PerfTools, env 게이트)를 측정 전용 브랜치 `bg/react-scan-setup`에 격리(마이그레이션 브랜치 미포함, 측정 후 폐기). 수동 측정 가이드 `docs/runtime-measurement-guide.md` 작성(시나리오 3개: 원서 폼 타이핑/모달 열닫/admin 리스트 필터링, 리렌더는 dev+react-scan·INP는 prod+Web Vitals 분리 측정) | 브랜치 `bg/react-scan-setup` |
 
-| 2026-07-09 | stage-4 | **react-compiler-healthcheck 실행** (컴파일러 ON 전 사전 진단, 코드 변경 없음). 결과는 아래 표 참조 — 3개 워크스페이스 전부 100% 컴파일 성공, 차단 요소 없음 → 컴파일러 활성화 진행 결정 | |
+| 2026-07-09 | stage-4 | **react-compiler-healthcheck 실행** (컴파일러 ON 전 사전 진단, 코드 변경 없음). 결과는 아래 표 참조 — 3개 워크스페이스 전부 100% 컴파일 성공, 차단 요소 없음 → 컴파일러 활성화 진행 결정 | `8697a03c` |
+
+| 2026-07-09 | stage-4 | **React Compiler 활성화**: babel-plugin-react-compiler@1.0.0 + 두 앱 `reactCompiler: true`(Next 16 top-level 안정 옵션). 스위치 단독 커밋으로 격리(revert 1회 = T1 복귀). 직후 스모크에서 hydration 불일치 2종 발견·수정(이슈 로그 참조). 검증: types 9/9, lint 9/9(0 err), build 10/10, 스모크 6/6, 프로덕션 5페이지 hydration 에러 0. **@repo/ui 소스도 컴파일 적용 확인** — 소스 export(`./src/*.ts`) + pnpm 심링크 구조라 Turbopack이 직접 트랜스파일하며 컴파일러 패스 포함(dev 청크에서 ui 모듈들의 `react/compiler-runtime` import 확인, transpilePackages 불필요) | `8573284e`, `6ec92eed` |
 
 ### Stage 4 react-compiler-healthcheck 결과 (2026-07-09, `npx react-compiler-healthcheck@latest`)
 
@@ -197,3 +199,6 @@ HG(hellogsm-front-25)에 React Compiler를 도입하는 마이그레이션(Next 
 | 2026-07-06 | 스모크 첫 실행에서 client 메인 1건 실패 후 재실행 통과 | 서버 콜드스타트 + 외부 API 첫 응답 지연으로 인한 플레이크(로컬은 retries 0) | 재실행 통과 확인. CI는 retries 2라 완충 있음 — 반복되면 대기 로직 보강 예정 | ~5분 |
 | 2026-07-06 | Next 16 첫 빌드에서 `@repo/ui` tsc 실패 — `Cannot find name 'process'` (ui/api 5곳) | ui·api가 @types/node를 선언 없이 써왔는데(전역 process), Next 16 설치로 pnpm 은닉 호이스팅 경로가 재배치되며 잠복 이슈가 드러남 | 사용하는 패키지(ui/api)에 @types/node devDep 명시 — 근본 수정 | ~10분 |
 | 2026-07-06 | Next 16 `next start`가 500 + "React Client Manifest" 에러 연쇄로 전 페이지 다운 | **dev 서버(`next dev`)가 켜진 상태에서 프로덕션 빌드**를 돌려 `.next`가 dev 산출물과 섞여 오염됨 | dev 서버 종료 → `.next` 삭제 → 클린 재빌드로 해결. 교훈: 빌드/측정 전 dev 서버 종료 확인 필수 | ~20분 |
+| 2026-07-09 | 컴파일러 ON 직후 client 스모크 3/6 실패 — React #418(서버/클라이언트 텍스트 불일치). check-result만 통과 | **JSX 텍스트 내 HTML 엔티티**(&nbsp; 등)가 트리거: 컴파일러 babel 패스가 엔티티 포함 JSXText를 재생성하며 서버 번들(SWC)과 공백 처리가 갈라짐. 클라이언트 컴포넌트에서만 발생(check-result는 Footer가 서버 레이아웃에 있어 hydration 비대상 → 통과, 나머지는 'use client' 페이지 컨테이너 내부라 실패) | 엔티티 10곳을 렌더 결과 보존하며 명시 표현으로 치환(&nbsp;→`{'\u00A0'}`, &middot;→`·`, &quot;→`{'"'}`). 프로덕션 5페이지 프로브로 에러 0 확인 | ~1.5시간 |
+| 2026-07-09 | /introduce 페이지 hydration 불일치 — `jsx-XXXX` 클래스가 서버 HTML에만 존재 | **styled-jsx + reactCompiler 알려진 비호환**(vercel/next.js#65995): 컴파일러 변환이 클라이언트 측 styled-jsx 변환을 깨뜨림 | 유일한 사용처 TeamSection4의 `<style jsx global>`을 일반 `<style>` 태그로 전환(global 모드라 스코핑 기능을 안 쓰고 있었음 — 기능 동일) | ~30분 |
+| 2026-07-09 | &nbsp; 치환 중 1차: 리터럴 NBSP 문자가 소스에 들어가 `{'\u00A0'}`와 육안 구분 불가, 2차: sed의 `\u` 지시어 해석으로 `{'00A0'}` 오염 | 도구 체인의 이스케이프 다층 해석(JSON→bash→sed) | Python 바이트 치환으로 `{'\u00A0'}` 명시 이스케이프로 통일, `cat -A`로 바이트 검증 | ~20분 |
