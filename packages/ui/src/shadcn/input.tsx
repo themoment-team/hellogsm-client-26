@@ -23,8 +23,7 @@ const inputVariants = cva(cn(''), {
   },
 });
 
-interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement>, VariantProps<typeof inputVariants> {
+interface InputProps extends React.ComponentProps<'input'>, VariantProps<typeof inputVariants> {
   width?: 'full' | 'large' | 'medium' | 'small';
   icon?: React.ReactNode;
   onIconClick?: () => void;
@@ -32,77 +31,71 @@ interface InputProps
   successMessage?: string;
 }
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  (
-    {
-      errorMessage,
-      successMessage,
-      className,
-      type,
-      width = 'full',
-      icon,
-      onIconClick,
-      variant,
-      ...props
-    },
-    ref,
-  ) => {
-    return (
-      <div className={cn('flex', 'flex-col', 'gap-1', inputVariants({ width }))}>
-        <div className={cn(['relative', 'flex', 'items-center', className])}>
-          <input
-            type={type}
-            className={cn(
-              inputVariants({ variant }),
-              'm-0',
-              'h-10',
-              'w-full',
-              'px-3',
-              'py-2',
-              'pr-10',
-              'text-sm',
-              'rounded-md',
-              'border',
-              'bg-white',
-              'border-input',
-              'ring-offset-background',
-              'focus-visible:outline-none',
-              'disabled:cursor-not-allowed',
-              'disabled:opacity-50',
-              'file:border-0',
-              'file:bg-transparent',
-              'file:text-sm',
-              'file:font-medium',
-              'placeholder:text-muted-foreground',
-            )}
-            ref={ref}
-            {...props}
-          />
-          {icon && (
-            <div
-              onClick={onIconClick}
-              className={cn('pointer-events-none', 'absolute', 'right-3', 'flex', 'items-center')}
-            >
-              {icon}
-            </div>
+const Input = ({
+  errorMessage,
+  successMessage,
+  className,
+  type,
+  width = 'full',
+  icon,
+  onIconClick,
+  variant,
+  ...props
+}: InputProps) => {
+  return (
+    <div className={cn('flex', 'flex-col', 'gap-1', inputVariants({ width }))}>
+      <div className={cn(['relative', 'flex', 'items-center', className])}>
+        <input
+          type={type}
+          className={cn(
+            inputVariants({ variant }),
+            'm-0',
+            'h-10',
+            'w-full',
+            'px-3',
+            'py-2',
+            'pr-10',
+            'text-sm',
+            'rounded-md',
+            'border',
+            'bg-white',
+            'border-input',
+            'ring-offset-background',
+            'focus-visible:outline-none',
+            'disabled:cursor-not-allowed',
+            'disabled:opacity-50',
+            'file:border-0',
+            'file:bg-transparent',
+            'file:text-sm',
+            'file:font-medium',
+            'placeholder:text-muted-foreground',
           )}
-        </div>
-
-        {(errorMessage || successMessage) && (
-          <span
-            className={cn([
-              'text-xs',
-              'font-normal',
-              errorMessage ? 'text-red-600' : 'text-green-600',
-            ])}
+          {...props}
+        />
+        {icon && (
+          <div
+            onClick={onIconClick}
+            className={cn('pointer-events-none', 'absolute', 'right-3', 'flex', 'items-center')}
           >
-            {errorMessage ?? successMessage}
-          </span>
+            {icon}
+          </div>
         )}
       </div>
-    );
-  },
-);
+
+      {(errorMessage || successMessage) && (
+        <span
+          className={cn([
+            'text-xs',
+            'font-normal',
+            errorMessage ? 'text-red-600' : 'text-green-600',
+          ])}
+        >
+          {errorMessage ?? successMessage}
+        </span>
+      )}
+    </div>
+  );
+};
 Input.displayName = 'Input';
 
 export { Input };

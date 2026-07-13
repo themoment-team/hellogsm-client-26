@@ -27,13 +27,15 @@ const toggleVariants = cva(
   },
 );
 
-const Toggle = React.forwardRef<
-  React.ElementRef<typeof TogglePrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof TogglePrimitive.Root> &
-    VariantProps<typeof toggleVariants> & { icon?: React.ReactNode }
->(({ className, variant, size, icon, ...props }, ref) => (
+const Toggle = ({
+  className,
+  variant,
+  size,
+  icon,
+  ...props
+}: React.ComponentProps<typeof TogglePrimitive.Root> &
+  VariantProps<typeof toggleVariants> & { icon?: React.ReactNode }) => (
   <TogglePrimitive.Root
-    ref={ref}
     className={cn(toggleVariants({ variant, size }), className, 'toggle-icon-hover', {
       'toggle-icon-active': !!icon,
     })}
@@ -42,7 +44,7 @@ const Toggle = React.forwardRef<
     {icon && <span className={cn('toggle-icon')}>{icon}</span>}
     {props.children}
   </TogglePrimitive.Root>
-));
+);
 
 Toggle.displayName = TogglePrimitive.Root.displayName;
 
