@@ -200,6 +200,8 @@ const SignUpPage = ({ isPastAnnouncement }: SignUpProps) => {
     mutateMemberRegister(body);
   };
 
+  // useCallback 유지: sendCodeNumber가 useEffect 의존성이라 안정 참조가 필요
+  // (컴파일러 메모화와 별개로 exhaustive-deps 정합성 유지 목적)
   const handleDuplicateConfirm = useCallback(() => {
     setPhoneNumberDuplicateModal(false);
     if (isPastAnnouncement) {
