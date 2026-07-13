@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 import {
@@ -154,7 +154,8 @@ const StepWrapper = ({ data, step, info, memberId, type, isModifyApproved }: Ste
   const [errorStep, setErrorStep] = useState<StepEnum | null>(null);
 
   const { push } = useRouter();
-  const graduationType = step2UseForm.watch('graduationType');
+  // 렌더 중 구독은 watch() 대신 useWatch 사용 (React Compiler 호환)
+  const graduationType = useWatch({ control: step2UseForm.control, name: 'graduationType' });
 
   const isClient = type === 'client';
   const isCandidate = graduationType === GraduationTypeValueEnum.CANDIDATE;
@@ -166,11 +167,16 @@ const StepWrapper = ({ data, step, info, memberId, type, isModifyApproved }: Ste
 
   const phoneNumber = isClient ? info!.phoneNumber : data!.privacyDetail.phoneNumber;
 
+  const step1Values = useWatch({ control: step1UseForm.control });
+  const step2Values = useWatch({ control: step2UseForm.control });
+  const step3Values = useWatch({ control: step3UseForm.control });
+  const step4Values = useWatch({ control: step4UseForm.control });
+
   const isStepSuccess = {
-    '1': step1Schema.safeParse(step1UseForm.watch()).success,
-    '2': step2Schema.safeParse(step2UseForm.watch()).success,
-    '3': step3Schema.safeParse(step3UseForm.watch()).success,
-    '4': step4Schema.safeParse(step4UseForm.watch()).success,
+    '1': step1Schema.safeParse(step1Values).success,
+    '2': step2Schema.safeParse(step2Values).success,
+    '3': step3Schema.safeParse(step3Values).success,
+    '4': step4Schema.safeParse(step4Values).success,
   };
 
   const isScoreComplete = Object.values(isStepSuccess).every((value) => value === true);
@@ -238,7 +244,7 @@ const StepWrapper = ({ data, step, info, memberId, type, isModifyApproved }: Ste
   });
 
   const getOneseo = (isTemp: boolean = false) => {
-    const { profileImg, name, birth, sex, address, detailAddress } = step1UseForm.watch();
+    const { profileImg, name, birth, sex, address, detailAddress } = step1UseForm.getValues();
     const {
       graduationType,
       schoolName,
@@ -249,7 +255,7 @@ const StepWrapper = ({ data, step, info, memberId, type, isModifyApproved }: Ste
       firstDesiredMajor,
       secondDesiredMajor,
       thirdDesiredMajor,
-    } = step2UseForm.watch();
+    } = step2UseForm.getValues();
     const {
       guardianName,
       guardianPhoneNumber,
@@ -257,7 +263,7 @@ const StepWrapper = ({ data, step, info, memberId, type, isModifyApproved }: Ste
       otherRelationshipWithGuardian,
       schoolTeacherName,
       schoolTeacherPhoneNumber,
-    } = step3UseForm.watch();
+    } = step3UseForm.getValues();
     const {
       liberalSystem,
       achievement1_1,
@@ -273,7 +279,7 @@ const StepWrapper = ({ data, step, info, memberId, type, isModifyApproved }: Ste
       volunteerTime,
       freeSemester,
       gedAvgScore,
-    } = step4UseForm.watch();
+    } = step4UseForm.getValues();
 
     const body: PostOneseoType = {
       // step 1
@@ -343,9 +349,9 @@ const StepWrapper = ({ data, step, info, memberId, type, isModifyApproved }: Ste
   };
 
   const getPersonalInfo = (): PatchPersonalInfoType => {
-    const { profileImg, name, birth, sex, address, detailAddress } = step1UseForm.watch();
+    const { profileImg, name, birth, sex, address, detailAddress } = step1UseForm.getValues();
     const { graduationType, schoolName, schoolAddress, studentNumber, graduationDate } =
-      step2UseForm.watch();
+      step2UseForm.getValues();
     const {
       guardianName,
       guardianPhoneNumber,
@@ -353,7 +359,7 @@ const StepWrapper = ({ data, step, info, memberId, type, isModifyApproved }: Ste
       otherRelationshipWithGuardian,
       schoolTeacherName,
       schoolTeacherPhoneNumber,
-    } = step3UseForm.watch();
+    } = step3UseForm.getValues();
 
     return {
       profileImg: profileImg!,
@@ -417,7 +423,7 @@ const StepWrapper = ({ data, step, info, memberId, type, isModifyApproved }: Ste
       volunteerTime,
       freeSemester,
       gedAvgScore,
-    } = step4UseForm.watch();
+    } = step4UseForm.getValues();
 
     const body: MiddleSchoolAchievementType | GEDAchievementType = isGED
       ? {
@@ -476,6 +482,9 @@ const StepWrapper = ({ data, step, info, memberId, type, isModifyApproved }: Ste
     });
   };
   useEffect(() => {
+    // 스텝 전환(URL 라우팅) 시 이전 스텝의 에러 표시 초기화 — 전환 진입점이
+    // 라우터 경유라 이벤트 핸들러로 일원화 불가, effect 유지가 정당
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (errorStep !== step) clearStepError();
 
     if (step === StepEnum.TWO && !isStepSuccess[1]) push(`${BASE_URL}?step=1`);

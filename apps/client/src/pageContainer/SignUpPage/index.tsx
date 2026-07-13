@@ -2,8 +2,8 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
-import { useEffect, useState, useCallback } from 'react';
-import { useForm, FormProvider } from 'react-hook-form';
+import { useEffect, useRef, useState } from 'react';
+import { useForm, useWatch, FormProvider } from 'react-hook-form';
 import { z } from 'zod';
 
 import { useGetDuplicateMember } from '@repo/api/hooks';
@@ -45,10 +45,9 @@ interface SignUpProps {
 
 const SignUpPage = ({ isPastAnnouncement }: SignUpProps) => {
   const [showPrivacyPolicy, setShowPrivacyPolicy] = useState(false);
-  const [btnClick, setBtnClick] = useState<boolean>(false);
-  const [lastSubmittedCode, setLastSubmittedCode] = useState<string>('');
+  // 인증번호 중복 제출 방지 플래그 — 렌더에 쓰이지 않으므로 ref
+  const lastSubmittedCodeRef = useRef<string>('');
   const [isSuccess, setIsSuccess] = useState<boolean | undefined>(undefined);
-  const [isContinue, setIsContinue] = useState<boolean>(false);
   const [isVerifyClicked, setIsVerifyClicked] = useState(false);
 
   const {
@@ -60,6 +59,8 @@ const SignUpPage = ({ isPastAnnouncement }: SignUpProps) => {
   } = useModalStore();
 
   const [timeLeft, setTimeLeft] = useState(0);
+  // 재전송 버튼 노출 여부는 타이머 진행 여부의 순수 파생값
+  const btnClick = timeLeft > 0;
 
   const formMethods = useForm({
     resolver: zodResolver(signupFormSchema),
@@ -81,14 +82,16 @@ const SignUpPage = ({ isPastAnnouncement }: SignUpProps) => {
 
   useEffect(() => {
     const initialTime = VERIFICATION_CODE_TIMEOUT;
+    // sessionStorage는 클라이언트 전용 외부 저장소 — hydration 불일치 방지를 위해
+    // 마운트 후 effect에서 타이머를 복원해야 함
     const savedTime = sessionStorage.getItem('timerStart');
 
     if (savedTime) {
       const elapsedTime = Math.floor((Date.now() - parseInt(savedTime, 10)) / 1000);
       const remainingTime = initialTime - elapsedTime;
       if (remainingTime > 0) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setTimeLeft(remainingTime);
-        setBtnClick(true);
         setIsVerifyClicked(true);
         formMethods.setValue('isSentCertificationNumber', true);
       } else {
@@ -113,28 +116,35 @@ const SignUpPage = ({ isPastAnnouncement }: SignUpProps) => {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    if (timeLeft > 0) {
-      setBtnClick(true);
-    } else if (timeLeft === 0) {
-      setBtnClick(false);
-    }
-  }, [timeLeft]);
-
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
   };
 
-  const phoneNumber = formMethods.watch('phoneNumber');
-  const certificationNumber = formMethods.watch('certificationNumber');
-  const isAgreed = formMethods.watch('isAgreed');
-  const isSentCertificationNumber = formMethods.watch('isSentCertificationNumber');
-  const sex = formMethods.watch('sex');
-  const birthYear = formMethods.watch('birth.year');
-  const birthMonth = formMethods.watch('birth.month');
-  const birthDay = formMethods.watch('birth.day');
+  // 렌더 중 구독은 watch() 대신 useWatch 사용 (React Compiler 호환 — Compilation Skipped 해소)
+  const [
+    phoneNumber,
+    certificationNumber,
+    isAgreed,
+    isSentCertificationNumber,
+    sex,
+    birthYear,
+    birthMonth,
+    birthDay,
+  ] = useWatch({
+    control: formMethods.control,
+    name: [
+      'phoneNumber',
+      'certificationNumber',
+      'isAgreed',
+      'isSentCertificationNumber',
+      'sex',
+      'birth.year',
+      'birth.month',
+      'birth.day',
+    ],
+  });
 
   const isCertificationButtonDisabled =
     !signupFormSchema.shape.phoneNumber.safeParse(phoneNumber).success;
@@ -158,7 +168,6 @@ const SignUpPage = ({ isPastAnnouncement }: SignUpProps) => {
 
   const { mutate: mutateSendCode } = useSendCode({
     onSuccess: () => {
-      setBtnClick(true);
       setIsVerifyClicked(true);
       formMethods.setValue('isSentCertificationNumber', true);
       setTimeLeft(VERIFICATION_CODE_TIMEOUT);
@@ -175,16 +184,16 @@ const SignUpPage = ({ isPastAnnouncement }: SignUpProps) => {
   const codeDebounce = useDebounce(certificationNumber ?? '', 500);
 
   useEffect(() => {
-    if (codeDebounce.length === 6 && codeDebounce !== lastSubmittedCode) {
+    if (codeDebounce.length === 6 && codeDebounce !== lastSubmittedCodeRef.current) {
       const payload = {
         code: codeDebounce,
       };
 
       mutateVerifyCode(payload);
 
-      setLastSubmittedCode(codeDebounce);
+      lastSubmittedCodeRef.current = codeDebounce;
     }
-  }, [codeDebounce, lastSubmittedCode, mutateVerifyCode]);
+  }, [codeDebounce, mutateVerifyCode]);
 
   const onSubmit = (data: z.infer<typeof signupFormSchema>) => {
     const month = String(data.birth.month).padStart(2, '0');
@@ -200,47 +209,29 @@ const SignUpPage = ({ isPastAnnouncement }: SignUpProps) => {
     mutateMemberRegister(body);
   };
 
-  // useCallback 유지: sendCodeNumber가 useEffect 의존성이라 안정 참조가 필요
-  // (컴파일러 메모화와 별개로 exhaustive-deps 정합성 유지 목적)
-  const handleDuplicateConfirm = useCallback(() => {
-    setPhoneNumberDuplicateModal(false);
-    if (isPastAnnouncement) {
-      setApplicationPeriodModal(true);
-    } else {
-      setIsContinue(true);
+  // 중복 확인 후 인증번호 전송. 모달에서 "계속"을 누르면 force로 재진입해 전송을 강행
+  // (기존 isContinue state + useEffect 체인을 직접 호출로 대체)
+  const sendCodeNumber = async (number: string, force = false) => {
+    const duplicateResponse = await checkDuplicateMember();
+    const isDuplicate = duplicateResponse?.data?.duplicateMemberYn === 'NO';
+
+    if (isDuplicate || force) {
+      const body: SendCodeType = {
+        phoneNumber: number,
+      };
+      mutateSendCode(body);
+      return;
     }
-  }, [isPastAnnouncement, setPhoneNumberDuplicateModal, setApplicationPeriodModal]);
 
-  const sendCodeNumber = useCallback(
-    async (number: string) => {
-      const duplicateResponse = await checkDuplicateMember();
-      const isDuplicate = duplicateResponse?.data?.duplicateMemberYn === 'NO';
-
-      if (isDuplicate || isContinue === true) {
-        const body: SendCodeType = {
-          phoneNumber: number,
-        };
-        mutateSendCode(body);
-        setIsContinue(false);
-        return;
+    setPhoneNumberDuplicateModal(true, () => {
+      setPhoneNumberDuplicateModal(false);
+      if (isPastAnnouncement) {
+        setApplicationPeriodModal(true);
       } else {
-        setPhoneNumberDuplicateModal(true, handleDuplicateConfirm);
+        sendCodeNumber(number, true);
       }
-    },
-    [
-      checkDuplicateMember,
-      isContinue,
-      mutateSendCode,
-      setPhoneNumberDuplicateModal,
-      handleDuplicateConfirm,
-    ],
-  );
-
-  useEffect(() => {
-    if (isContinue === true) {
-      sendCodeNumber(phoneNumber);
-    }
-  }, [isContinue, phoneNumber, sendCodeNumber]);
+    });
+  };
 
   return (
     <>

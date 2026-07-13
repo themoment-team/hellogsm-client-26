@@ -3,7 +3,7 @@
 import { QueryObserverResult, RefetchOptions } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, useWatch, Controller } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 import {
@@ -123,15 +123,21 @@ const ApplicantTR = ({
   const formatted역량검사점수 = formatScore(String(competencyEvaluationScore ?? ''));
   const formatted심층면접점수 = formatScore(String(interviewScore ?? ''));
 
-  const { control, watch, setValue } = useForm({
+  const { control, setValue, getValues } = useForm({
     defaultValues: {
       역량검사점수: formatted역량검사점수,
       심층면접점수: formatted심층면접점수,
     },
   });
 
-  const debounced역량검사점수 = useDebounce(watch('역량검사점수'), 1000);
-  const debounced심층면접점수 = useDebounce(watch('심층면접점수'), 1000);
+  // 렌더 중 구독은 watch() 대신 useWatch 사용 (React Compiler 호환)
+  const [입력중역량검사점수, 입력중심층면접점수] = useWatch({
+    control,
+    name: ['역량검사점수', '심층면접점수'],
+  });
+
+  const debounced역량검사점수 = useDebounce(입력중역량검사점수, 1000);
+  const debounced심층면접점수 = useDebounce(입력중심층면접점수, 1000);
 
   useEffect(() => {
     const formatAndSetScore = (score: string, fieldName: '역량검사점수' | '심층면접점수') => {
@@ -157,7 +163,8 @@ const ApplicantTR = ({
   };
 
   const handleAptitudeScore = () => {
-    const 역량검사점수 = parseFloat(watch('역량검사점수'));
+    // 이벤트 핸들러에서는 구독이 불필요 — getValues() 사용
+    const 역량검사점수 = parseFloat(getValues('역량검사점수'));
 
     if (역량검사점수 < 0 || 역량검사점수 > 100 || isNaN(역량검사점수)) return;
 
@@ -165,7 +172,7 @@ const ApplicantTR = ({
   };
 
   const handleInterviewScore = () => {
-    const 심층면접점수 = parseFloat(watch('심층면접점수'));
+    const 심층면접점수 = parseFloat(getValues('심층면접점수'));
 
     if (심층면접점수 < 0 || 심층면접점수 > 100 || isNaN(심층면접점수)) return;
 
@@ -227,7 +234,7 @@ const ApplicantTR = ({
             />
             <Button
               variant={
-                watch('역량검사점수') && formatted역량검사점수 !== watch('역량검사점수')
+                입력중역량검사점수 && formatted역량검사점수 !== 입력중역량검사점수
                   ? 'default'
                   : 'subtitle'
               }
@@ -251,7 +258,7 @@ const ApplicantTR = ({
             />
             <Button
               variant={
-                watch('심층면접점수') && formatted심층면접점수 !== watch('심층면접점수')
+                입력중심층면접점수 && formatted심층면접점수 !== 입력중심층면접점수
                   ? 'default'
                   : 'subtitle'
               }
