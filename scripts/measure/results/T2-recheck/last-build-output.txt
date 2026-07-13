@@ -1,0 +1,128 @@
+
+> hellogsm-front-v2@ build C:\Users\user\git\hellogsm-front-25
+> turbo run build "--force"
+
+[2m• Packages in scope: @repo/api, @repo/constants, @repo/eslint-config, @repo/hooks, @repo/store, @repo/tailwind-config, @repo/types, @repo/typescript-config, @repo/ui, @repo/utils, admin, client[0m
+[2m• Running [0m[1m[2mbuild[0m[2m in 12 packages
+[0m[2m• Remote caching disabled[0m
+[36m@repo/ui:build:components: [0mcache bypass, force executing [2m95eebbe2d84be84f[0m
+[35m@repo/ui:build:styles: [0mcache bypass, force executing [2md4e7b8be4cf38ccd[0m
+[34m@repo/hooks:build: [0mcache bypass, force executing [2m45af977eac99f6d5[0m
+[32m@repo/constants:build: [0mcache bypass, force executing [2m8ea71626dd09df74[0m
+[36m@repo/ui:build:components: [0m
+[36m@repo/ui:build:components: [0m> @repo/ui@0.0.0 build:components C:\Users\user\git\hellogsm-front-25\packages\ui
+[36m@repo/ui:build:components: [0m> tsc
+[36m@repo/ui:build:components: [0m
+[35m@repo/ui:build:styles: [0m
+[35m@repo/ui:build:styles: [0m> @repo/ui@0.0.0 build:styles C:\Users\user\git\hellogsm-front-25\packages\ui
+[35m@repo/ui:build:styles: [0m> tailwindcss -i ./src/styles.css -o ./dist/index.css
+[35m@repo/ui:build:styles: [0m
+[32m@repo/constants:build: [0m
+[32m@repo/constants:build: [0m> @repo/constants@0.0.0 build C:\Users\user\git\hellogsm-front-25\packages\constants
+[32m@repo/constants:build: [0m> tsc
+[32m@repo/constants:build: [0m
+[34m@repo/hooks:build: [0m
+[34m@repo/hooks:build: [0m> @repo/hooks@0.0.0 build C:\Users\user\git\hellogsm-front-25\packages\hooks
+[34m@repo/hooks:build: [0m> tsc
+[34m@repo/hooks:build: [0m
+[32m@repo/utils:build: [0mcache bypass, force executing [2mf0047d2da2410263[0m
+[35m@repo/ui:build:styles: [0m
+[35m@repo/ui:build:styles: [0mRebuilding...
+[32m@repo/utils:build: [0m
+[32m@repo/utils:build: [0m> @repo/utils@0.0.0 build C:\Users\user\git\hellogsm-front-25\packages\utils
+[32m@repo/utils:build: [0m> tsc
+[32m@repo/utils:build: [0m
+[35m@repo/ui:build:styles: [0m
+[35m@repo/ui:build:styles: [0mDone in 730ms.
+[32m@repo/types:build: [0mcache bypass, force executing [2m7204ec2ede255951[0m
+[32m@repo/types:build: [0m
+[32m@repo/types:build: [0m> @repo/types@0.0.0 build C:\Users\user\git\hellogsm-front-25\packages\types
+[32m@repo/types:build: [0m> tsc
+[32m@repo/types:build: [0m
+[36m@repo/store:build: [0mcache bypass, force executing [2ma2bf58b50a09acae[0m
+[35m@repo/api:build: [0mcache bypass, force executing [2mb73446d33578e737[0m
+[36m@repo/store:build: [0m
+[36m@repo/store:build: [0m> @repo/store@0.0.0 build C:\Users\user\git\hellogsm-front-25\packages\store
+[36m@repo/store:build: [0m> tsc
+[36m@repo/store:build: [0m
+[35m@repo/api:build: [0m
+[35m@repo/api:build: [0m> @repo/api@0.0.0 build C:\Users\user\git\hellogsm-front-25\packages\api
+[35m@repo/api:build: [0m> tsc
+[35m@repo/api:build: [0m
+[33madmin:build: [0mcache bypass, force executing [2m41f046558b048a33[0m
+[34mclient:build: [0mcache bypass, force executing [2m5cde36d88bda1ceb[0m
+[34mclient:build: [0m
+[34mclient:build: [0m> client@1.0.0 build C:\Users\user\git\hellogsm-front-25\apps\client
+[34mclient:build: [0m> next build
+[34mclient:build: [0m
+[33madmin:build: [0m
+[33madmin:build: [0m> admin@1.0.0 build C:\Users\user\git\hellogsm-front-25\apps\admin
+[33madmin:build: [0m> next build
+[33madmin:build: [0m
+[34mclient:build: [0m▲ Next.js 16.2.10 (Turbopack)
+[34mclient:build: [0m- Environments: .env.local
+[34mclient:build: [0m
+[33madmin:build: [0m▲ Next.js 16.2.10 (Turbopack)
+[33madmin:build: [0m- Environments: .env.local
+[33madmin:build: [0m
+[34mclient:build: [0m  Creating an optimized production build ...
+[33madmin:build: [0m  Creating an optimized production build ...
+[33madmin:build: [0m✓ Compiled successfully in 27.9s
+[33madmin:build: [0m  Running TypeScript ...
+[34mclient:build: [0m✓ Compiled successfully in 29.2s
+[34mclient:build: [0m  Running TypeScript ...
+[33madmin:build: [0m  Finished TypeScript in 12.0s ...
+[33madmin:build: [0m  Collecting page data using 8 workers ...
+[33madmin:build: [0m  Generating static pages using 8 workers (0/5) ...
+[33madmin:build: [0m  Generating static pages using 8 workers (1/5) 
+[33madmin:build: [0m  Generating static pages using 8 workers (2/5) 
+[33madmin:build: [0m  Generating static pages using 8 workers (3/5) 
+[33madmin:build: [0m✓ Generating static pages using 8 workers (5/5) in 817ms
+[33madmin:build: [0m  Finalizing page optimization ...
+[33madmin:build: [0m
+[33madmin:build: [0mRoute (app)
+[33madmin:build: [0m┌ ƒ /
+[33madmin:build: [0m├ ○ /_not-found
+[33madmin:build: [0m├ ƒ /edit/[memberId]
+[33madmin:build: [0m├ ƒ /print
+[33madmin:build: [0m├ ƒ /print/[memberId]
+[33madmin:build: [0m└ ○ /signin
+[33madmin:build: [0m
+[33madmin:build: [0m
+[33madmin:build: [0m○  (Static)   prerendered as static content
+[33madmin:build: [0mƒ  (Dynamic)  server-rendered on demand
+[33madmin:build: [0m
+[34mclient:build: [0m  Finished TypeScript in 15.9s ...
+[34mclient:build: [0m  Collecting page data using 14 workers ...
+[34mclient:build: [0m  Generating static pages using 14 workers (0/13) ...
+[34mclient:build: [0m  Generating static pages using 14 workers (3/13) 
+[34mclient:build: [0m  Generating static pages using 14 workers (6/13) 
+[34mclient:build: [0m  Generating static pages using 14 workers (9/13) 
+[34mclient:build: [0m✓ Generating static pages using 14 workers (13/13) in 1581ms
+[34mclient:build: [0m  Finalizing page optimization ...
+[34mclient:build: [0m
+[34mclient:build: [0mRoute (app)            Revalidate  Expire
+[34mclient:build: [0m┌ ƒ /
+[34mclient:build: [0m├ ○ /_not-found                1m      1y
+[34mclient:build: [0m├ ƒ /callback
+[34mclient:build: [0m├ ƒ /check-result
+[34mclient:build: [0m├ ƒ /faq
+[34mclient:build: [0m├ ƒ /guide
+[34mclient:build: [0m├ ○ /introduce                 1m      1y
+[34mclient:build: [0m├ ƒ /mypage
+[34mclient:build: [0m├ ○ /oneseo/calculate          1m      1y
+[34mclient:build: [0m├ ƒ /print
+[34mclient:build: [0m├ ƒ /register
+[34mclient:build: [0m└ ○ /signup                    1m      1y
+[34mclient:build: [0m
+[34mclient:build: [0m
+[34mclient:build: [0m○  (Static)   prerendered as static content
+[34mclient:build: [0mƒ  (Dynamic)  server-rendered on demand
+[34mclient:build: [0m
+
+[1m Tasks:    [32m[1m10 successful[0m, 10 total[0m
+[1mCached:    [1m0 cached[0m, 10 total[0m
+[1m  Time:    [1m1m2.056s[0m [0m
+
+
+• turbo 2.8.11
