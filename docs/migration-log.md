@@ -183,6 +183,16 @@ HG(hellogsm-front-25)에 React Compiler를 도입하는 마이그레이션(Next 
 
 | 2026-07-11 | stage-4 | **T2 런타임 측정 완료 (T1↔T2 비교쌍 확정)**: 측정 브랜치 `bg/react-scan-t2`(T2 HEAD + 계측 cherry-pick)에서 T1과 동일 계측·조건(훅 스크립트, 배터리, 5회 중앙값)으로 수행. 리렌더 전체 합 S1 -16.1%/S2 -66.6%/S3 -13.5%, INP S1 656→80ms(-88%)/S2 -20%/S3 -15%. 결과 `scripts/measure/results/T2/runtime.md` | 측정 브랜치 `bg/react-scan-t2` |
 
+| 2026-07-13 | stage-4 | Stage 4 종료 태그 생성 (T2 런타임 기록 커밋 `55b93f1f` 대상) | 태그 `upgrade/stage-4-done` |
+
+| 2026-07-13 | stage-5 | **수동 메모이제이션 정리**: 리포 전체 인벤토리 = useMemo 0·React.memo 0·useCallback 3. ArtPhysicalForm.getFreeSemesterIndices는 순수 함수라 모듈 스코프 호이스팅으로 제거. SignUpPage 2건은 당시 effect 의존성 문제로 유지했다가 아래 watch 정리 과정에서 state+effect 체인 자체가 사라지며 **최종 0건** | `c91f2677`, `cfd74c26` |
+
+| 2026-07-13 | stage-5 | **forwardRef 전량 제거 (38건)**: shadcn 36 + LoginButton + TextField. 전수 조사 결과 ref 소비(useImperativeHandle/ref.current) 0건 — React 19 ref prop 직접 수용으로 기계적 전환(`ComponentPropsWithoutRef`→`ComponentProps`, ref는 spread로 전달). **부수 발견: forwardRef 컴포넌트는 컴파일러 lint 진단 범위 밖이었음** — 전환 직후 LoginButton에서 set-state-in-effect 2건 신규 노출 | `b23b16ed` |
+
+| 2026-07-13 | stage-5 | **컴파일러 진단 위반 코드 수정 (연쇄 노출 포함 총 13건)**: static-components 1(Header 렌더 내부 컴포넌트 → 인라인화, 매 렌더 리마운트 실버그 해소), set-state-in-effect 실수정 8(파생 상태 렌더 계산 전환·state→ref·lazy init·state+effect 체인 제거) + 정당 disable 4(localStorage/cookie/sessionStorage/window 마운트 복원, 라우팅 반응 에러 초기화 — 각 지점 사유 주석), incompatible-library 4(핸들러 watch→getValues 10곳, 렌더 구독 watch→useWatch 15필드). **컴파일 스킵 컴포넌트가 컴파일 대상이 될 때마다 숨은 위반이 연쇄 노출**(SignUpPage 4건, StepWrapper 1건) — "위반 수 = lint 표시 수"가 아님을 확인 | `e9dda442`, `cfd74c26` |
+
+| 2026-07-13 | stage-5 | **컴파일러 진단 룰 14종 전부 error 승격** + 검증 체인 전체 green (types 9/9·lint 9/9 0 err·build 10/10·스모크 6/6). 잔여 경고는 exhaustive-deps(warn 유지 대상)뿐. 이후 T3 측정까지 코드 프리즈 | `302301ac` |
+
 ### Stage 4 react-compiler-healthcheck 결과 (2026-07-09, `npx react-compiler-healthcheck@latest`)
 
 | 워크스페이스 | 컴파일 성공 | StrictMode | 비호환 라이브러리 |
