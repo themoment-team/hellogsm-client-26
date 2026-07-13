@@ -106,7 +106,7 @@ HG(hellogsm-front-25)에 React Compiler를 도입하는 마이그레이션(Next 
   T0의 First Load JS(라우트당 전송량)와 산정 기준이 달라 **T0↔T1 번들 직접 비교 불가**.
   T1↔T2(컴파일러 ON) 비교가 목적이므로 이 방식으로 통일. 원본: `scripts/measure/results/T1/bundle-size.json`
 - 런타임 지표(리렌더/INP/Lighthouse): T2 직전에 T1 상태로 되돌려 연달아 측정 예정(조건 통제)
-- **T1 런타임 측정 완료 (2026-07-08, `bg/react-scan-setup`)** → 결과 `scripts/measure/results/T1/runtime.md` (untracked).
+- **T1 런타임 측정 완료 (2026-07-08, `bg/react-scan-setup`)** → 결과 `scripts/measure/results/T1/runtime.md`.
   ⚠️ **가이드(`docs/runtime-measurement-guide.md`, `79898428`)와 실측 방식이 일부 다름**:
   ① 리렌더는 react-scan 툴바 육안 판독 대신 DevTools `onCommitFiberRoot` 훅 스크립트로 집계(판정 로직은 bippy `didFiberRender` 동일),
   ② 회차 리셋은 새로고침 대신 `__mcReset()`,
@@ -142,11 +142,16 @@ HG(hellogsm-front-25)에 React Compiler를 도입하는 마이그레이션(Next 
 - 컴파일러가 삽입하는 메모화 코드(`_c(n)` 캐시 슬롯 + 비교 분기)의 크기 비용. 원본: `scripts/measure/results/T2/bundle-size.json`
 - 요약: **빌드 +17%, 번들 +6%대의 비용을 지불하고 런타임 리렌더/INP 개선을 사는 거래** — 손익은 아래 런타임 지표로 판단.
 
-### 런타임 (리렌더·INP) — 측정 예정
+### 런타임 (리렌더·INP) — 측정 완료
 
-- `bg/react-scan-setup`의 계측 커밋(`51716fb0`)을 T2 HEAD 위에 cherry-pick한 측정 브랜치에서
-  **T1 `runtime.md` 부록 스크립트·조건 그대로** 수행 예정 (배터리, 확장 on 일반 창, 시나리오 3개 × 5회 중앙값,
-  admin 데이터 5행 유지 여부 사전 확인). 결과: `scripts/measure/results/T2/runtime.md`
+- 측정 브랜치 `bg/react-scan-t2`(= T2 HEAD + 계측 cherry-pick `e3835b53`)에서 **T1 `runtime.md` 부록
+  스크립트·조건 그대로** 수행 — 리렌더 2026-07-09(dev), INP 2026-07-11(prod·배터리 방전 중·확장 on 일반 창,
+  T1과 동일 편차). admin 데이터셋 T1과 동일 5행 확인. 결과: `scripts/measure/results/T2/runtime.md`
+- **리렌더**(시나리오 전체 합, 5회 중앙값): S1 폼 타이핑 **-16.1%**(16,043→13,460, SelectItem 정확히 절반),
+  S2 모달 열닫 **-66.6%**(10,712→3,575), S3 admin 필터링 **-13.5%**(6,348→5,494)
+- **INP**(이벤트 지연 최댓값, 5회 중앙값): S1 **656→80ms(-88%, Chrome 기준 "나쁨"→"좋음")**,
+  S2 80→64ms(-20%), S3 104→88ms(-15%)
+- 요약: **빌드 +17%·번들 +6%를 지불하고 핵심 시나리오 INP -88%·리렌더 churn 최대 -67%를 얻음** — T1↔T2 거래 손익 확정
 
 ## T3 — 최종 (수동 메모 제거 + 안정화)
 
@@ -175,6 +180,8 @@ HG(hellogsm-front-25)에 React Compiler를 도입하는 마이그레이션(Next 
 | 2026-07-09 | stage-4 | **T2 측정(빌드·번들)**: 빌드 평균 52.2s(T1 대비 +17% — 컴파일러 변환 비용, T0 대비는 -22%), 번들 client 1,424KB(+6.5%)/admin 1,355KB(+5.7%). 배터리(방전 중) 조건 준수. 런타임(리렌더·INP)은 cherry-pick 측정 브랜치에서 별도 수행 예정 | `ae501a0d` |
 
 | 2026-07-09 | stage-4 | **react-hooks 컴파일러 진단 룰 error 승격**: 위반 0건인 11개 룰 warn→error. 위반 잔존 3종(`set-state-in-effect`×5, `incompatible-library`×4 RHF watch, `static-components`×1)은 코드 수정이 런타임 동작을 바꿀 수 있어 warn 유지 + Stage 5 이월 주석(T2 순수성 유지 목적). export명 `reactHooksCompilerRulesAsWarn`→`reactHooksCompilerRules` 정리. 검증: lint 9/9, 0 errors | `97d10bfc` |
+
+| 2026-07-11 | stage-4 | **T2 런타임 측정 완료 (T1↔T2 비교쌍 확정)**: 측정 브랜치 `bg/react-scan-t2`(T2 HEAD + 계측 cherry-pick)에서 T1과 동일 계측·조건(훅 스크립트, 배터리, 5회 중앙값)으로 수행. 리렌더 전체 합 S1 -16.1%/S2 -66.6%/S3 -13.5%, INP S1 656→80ms(-88%)/S2 -20%/S3 -15%. 결과 `scripts/measure/results/T2/runtime.md` | 측정 브랜치 `bg/react-scan-t2` |
 
 ### Stage 4 react-compiler-healthcheck 결과 (2026-07-09, `npx react-compiler-healthcheck@latest`)
 
