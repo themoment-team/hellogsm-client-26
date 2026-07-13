@@ -1,7 +1,7 @@
 'use client';
 
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { FaqPageData } from '@repo/types';
 import { SearchIcon } from '@repo/ui/icons';
@@ -27,9 +27,11 @@ interface FaqPageProps {
 const FaqPage = ({ data, openIndex }: FaqPageProps) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [keyword, setKeyword] = useState<string>('');
-  const [faqStates, setFaqStates] = useState<{ [key: number]: boolean }>({});
+  // openIndex(URL 쿼리)는 첫 렌더에 확정되므로 초기 상태로 반영 (effect 초기화 불필요)
+  const [faqStates, setFaqStates] = useState<{ [key: number]: boolean }>(() =>
+    openIndex !== undefined ? { [openIndex]: true } : {},
+  );
   const [isPageChanging, setIsPageChanging] = useState<boolean>(false);
-  const [isInitialOpenIndexHandled, setIsInitialOpenIndexHandled] = useState<boolean>(false);
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -76,13 +78,6 @@ const FaqPage = ({ data, openIndex }: FaqPageProps) => {
       return newFaqStates;
     });
   };
-
-  useEffect(() => {
-    if (!isInitialOpenIndexHandled && openIndex !== undefined) {
-      setFaqStates({ [openIndex]: true });
-      setIsInitialOpenIndexHandled(true);
-    }
-  }, [openIndex, isInitialOpenIndexHandled]);
 
   return (
     <div className={cn('flex', 'flex-col', 'h-[100vh]', 'justify-between', 'bg-white')}>

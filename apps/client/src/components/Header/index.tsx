@@ -316,10 +316,6 @@ const Header = ({ isServerHealthy }: HeaderProps) => {
 
   const router = useRouter();
 
-  const MenuToggleButton = () => (
-    <button onClick={() => setIsMenu(!isMenu)}>{isMenu ? <I.XIcon /> : <I.HamburgerIcon />}</button>
-  );
-
   const mobileNavLinks = isServerHealthy
     ? [
         { href: '/', label: '홈', icon: I.HomeIcon },
@@ -458,7 +454,13 @@ const Header = ({ isServerHealthy }: HeaderProps) => {
 
         {/* Mobile width 일떄 */}
         <div className={cn('md:hidden')}>
-          {isLogin ? '회원가입을 진행해주세요' : <MenuToggleButton />}
+          {isLogin ? (
+            '회원가입을 진행해주세요'
+          ) : (
+            <button onClick={() => setIsMenu(!isMenu)}>
+              {isMenu ? <I.XIcon /> : <I.HamburgerIcon />}
+            </button>
+          )}
         </div>
       </header>
 

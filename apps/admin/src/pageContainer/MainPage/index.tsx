@@ -93,9 +93,12 @@ const MainPage = ({
   }, [debouncedKeyword, page, testResultTag, isSubmitted, screeningTag, requested]);
 
   useEffect(() => {
+    // 필터 조건이 변경 되었을때 1번부터 다시 시작.
+    // 페이지 리셋을 각 필터 핸들러(SideMenu·검색어 입력 등)로 옮기는 것이 정석이나
+    // 핸들러가 여러 컴포넌트에 분산되어 있어 후속 과제로 이월 (Stage 5 범위 제외)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setPage(0);
   }, [debouncedKeyword, testResultTag, isSubmitted, screeningTag, requested]);
-  // 필터 조건이 변경 되었을때 1번부터 다시 시작
 
   return (
     <main
