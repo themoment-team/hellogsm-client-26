@@ -85,7 +85,7 @@ const SearchDialog = ({ setValue }: SearchDialogProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>학교 찾기</Button>
+        <Button variant="next">학교 찾기</Button>
       </DialogTrigger>
       <DialogContent className={cn('w-fit', 'p-0', 'rounded-lg')} showCloseIcon={false}>
         <DialogTitle className={cn('sr-only')}>학교 찾기</DialogTitle>
@@ -118,7 +118,7 @@ const SearchDialog = ({ setValue }: SearchDialogProps) => {
               <Button variant="submit">확인</Button>
             ) : (
               <DialogClose asChild>
-                <Button>확인</Button>
+                <Button variant="next">확인</Button>
               </DialogClose>
             )}
           </div>
