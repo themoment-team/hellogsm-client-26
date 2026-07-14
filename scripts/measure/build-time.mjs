@@ -3,7 +3,7 @@
  *
  * Runs `pnpm build --force` N times (turbo cache bypassed), removing every
  * `.next` directory before each run so all iterations are comparable cold builds.
- * Results are written to scripts/measure/results/<label>/build-times.json and
+ * Results are written to docs/measurements/<label>/build-times.json and
  * the full build output of the last run is saved for the route/bundle table.
  *
  * Usage: node scripts/measure/build-time.mjs <label> [iterations]
@@ -21,7 +21,7 @@ if (!label) {
 }
 
 const root = process.cwd();
-const resultsDir = join(root, 'scripts', 'measure', 'results', label);
+const resultsDir = join(root, 'docs', 'measurements', label);
 mkdirSync(resultsDir, { recursive: true });
 
 const nextDirs = ['apps/client/.next', 'apps/admin/.next'].map((p) => join(root, p));
@@ -83,4 +83,4 @@ writeFileSync(join(resultsDir, 'last-build-output.txt'), lastOutput);
 console.log(
   `\n[${label}] done. avg=${result.avgSeconds}s median=${result.medianSeconds}s (commit ${result.commit})`,
 );
-console.log(`Results written to scripts/measure/results/${label}/`);
+console.log(`Results written to docs/measurements/${label}/`);

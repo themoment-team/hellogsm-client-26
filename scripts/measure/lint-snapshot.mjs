@@ -3,7 +3,7 @@
  *
  * 워크스페이스 9개 대상에서 `eslint src --format json`을 실행해
  * 원본 JSON과 diff 가능한 요약(summary.txt: pkg|file:line:col|rule|severity 정렬)을
- * scripts/measure/results/stage2-lint-parity/<label>/ 에 저장한다.
+ * docs/measurements/stage2-lint-parity/<label>/ 에 저장한다.
  *
  * Usage: node scripts/measure/lint-snapshot.mjs <before|after>
  */
@@ -18,7 +18,7 @@ if (!label) {
 }
 
 const root = process.cwd();
-const outDir = join(root, 'scripts', 'measure', 'results', 'stage2-lint-parity', label);
+const outDir = join(root, 'docs', 'measurements', 'stage2-lint-parity', label);
 mkdirSync(outDir, { recursive: true });
 
 const targets = [

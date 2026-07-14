@@ -107,7 +107,7 @@ cd apps\admin  ; pnpm start -- -p 3001   # 3001
 
 ## 3. 결과 기록
 
-`scripts/measure/results/T1/runtime.md` (T2는 `T2/runtime.md`)에 아래 템플릿으로 기록:
+`docs/measurements/T1/runtime.md` (T2는 `T2/runtime.md`)에 아래 템플릿으로 기록:
 
 ```markdown
 # T1 런타임 측정 결과
@@ -145,7 +145,7 @@ cd apps\admin  ; pnpm start -- -p 3001   # 3001
 # runtime.md는 아직 커밋하지 말 것 — untracked 상태로 브랜치 이동하면 그대로 따라옴
 git checkout refactor/react-compiler-migration
 pnpm install                              # react-scan 제거
-git add scripts/measure/results/T1/runtime.md docs/migration-log.md
+git add docs/measurements/T1/runtime.md docs/migration-log.md
 git commit                                # 결과 기록 커밋
 ```
 
@@ -155,7 +155,7 @@ git commit                                # 결과 기록 커밋
 git checkout -b measure/t2 <Stage4-완료-커밋>
 git cherry-pick <계측-커밋-SHA>           # bg/react-scan-setup의 "chore: react-scan 계측" 커밋
 pnpm install
-# → 위 1·2절 동일 수행, 결과는 scripts/measure/results/T2/runtime.md
+# → 위 1·2절 동일 수행, 결과는 docs/measurements/T2/runtime.md
 git checkout refactor/react-compiler-migration
 pnpm install
 git branch -D measure/t2                  # 계측 브랜치 폐기

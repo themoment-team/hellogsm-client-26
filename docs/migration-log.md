@@ -5,7 +5,7 @@ HG(hellogsm-front-25)에 React Compiler를 도입하는 마이그레이션(Next 
 
 - 브랜치: `refactor/react-compiler-migration` (단일 브랜치)
 - 커밋: 리포 컨벤션 `type: 설명` (`feat`/`refactor`/`chore`/`fix`/`test`/`docs`) 준수, stage 구분은 커밋 본문에 `stage-N:` 줄로 기록
-- 측정 원본 데이터: `scripts/measure/results/{T0..T3}/` (JSON + 빌드 출력 전문)
+- 측정 원본 데이터: `docs/measurements/{T0..T3}/` (JSON + 빌드 출력 전문)
 
 ## 측정 시점 정의
 
@@ -25,7 +25,7 @@ HG(hellogsm-front-25)에 React Compiler를 도입하는 마이그레이션(Next 
   - 매 회 `apps/client/.next`, `apps/admin/.next` 삭제 후 `pnpm build --force` (turbo 캐시 우회) → 10회 모두 동일 조건의 콜드 빌드.
   - `turbo run build`는 apps/client + apps/admin + apps/storybook + packages/* 전체 파이프라인을 포함.
 - 런타임 지표(리렌더/INP): 로그인 필요로 자동화 불가 → 수동 측정. 절차·시나리오 3개(원서 폼 타이핑/모달 열닫/admin 리스트 필터링)는 `docs/runtime-measurement-guide.md` 참조.
-  - 리렌더: dev 모드 + react-scan(측정 전용 브랜치 `bg/react-scan-setup`의 계측 커밋 — 마이그레이션 브랜치엔 미포함, T2 때 cherry-pick 재사용), INP: production build + `next start` + Web Vitals 로거, 시크릿 창, 확장 off, CPU 4x throttle. 시나리오당 5회 중앙값. 결과: `scripts/measure/results/{T1,T2}/runtime.md`.
+  - 리렌더: dev 모드 + react-scan(측정 전용 브랜치 `bg/react-scan-setup`의 계측 커밋 — 마이그레이션 브랜치엔 미포함, T2 때 cherry-pick 재사용), INP: production build + `next start` + Web Vitals 로거, 시크릿 창, 확장 off, CPU 4x throttle. 시나리오당 5회 중앙값. 결과: `docs/measurements/{T1,T2}/runtime.md`.
 - 동일 머신·동일 전원 조건에서만 시점 간 비교 유효 (아래 환경 기록 참조).
 
 ## 측정 환경
@@ -56,8 +56,8 @@ HG(hellogsm-front-25)에 React Compiler를 도입하는 마이그레이션(Next 
 - **평균: 66.7s**
 - 중앙값: 59.7s / 최소: 57.2s / 최대: 104.7s
 - 비고: 3회차(104.7s)는 명백한 아웃라이어(백그라운드 프로세스 간섭 추정). 아웃라이어에 강한 중앙값(59.7s)을 T1 비교 시 함께 볼 것.
-- 원본: `scripts/measure/results/T0/build-times.json`
-- 빌드 출력 전문(라우트별 First Load JS 포함 — webpack 마지막 수치 📸): `scripts/measure/results/T0/last-build-output.txt`
+- 원본: `docs/measurements/T0/build-times.json`
+- 빌드 출력 전문(라우트별 First Load JS 포함 — webpack 마지막 수치 📸): `docs/measurements/T0/last-build-output.txt`
 
 ### 번들 크기 (라우트별 First Load JS, webpack)
 
@@ -93,7 +93,7 @@ HG(hellogsm-front-25)에 React Compiler를 도입하는 마이그레이션(Next 
 - **평균: 44.5s** (T0 66.7s 대비 **-33%**) / 중앙값: 43.3s (T0 59.7s 대비 **-27%**)
 - 최소 40.4 / 최대 50.2. 후반 회차로 갈수록 증가 추세 — 배터리 전원의 열 스로틀링 추정 (T2 측정 시에도 동일 패턴 예상되므로 비교엔 지장 없음, 중앙값 병용)
 - 이 감소분은 **Turbopack 전환 효과이며 React Compiler와 무관** — 별도 성과로 분리 서술할 것
-- 원본: `scripts/measure/results/T1/build-times.json`, 빌드 출력: `last-build-output.txt`
+- 원본: `docs/measurements/T1/build-times.json`, 빌드 출력: `last-build-output.txt`
 
 ### 번들 크기 (신규 방식: `.next/static/**/*.js` 합산 — T2와 이 방식으로 비교)
 
@@ -104,9 +104,9 @@ HG(hellogsm-front-25)에 React Compiler를 도입하는 마이그레이션(Next 
 
 - ⚠️ Next 16(Turbopack)이 라우트별 First Load JS 표를 출력에서 제거해 측정 방식 변경.
   T0의 First Load JS(라우트당 전송량)와 산정 기준이 달라 **T0↔T1 번들 직접 비교 불가**.
-  T1↔T2(컴파일러 ON) 비교가 목적이므로 이 방식으로 통일. 원본: `scripts/measure/results/T1/bundle-size.json`
+  T1↔T2(컴파일러 ON) 비교가 목적이므로 이 방식으로 통일. 원본: `docs/measurements/T1/bundle-size.json`
 - 런타임 지표(리렌더/INP/Lighthouse): T2 직전에 T1 상태로 되돌려 연달아 측정 예정(조건 통제)
-- **T1 런타임 측정 완료 (2026-07-08, `bg/react-scan-setup`)** → 결과 `scripts/measure/results/T1/runtime.md`.
+- **T1 런타임 측정 완료 (2026-07-08, `bg/react-scan-setup`)** → 결과 `docs/measurements/T1/runtime.md`.
   ⚠️ **가이드(`docs/runtime-measurement-guide.md`, `79898428`)와 실측 방식이 일부 다름**:
   ① 리렌더는 react-scan 툴바 육안 판독 대신 DevTools `onCommitFiberRoot` 훅 스크립트로 집계(판정 로직은 bippy `didFiberRender` 동일),
   ② 회차 리셋은 새로고침 대신 `__mcReset()`,
@@ -130,7 +130,7 @@ HG(hellogsm-front-25)에 React Compiler를 도입하는 마이그레이션(Next 
 - **평균: 52.2s** (T1 44.5s 대비 **+7.7s, +17%**) / 중앙값: 52.4s (T1 43.3s 대비 +21%)
 - 최소 46.7 / 최대 60.4 — **컴파일러 변환 비용**(babel 패스가 파일마다 추가 실행). 예상된 트레이드오프로,
   T0(webpack) 66.7s 대비로는 여전히 **-22%**. "Turbopack 이득(-33%)의 일부를 컴파일러 비용(+17%)과 교환" 구도.
-- 원본: `scripts/measure/results/T2/build-times.json`, 빌드 출력: `last-build-output.txt`
+- 원본: `docs/measurements/T2/build-times.json`, 빌드 출력: `last-build-output.txt`
 
 ### 번들 크기 (`.next/static/**/*.js` 합산 — T1과 동일 방식)
 
@@ -139,14 +139,14 @@ HG(hellogsm-front-25)에 React Compiler를 도입하는 마이그레이션(Next 
 | client | 15 | **1,424 KB** | +87 KB (**+6.5%**) |
 | admin | 23 | **1,355 KB** | +73 KB (**+5.7%**) |
 
-- 컴파일러가 삽입하는 메모화 코드(`_c(n)` 캐시 슬롯 + 비교 분기)의 크기 비용. 원본: `scripts/measure/results/T2/bundle-size.json`
+- 컴파일러가 삽입하는 메모화 코드(`_c(n)` 캐시 슬롯 + 비교 분기)의 크기 비용. 원본: `docs/measurements/T2/bundle-size.json`
 - 요약: **빌드 +17%, 번들 +6%대의 비용을 지불하고 런타임 리렌더/INP 개선을 사는 거래** — 손익은 아래 런타임 지표로 판단.
 
 ### 런타임 (리렌더·INP) — 측정 완료
 
 - 측정 브랜치 `bg/react-scan-t2`(= T2 HEAD + 계측 cherry-pick `e3835b53`)에서 **T1 `runtime.md` 부록
   스크립트·조건 그대로** 수행 — 리렌더 2026-07-09(dev), INP 2026-07-11(prod·배터리 방전 중·확장 on 일반 창,
-  T1과 동일 편차). admin 데이터셋 T1과 동일 5행 확인. 결과: `scripts/measure/results/T2/runtime.md`
+  T1과 동일 편차). admin 데이터셋 T1과 동일 5행 확인. 결과: `docs/measurements/T2/runtime.md`
 - **리렌더**(시나리오 전체 합, 5회 중앙값): S1 폼 타이핑 **-16.1%**(16,043→13,460, SelectItem 정확히 절반),
   S2 모달 열닫 **-66.6%**(10,712→3,575), S3 admin 필터링 **-13.5%**(6,348→5,494)
 - **INP**(이벤트 지연 최댓값, 5회 중앙값): S1 **656→80ms(-88%, Chrome 기준 "나쁨"→"좋음")**,
@@ -171,7 +171,7 @@ HG(hellogsm-front-25)에 React Compiler를 도입하는 마이그레이션(Next 
 - **T2↔T3 유효 비교(동일 세션)**: T3 중앙값 66.4s vs T2-recheck 중앙값 72.4s → **-8.3%** (T3는 열 축적된
   8~10회차 기준으로도 T2-recheck와 동급) — **Stage 5 정리는 빌드 시간 중립~소폭 개선**. forwardRef 제거로
   컴파일 대상 컴포넌트가 38개 늘었음에도 래퍼 코드 감소가 상쇄한 것으로 해석.
-- 원본: `scripts/measure/results/T3/build-times.json`, 대조: `scripts/measure/results/T2-recheck/`
+- 원본: `docs/measurements/T3/build-times.json`, 대조: `docs/measurements/T2-recheck/`
 
 ### 번들 크기 (`.next/static/**/*.js` 합산 — T1·T2와 동일 방식, 결정적이라 측정일 무관)
 
@@ -181,11 +181,16 @@ HG(hellogsm-front-25)에 React Compiler를 도입하는 마이그레이션(Next 
 | admin | 23 | **1,365 KB** | +10 KB (+0.7%) | +83 KB (+6.5%) |
 
 - 소폭 증가는 forwardRef 제거로 **이전에 컴파일 스킵되던 38개 컴포넌트가 컴파일 대상이 되며** 메모화 코드가
-  추가된 비용 — 그만큼 런타임 최적화 커버리지가 넓어진 것. 원본: `scripts/measure/results/T3/bundle-size.json`
+  추가된 비용 — 그만큼 런타임 최적화 커버리지가 넓어진 것. 원본: `docs/measurements/T3/bundle-size.json`
 
-### 런타임 (리렌더·INP) — 측정 예정
+### 런타임 (리렌더·INP) — 측정 생략 결정 (2026-07-14)
 
-- 측정 브랜치 `bg/react-scan-t3`(T3 HEAD + 계측 cherry-pick)에서 T1 `runtime.md` 부록 스크립트·조건 그대로 수행 예정
+- **생략 사유**: 런타임 개선의 핵심 증거는 T1↔T2 비교쌍(컴파일러 순수 효과)으로 이미 확보됨.
+  Stage 5는 수동 메모 제거(3건 중 실질 1건)·forwardRef 정리·lint 픽스가 주된 내용으로 런타임 델타가
+  작을 것으로 예상되고, 측정일 환경 편차 이슈(이슈 로그 07-14)로 시점 간 비교 신뢰도도 제한적.
+- 측정 브랜치 `bg/react-scan-t3`(T3 HEAD + 계측 cherry-pick `82f1b435`, types 9/9)는 **추후 측정
+  가능성을 위해 보존** — 필요 시 T1 `runtime.md` 부록 스크립트·조건 그대로 수행하면 됨.
+- 폐기 완료: `bg/react-scan-t2`, `bg/react-scan-setup` 브랜치 및 재측정용 stash (T2 런타임 측정 종료)
 
 ---
 
@@ -197,7 +202,7 @@ HG(hellogsm-front-25)에 React Compiler를 도입하는 마이그레이션(Next 
 | 2026-07-05 | stage-0 | Playwright 스모크 E2E 6개 추가(client 4: 메인/FAQ/원서조회/회원가입, admin 2: signin 리다이렉트 origin·OAuth redirect_uri — #419~422 회귀 직격 검증) + CI 스텝 추가. 로컬 6/6 green (12.2s) | 태그 `upgrade/stage-0-done` |
 | 2026-07-05 | stage-1 | **Next 14.2.35→15.5.20, React 18.3.1→19.2.7** 업그레이드. 의존성 bump(앱 2 + packages 3 peerDeps ^19 + @types/react 19 overrides 단일화) → `next-async-request-api` codemod 17개 파일 자동 전환(cookies/headers 11 + params/searchParams 6) → 수동 보정은 lint 룰 예외 1건뿐 → images.domains→remotePatterns → fetch 캐싱 결정(아래 표) → radix-ui 6종 최신화. 검증: check-types 9/9, lint 9/9, build 10/10, 스모크 6/6 green | 태그 `upgrade/stage-1-done` |
 
-| 2026-07-06 | stage-2 | **ESLint 8.57.1→9.39.4 + flat config 전면 전환.** 공유 설정 3파일 재작성(typescript-eslint config 헬퍼, import flatConfigs, react configs.flat, next 플러그인은 legacy preset이라 rules 수동 등록), `.eslintrc.cjs` 9개→`eslint.config.mjs`. react-hooks 4.6.2→**7.1.1**(컴파일러 진단 룰 14종 warn 강등, Stage 4에서 승격 검토). **파리티 검증: 사라진 진단 0건**, 신규 10건 전부 react-hooks v7 컴파일러 진단(`scripts/measure/results/stage2-lint-parity/ANALYSIS.md`). 선행 픽스: react-query undefined 에러(기존 이슈). 검증: types 9/9, lint 9/9, build 10/10(빌드 내 lint가 flat config 읽는 것 확인), 스모크 6/6 | 태그 `upgrade/stage-2-done` |
+| 2026-07-06 | stage-2 | **ESLint 8.57.1→9.39.4 + flat config 전면 전환.** 공유 설정 3파일 재작성(typescript-eslint config 헬퍼, import flatConfigs, react configs.flat, next 플러그인은 legacy preset이라 rules 수동 등록), `.eslintrc.cjs` 9개→`eslint.config.mjs`. react-hooks 4.6.2→**7.1.1**(컴파일러 진단 룰 14종 warn 강등, Stage 4에서 승격 검토). **파리티 검증: 사라진 진단 0건**, 신규 10건 전부 react-hooks v7 컴파일러 진단(`docs/measurements/stage2-lint-parity/ANALYSIS.md`). 선행 픽스: react-query undefined 에러(기존 이슈). 검증: types 9/9, lint 9/9, build 10/10(빌드 내 lint가 flat config 읽는 것 확인), 스모크 6/6 | 태그 `upgrade/stage-2-done` |
 
 | 2026-07-06 | stage-3 | **Next 15.5.20→16.2.10 (Turbopack 기본 전환)**, engines >=20.9, packages/ui·api에 @types/node 명시. 컴파일 47s→7.5s. Next 16부터 빌드 내 lint 제거(turbo lint가 게이트), 라우트별 번들 표 제거(측정 방식 변경). 검증: types 9/9, lint 9/9, build 10/10, 스모크 6/6. **T1 측정 완료**: 빌드 평균 44.5s(T0 대비 -33%), 번들 client 1,337KB / admin 1,282KB(신규 방식) | 태그 `upgrade/stage-3-done` |
 
@@ -211,7 +216,7 @@ HG(hellogsm-front-25)에 React Compiler를 도입하는 마이그레이션(Next 
 
 | 2026-07-09 | stage-4 | **react-hooks 컴파일러 진단 룰 error 승격**: 위반 0건인 11개 룰 warn→error. 위반 잔존 3종(`set-state-in-effect`×5, `incompatible-library`×4 RHF watch, `static-components`×1)은 코드 수정이 런타임 동작을 바꿀 수 있어 warn 유지 + Stage 5 이월 주석(T2 순수성 유지 목적). export명 `reactHooksCompilerRulesAsWarn`→`reactHooksCompilerRules` 정리. 검증: lint 9/9, 0 errors | `97d10bfc` |
 
-| 2026-07-11 | stage-4 | **T2 런타임 측정 완료 (T1↔T2 비교쌍 확정)**: 측정 브랜치 `bg/react-scan-t2`(T2 HEAD + 계측 cherry-pick)에서 T1과 동일 계측·조건(훅 스크립트, 배터리, 5회 중앙값)으로 수행. 리렌더 전체 합 S1 -16.1%/S2 -66.6%/S3 -13.5%, INP S1 656→80ms(-88%)/S2 -20%/S3 -15%. 결과 `scripts/measure/results/T2/runtime.md` | 측정 브랜치 `bg/react-scan-t2` |
+| 2026-07-11 | stage-4 | **T2 런타임 측정 완료 (T1↔T2 비교쌍 확정)**: 측정 브랜치 `bg/react-scan-t2`(T2 HEAD + 계측 cherry-pick)에서 T1과 동일 계측·조건(훅 스크립트, 배터리, 5회 중앙값)으로 수행. 리렌더 전체 합 S1 -16.1%/S2 -66.6%/S3 -13.5%, INP S1 656→80ms(-88%)/S2 -20%/S3 -15%. 결과 `docs/measurements/T2/runtime.md` | 측정 브랜치 `bg/react-scan-t2` |
 
 | 2026-07-13 | stage-4 | Stage 4 종료 태그 생성 (T2 런타임 기록 커밋 `55b93f1f` 대상) | 태그 `upgrade/stage-4-done` |
 
@@ -223,7 +228,9 @@ HG(hellogsm-front-25)에 React Compiler를 도입하는 마이그레이션(Next 
 
 | 2026-07-13 | stage-5 | **컴파일러 진단 룰 14종 전부 error 승격** + 검증 체인 전체 green (types 9/9·lint 9/9 0 err·build 10/10·스모크 6/6). 잔여 경고는 exhaustive-deps(warn 유지 대상)뿐. 이후 T3 측정까지 코드 프리즈 | `302301ac` |
 
-| 2026-07-14 | stage-5 | **T3 측정(빌드·번들)**: 빌드 평균 67.9s/중앙값 66.4s — 측정일 환경 편차 발견(이슈 로그)으로 동일 세션 대조 측정 `T2-recheck`(72.4s) 도입, **T2↔T3 유효 비교 -8.3%(중립~소폭 개선)**. 번들 client 1,438KB(+1.0%)/admin 1,365KB(+0.7%) — forwardRef 제거로 컴파일 대상 +38개가 된 비용. 배터리+프레젠테이션 모드(절전 차단) 조건. 런타임은 `bg/react-scan-t3`에서 별도 수행 예정 | |
+| 2026-07-14 | stage-5 | **T3 측정(빌드·번들)**: 빌드 평균 67.9s/중앙값 66.4s — 측정일 환경 편차 발견(이슈 로그)으로 동일 세션 대조 측정 `T2-recheck`(72.4s) 도입, **T2↔T3 유효 비교 -8.3%(중립~소폭 개선)**. 번들 client 1,438KB(+1.0%)/admin 1,365KB(+0.7%) — forwardRef 제거로 컴파일 대상 +38개가 된 비용. 배터리+프레젠테이션 모드(절전 차단) 조건. 런타임은 `bg/react-scan-t3`에서 별도 수행 예정 | `bb392768` |
+
+| 2026-07-14 | stage-5 | **T3 런타임 측정 생략 결정**(사유는 T3 섹션 참조 — T1↔T2로 핵심 증거 확보, 측정 브랜치 `bg/react-scan-t3`는 보존) + 측정 잔여물 정리(`bg/react-scan-t2`·`bg/react-scan-setup` 브랜치, stash 삭제) + **문서 통합**: `scripts/measure/results/**` → `docs/measurements/**` 이동, 측정 스크립트 출력 경로·문서 내 참조 일괄 갱신 — 마이그레이션 문서·데이터가 `docs/` 한 곳으로 수렴 | |
 
 ### Stage 4 react-compiler-healthcheck 결과 (2026-07-09, `npx react-compiler-healthcheck@latest`)
 

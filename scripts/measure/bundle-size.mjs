@@ -42,7 +42,7 @@ for (const app of ['client', 'admin']) {
   console.log(`[${app}] ${files.length} js files, ${(totalBytes / 1024).toFixed(0)} KB`);
 }
 
-const outDir = join(root, 'scripts', 'measure', 'results', label);
+const outDir = join(root, 'docs', 'measurements', label);
 mkdirSync(outDir, { recursive: true });
 writeFileSync(join(outDir, 'bundle-size.json'), JSON.stringify(result, null, 2));
-console.log(`-> scripts/measure/results/${label}/bundle-size.json`);
+console.log(`-> docs/measurements/${label}/bundle-size.json`);
