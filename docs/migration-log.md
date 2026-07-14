@@ -7,6 +7,39 @@ HG(hellogsm-front-25)에 React Compiler를 도입하는 마이그레이션(Next 
 - 커밋: 리포 컨벤션 `type: 설명` (`feat`/`refactor`/`chore`/`fix`/`test`/`docs`) 준수, stage 구분은 커밋 본문에 `stage-N:` 줄로 기록
 - 측정 원본 데이터: `docs/measurements/{T0..T3}/` (JSON + 빌드 출력 전문)
 
+## 최종 요약 (T0 → T3)
+
+Next 14/React 18/webpack → **Next 16/React 19/Turbopack + React Compiler** 전환 완료 (Stage 0~5, 2026-07-03 ~ 07-14).
+
+### 성과 요약표
+
+| 지표 | 값 | 귀속 |
+|---|---|---|
+| 빌드 시간 | T0 66.7s → T1 44.5s (**-33%**) | Turbopack 전환 효과 (컴파일러와 무관) |
+| 빌드 시간 | T1 → T2 **+17%** / T2 → T3 **-8.3%**(동일 세션 대조) | 컴파일러 변환 비용 / Stage 5 정리로 일부 회수 |
+| 번들 크기 | T1 → T3 client **+7.6%** / admin **+6.5%** | 컴파일러 메모화 코드 비용 |
+| **리렌더** (T1↔T2) | 폼 타이핑 **-16%** · 모달 열닫 **-67%** · admin 필터링 **-14%** | **컴파일러 순수 효과** |
+| **INP** (T1↔T2) | 폼 타이핑 **656→80ms (-88%**, "나쁨"→"좋음") · 모달 -20% · 필터링 -15% | **컴파일러 순수 효과** |
+| 코드 정리 | forwardRef 38→**0**, 수동 메모 3→**0**, 컴파일러 진단 위반 13건 해소, 진단 룰 **14종 전부 error** | Stage 5 |
+
+**한 줄 결론**: 빌드 +17%·번들 +6%대를 지불하고 핵심 사용자 시나리오의 INP -88%·리렌더 churn 최대 -67%를 얻는 거래 —
+인터랙션 품질이 지표 등급을 바꾸는 수준으로 개선됨. 빌드 비용은 Turbopack 이득(-33%) 안에서 흡수.
+
+### 과정에서의 주요 발견 (상세는 이슈 로그)
+
+1. **컴파일러 hydration 비호환 2종 실증**: JSX 텍스트 내 HTML 엔티티(React #418), styled-jsx(vercel/next.js#65995)
+2. **forwardRef는 컴파일러 진단 사각지대** — 제거하자 숨은 위반이 노출됨. 컴파일 스킵 컴포넌트가 대상이 될 때마다 위반이 연쇄 노출("표시된 위반 수 ≠ 실제 위반 수")
+3. **측정일 간 환경 편차 +38% 실측** → 시점 간 빌드 시간 비교는 동일 세션 내 이전 커밋 대조 측정(T2-recheck 방식)으로만 유효
+4. **@repo/ui 소스 export + pnpm 심링크 구조는 transpilePackages 없이 컴파일러 적용됨** (Turbopack이 워크스페이스 소스를 직접 트랜스파일)
+
+### 후속 과제 (이 마이그레이션 범위 제외)
+
+- [ ] client 라우트별 코드 스플리팅 — T0에서 전 라우트 First Load 308kB 동일(공통 청크 비대) 발견
+- [ ] StepWrapper → Step1~4Register의 `watch` prop 드릴링을 useFormContext/useWatch 구조로 재설계 (현재 lint는 통과하나 구조적 부채)
+- [ ] admin MainPage 필터 변경 시 페이지 리셋을 effect → 각 필터 핸들러로 이동 (disable 주석 1건 해소)
+- [ ] exhaustive-deps 경고 24건 정리 (전 구간 warn 유지 중)
+- [ ] T3 런타임 측정 (선택) — 측정 브랜치 `bg/react-scan-t3` 보존됨, T1 runtime.md 부록 절차 그대로 수행 가능
+
 ## 측정 시점 정의
 
 | 시점 | 상태 | 용도 |
