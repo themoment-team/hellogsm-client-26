@@ -8,7 +8,7 @@ const CheckIcon = () => (
   >
     <path
       d="M13.3334 4L6.00008 11.3333L2.66675 8"
-      stroke="white"
+      stroke="currentColor"
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"

@@ -20,19 +20,19 @@ const SelectTrigger = React.forwardRef<
     ref={ref}
     className={cn([
       'flex',
-      'h-10',
+      'h-9',
       'w-full',
       'items-center',
       'justify-between',
-      'rounded-md',
+      'rounded-lg',
       'border',
-      'border-input',
+      'border-slate-300',
       'bg-white',
       'px-3',
       'py-2',
       'text-sm',
       'ring-offset-background',
-      'placeholder:text-muted-foreground',
+      'data-[placeholder]:text-slate-400',
       'focus:outline-none',
       'focus:ring-2',
       'focus:ring-ring',
@@ -186,7 +186,7 @@ const SelectItem = React.forwardRef<
       )}
     >
       <SelectPrimitive.ItemIndicator>
-        <Check className={cn('h-4', 'w-4')} />
+        <Check className={cn('h-4', 'w-4', 'stroke-[#4A80F8]')} />
       </SelectPrimitive.ItemIndicator>
     </span>
 

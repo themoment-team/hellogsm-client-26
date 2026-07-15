@@ -50,14 +50,10 @@ const Section5 = () => {
             'flex-col',
             'items-center',
             'gap-[1rem]',
-            'pl-[8rem]',
-            'px-4',
-            'xs:px-[3.75rem]',
-            'md:px-[8rem]',
-            'xl:px-[16rem]',
+            'px-6',
+            'sm:px-[2.5rem]',
+            'md:px-[6.25rem]',
             'fhd:px-[20rem]',
-            'uhd:px-[32.5rem]',
-            'xl:items-start',
           )}
         >
           <div className={cn('flex', 'items-end')}>
@@ -65,7 +61,6 @@ const Section5 = () => {
               className={cn(
                 'text-gray-900',
                 'font-semibold',
-                'xl:text-left',
                 'text-center',
                 'text-[1.25rem]/[1.25rem]',
                 'xs:text-[1.5rem]/[2rem]',
@@ -85,15 +80,16 @@ const Section5 = () => {
           className={cn(
             'flex',
             'flex-wrap',
+            'sm:flex-col',
+            'mdx:flex-row',
             'w-full',
             'justify-center',
             'items-start',
             'gap-[0.8125rem]',
-            'px-4',
-            'px-4',
-            'xs:px-[3.75rem]',
-            'smx:px-[5.75rem]',
-            'md:px-[8rem]',
+            'px-6',
+            'sm:px-[2.5rem]',
+            'md:px-[6.25rem]',
+            'fhd:px-[20rem]',
             'max-sm:overflow-x-scroll',
             'max-sm:flex-nowrap',
             'max-sm:justify-start',
@@ -106,6 +102,8 @@ const Section5 = () => {
               className={cn(
                 'flex',
                 'w-[26rem]',
+                'sm:w-full',
+                'mdx:w-[26rem]',
                 'flex-col',
                 'items-start',
                 'gap-6',
@@ -117,6 +115,7 @@ const Section5 = () => {
                 alt={`${element.department} Image`}
                 width={418}
                 height={232}
+                className={cn('w-full', 'h-auto')}
               />
               <div className={cn('w-full', 'flex', 'flex-col', 'flex-start', 'gap-3')}>
                 <div className={cn('w-full', 'flex', 'flex-col', 'items-start', 'gap-4')}>
