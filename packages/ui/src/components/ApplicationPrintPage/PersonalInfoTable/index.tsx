@@ -16,12 +16,10 @@ const PersonalInfoTable = ({ oneseo }: Props) => {
       <FormColgroup />
       <thead>
         <tr>
-          <td className={cn(thStyle, 'border-l-0')} rowSpan={6}>
+          <td className={cn(thStyle, 'border-l-0')} rowSpan={5}>
             인적사항
           </td>
-        </tr>
 
-        <tr>
           <td className={cn(thStyle, 'leading-tight')} rowSpan={3}>
             지원자
           </td>
