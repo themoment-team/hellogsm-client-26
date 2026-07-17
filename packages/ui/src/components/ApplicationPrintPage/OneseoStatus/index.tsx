@@ -58,11 +58,9 @@ const OneseoStatus = ({ oneseo }: OneseoStatusType) => {
       <FormColgroup />
       <tbody>
         <tr>
-          <td className={cn(thStyle, 'w-[3%]', 'border-l-0', 'border-t-0')} rowSpan={10}>
+          <td className={cn(thStyle, 'w-[3%]', 'border-l-0', 'border-t-0')} rowSpan={9}>
             지원자 현황
           </td>
-        </tr>
-        <tr>
           <td className={cn(thStyle, 'border-t-0')} colSpan={2} rowSpan={3}>
             출신중학교
           </td>
