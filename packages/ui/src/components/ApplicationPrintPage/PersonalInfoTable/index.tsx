@@ -31,29 +31,29 @@ const PersonalInfoTable = ({ oneseo }: Props) => {
           <td className={cn(tdStyle)}>{SexEnum[oneseo.privacyDetail.sex ?? 'MALE']}</td>
 
           <td className={cn(thStyle)}>생년월일</td>
-          <td className={cn(tdStyle)} colSpan={2}>
+          <td className={cn(tdStyle)} colSpan={4}>
             {year}년 {month}월 {day}일
           </td>
 
-          <td rowSpan={5} colSpan={4} className={cn(tdStyle, 'h-[151px]')}>
+          <td rowSpan={5} colSpan={2} className={cn(tdStyle, 'h-[151px]')}>
             <img
               src={oneseo.privacyDetail.profileImg}
               alt="증명사진"
-              className={cn('mx-auto', 'w-[113.38582677px]', 'h-[151.18110236px]')}
+              className={cn('mx-auto', 'max-w-none', 'w-[113.38582677px]', 'h-[151.18110236px]')}
             />
           </td>
         </tr>
 
         <tr>
           <td className={cn(thStyle)}>주 소</td>
-          <td className={cn(tdStyle)} colSpan={6}>
+          <td className={cn(tdStyle)} colSpan={8}>
             {oneseo.privacyDetail.address} {oneseo.privacyDetail.detailAddress}
           </td>
         </tr>
 
         <tr>
           <td className={cn(thStyle)}>핸드폰</td>
-          <td className={cn(tdStyle)} colSpan={6}>
+          <td className={cn(tdStyle)} colSpan={8}>
             {oneseo.privacyDetail.phoneNumber}
           </td>
         </tr>
@@ -72,14 +72,14 @@ const PersonalInfoTable = ({ oneseo }: Props) => {
             관계
           </td>
 
-          <td className={cn(tdStyle)} colSpan={3}>
+          <td className={cn(tdStyle)} colSpan={5}>
             지원자 {oneseo.privacyDetail.name}의 {oneseo.privacyDetail.relationshipWithGuardian}
           </td>
         </tr>
 
         <tr>
           <td className={cn(thStyle)}>핸드폰</td>
-          <td className={cn(tdStyle)} colSpan={6}>
+          <td className={cn(tdStyle)} colSpan={8}>
             {oneseo.privacyDetail.guardianPhoneNumber}
           </td>
         </tr>
