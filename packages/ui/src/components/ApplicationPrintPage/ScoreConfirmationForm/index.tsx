@@ -1,14 +1,11 @@
-/* eslint-disable-next-line no-restricted-imports */
+ 
 import { CURRENT_YEAR, NEXT_YEAR } from '@repo/constants';
 import { OneseoStatusType } from '@repo/types';
 import { cn } from '@repo/utils';
 
 import ArtsPhysicalTable from '../ArtsPhysicalTable';
-/* eslint-disable-next-line no-restricted-imports */
 import ConfirmationTable from '../ConfirmationTable';
-/* eslint-disable-next-line no-restricted-imports */
 import ExtracurricularTable from '../ExtracurricularTable';
-/* eslint-disable-next-line no-restricted-imports */
 import GeneralSubjectsTable from '../GeneralSubjectsTable';
 
 interface ScoreConfirmationFormProps extends OneseoStatusType {

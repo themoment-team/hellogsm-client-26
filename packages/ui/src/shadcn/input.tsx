@@ -23,8 +23,7 @@ const inputVariants = cva(cn(''), {
   },
 });
 
-interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement>, VariantProps<typeof inputVariants> {
+interface InputProps extends React.ComponentProps<'input'>, VariantProps<typeof inputVariants> {
   width?: 'full' | 'large' | 'medium' | 'small';
   icon?: React.ReactNode;
   onIconClick?: () => void;
@@ -90,19 +89,19 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           )}
         </div>
 
-        {(errorMessage || successMessage) && (
-          <span
-            className={cn([
-              'text-xs',
-              'font-normal',
-              errorMessage ? 'text-red-600' : 'text-green-600',
-            ])}
-          >
-            {errorMessage ?? successMessage}
-          </span>
-        )}
-      </div>
-    );
+      {(errorMessage || successMessage) && (
+        <span
+          className={cn([
+            'text-xs',
+            'font-normal',
+            errorMessage ? 'text-red-600' : 'text-green-600',
+          ])}
+        >
+          {errorMessage ?? successMessage}
+        </span>
+      )}
+    </div>
+  );
   },
 );
 Input.displayName = 'Input';

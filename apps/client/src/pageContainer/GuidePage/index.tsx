@@ -183,17 +183,17 @@ const List = ({
       <div className={cn('flex', 'flex-col', 'items-start', 'gap-2')}>
         <div className={cn('flex', 'flex-row')}>
           <p className={cn([...textStyle, 'text-blue-600'])}>
-            {String(number).padStart(2, '0')}.&nbsp;
+            {String(number).padStart(2, '0')}.{'\u00A0'}
           </p>
           <p className={cn([...textStyle, 'text-gray-900'])}>{title}</p>
         </div>
         <ul className={cn('pl-2')}>
           <div className={cn([...descriptionStyle, 'text-gray-900', 'flex', 'gap-1'])}>
-            &middot; <span>{description}</span>
+            · <span>{description}</span>
           </div>
           {subDescription && (
             <div className={cn([...descriptionStyle, 'text-gray-900', 'flex', 'gap-1'])}>
-              &middot; <span>{subDescription}</span>
+              · <span>{subDescription}</span>
             </div>
           )}
         </ul>

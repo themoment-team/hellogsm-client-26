@@ -66,7 +66,7 @@ const Section1 = ({ isServerCurrentActive }: { isServerCurrentActive: boolean })
                   'before:absolute',
                   'before:text-lime-400',
                   'text-sky-300',
-                  // eslint-disable-next-line quotes
+                   
                   "before:content-['••']",
                   'before:tracking-[0.5rem]',
                   'before:-top-[1.275rem]',

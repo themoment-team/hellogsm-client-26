@@ -32,11 +32,14 @@ const useTimer = ({
   };
 
   useEffect(() => {
+    // 새로고침 후 타이머 복원: cookie는 클라이언트 전용 외부 저장소라
+    // 마운트 후 effect에서 읽어 반영해야 함 (렌더 중 접근 불가)
     const endTime = document.cookie.match('(^|;) ?' + 'endTime' + '=([^;]*)(;|$)');
     if (endTime) {
       const currentTime = new Date().getTime();
       const count = Math.floor((Number(endTime[2]) - currentTime) / 1000);
 
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setCount(count);
 
       const intervalId = setInterval(() => {

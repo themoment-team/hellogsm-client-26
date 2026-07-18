@@ -200,6 +200,8 @@ const MobileNavigation = ({
 const Logo = ({ isRegisterPath }: { isRegisterPath: boolean }) => {
   if (isRegisterPath) {
     return (
+      // 원서 작성 중에는 전체 리로드로 이동해야 하므로 의도적으로 <a>를 사용
+      // eslint-disable-next-line @next/next/no-html-link-for-pages
       <a href="/">
         <I.HelloGSMLogo />
       </a>
@@ -313,10 +315,6 @@ const Header = ({ isServerHealthy }: HeaderProps) => {
   const isRegisterPath = pathname?.startsWith('/register');
 
   const router = useRouter();
-
-  const MenuToggleButton = () => (
-    <button onClick={() => setIsMenu(!isMenu)}>{isMenu ? <I.XIcon /> : <I.HamburgerIcon />}</button>
-  );
 
   const mobileNavLinks = isServerHealthy
     ? [
@@ -456,7 +454,13 @@ const Header = ({ isServerHealthy }: HeaderProps) => {
 
         {/* Mobile width 일떄 */}
         <div className={cn('md:hidden')}>
-          {isLogin ? '회원가입을 진행해주세요' : <MenuToggleButton />}
+          {isLogin ? (
+            '회원가입을 진행해주세요'
+          ) : (
+            <button onClick={() => setIsMenu(!isMenu)}>
+              {isMenu ? <I.XIcon /> : <I.HamburgerIcon />}
+            </button>
+          )}
         </div>
       </header>
 

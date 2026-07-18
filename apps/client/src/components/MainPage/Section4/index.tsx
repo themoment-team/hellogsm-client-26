@@ -127,9 +127,9 @@ const Section4 = () => {
       <div className={cn('flex', 'flex-col', 'items-center', 'w-full')}>
         <div className={cn('flex', 'items-end')}>
           <DotWithText color="#84CC16" text="인성" textColor="text-[#84CC16]" />
-          <p className={cn([...textStyle])}>과 &nbsp;</p>
+          <p className={cn([...textStyle])}>과 {'\u00A0'}</p>
           <DotWithText color="#84CC16" text="감성" textColor="text-[#84CC16]" />
-          <p className={cn([...textStyle])}>으로 &nbsp;</p>
+          <p className={cn([...textStyle])}>으로 {'\u00A0'}</p>
           <DotWithText color="#38BDF8" text="감동" textColor="text-[#38BDF8]" />
           <p className={cn([...textStyle])}>을 만드는</p>
         </div>

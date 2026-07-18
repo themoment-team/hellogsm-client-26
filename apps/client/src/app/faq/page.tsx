@@ -28,11 +28,17 @@ const getFaqData = async (): Promise<FaqPageData[]> => {
   return sortedResults;
 };
 
-export default async function Faq({
-  searchParams: { openIndex },
-}: {
-  searchParams: { openIndex?: string };
-}) {
+export default async function Faq(
+  props: {
+    searchParams: Promise<{ openIndex?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
+
+  const {
+    openIndex
+  } = searchParams;
+
   const data = await getFaqData();
 
   return <FaqPage data={data} openIndex={openIndex ? Number(openIndex) : undefined} />;

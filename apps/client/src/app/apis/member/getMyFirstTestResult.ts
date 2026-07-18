@@ -4,7 +4,7 @@ import { memberUrl } from '@repo/api/lib';
 import { MyFirstTestResultType } from '@repo/types';
 
 export const getMyFirstTestResult = async (): Promise<MyFirstTestResultType | undefined> => {
-  const session = cookies().get('SESSION')?.value;
+  const session = (await cookies()).get('SESSION')?.value;
 
   try {
     const response = await fetch(

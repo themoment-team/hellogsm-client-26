@@ -31,15 +31,12 @@ const MainPage = ({ memberInfo, resultInfo, isServerHealthy }: MainPageProps) =>
 
   useEffect(() => {
     const today = new Date().toDateString();
+    // localStorage는 클라이언트 전용 값 — 서버 렌더와의 hydration 불일치를 막기 위해
+    // 마운트 후 effect에서 반영해야 함 (렌더 중 계산 불가)
     const hideDialog = localStorage.getItem('hideTestResultDialog');
 
-    if (hideDialog === today) {
-      setIsOpen(false);
-    } else if (resultInfo && resultInfo.firstTestPassYn !== null) {
-      setIsOpen(true);
-    } else {
-      setIsOpen(false);
-    }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsOpen(hideDialog !== today && !!resultInfo && resultInfo.firstTestPassYn !== null);
   }, []);
 
   const isFinishFirstTest = resultInfo?.secondTestPassYn === null ? true : false;

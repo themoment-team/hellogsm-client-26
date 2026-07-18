@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { UseFormSetValue } from 'react-hook-form';
 
 import { useDebounce } from '@repo/hooks';
@@ -32,7 +32,8 @@ interface SchoolType {
 const SearchDialog = ({ setValue }: SearchDialogProps) => {
   const [schools, setSchools] = useState<SchoolType[]>([]);
   const [keyword, setKeyword] = useState<string>('');
-  const [isSelecting, setIsSelecting] = useState<boolean>(false);
+  // 학교 선택 직후의 debounce 사이클 1회를 건너뛰기 위한 플래그 — 렌더에 쓰이지 않으므로 ref
+  const isSelectingRef = useRef(false);
 
   const debouncedKeyword = useDebounce(keyword, 400);
 
@@ -59,17 +60,13 @@ const SearchDialog = ({ setValue }: SearchDialogProps) => {
   };
 
   useEffect(() => {
-    if (isSelecting) {
-      setIsSelecting(false);
+    if (isSelectingRef.current) {
+      isSelectingRef.current = false;
       return;
     }
 
-    if (debouncedKeyword) {
-      // eslint-disable-next-line no-void
-      void getSchools();
-    } else {
-      setSchools([]);
-    }
+    // 빈 키워드 처리는 getSchools 내부에서 수행 (setSchools([]) 후 조기 반환)
+    void getSchools();
   }, [debouncedKeyword]);
 
   const handleKeywordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,7 +76,7 @@ const SearchDialog = ({ setValue }: SearchDialogProps) => {
   const handleSchoolSelect = (school: SchoolType) => {
     setKeyword(school.SCHUL_NM);
     setSchools([]);
-    setIsSelecting(true);
+    isSelectingRef.current = true;
     setValue('schoolName', school.SCHUL_NM, { shouldValidate: true, shouldDirty: true });
     // eslint-disable-next-line @cspell/spellchecker
     setValue('schoolAddress', school.ORG_RDNMA, { shouldValidate: true, shouldDirty: true });

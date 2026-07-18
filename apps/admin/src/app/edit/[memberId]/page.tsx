@@ -6,11 +6,18 @@ import { ComputerRecommendedPage, StepWrapper } from '@repo/ui/components';
 import { getOneseoByMemberId } from '@/app/apis';
 
 interface EditProps {
-  params: { memberId: string };
-  searchParams?: { [key: string]: string | undefined };
+  params: Promise<{ memberId: string }>;
+  searchParams?: Promise<{ [key: string]: string | undefined }>;
 }
 
-export default async function Edit({ params: { memberId }, searchParams }: EditProps) {
+export default async function Edit(props: EditProps) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
+
+  const {
+    memberId
+  } = params;
+
   const step = searchParams?.step;
   const id = Number(memberId);
 

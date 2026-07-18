@@ -16,7 +16,7 @@ interface GetAdmissionTicketsParams {
 export const getAdmissionTickets = async ({
   redirectUrl,
 }: GetAdmissionTicketsParams): Promise<TicketType[]> => {
-  const session = cookies().get('SESSION')?.value;
+  const session = (await cookies()).get('SESSION')?.value;
 
   const response = await fetch(
     new URL(oneseoUrl.getAdmissionTickets(), process.env.NEXT_PUBLIC_API_BASE_URL),

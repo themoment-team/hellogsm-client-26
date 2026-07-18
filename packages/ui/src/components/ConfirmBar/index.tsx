@@ -143,7 +143,7 @@ const ConfirmBar = ({
           {isModifyApproved
             ? '원서 제출 기간 이후에는 정보를 수정할 수 없습니다.'
             : '최종 제출 후에는 정보를 수정할 수 없습니다.'}
-          &nbsp;
+          {'\u00A0'}
         </span>
         <span className={cn('text-body1', 'text-slate-900')}>
           정확히 입력 후 {isModifyApproved ? '수정' : '제출'}해주세요!

@@ -38,6 +38,20 @@ jobs:
       - name: Build
         run: pnpm build
 
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Smoke E2E
+        run: pnpm test:e2e
+
+      - name: Upload Playwright Report
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
       - name: Success Discord Notification
         uses: sarisia/actions-status-discord@v1.15.5
         if: success()

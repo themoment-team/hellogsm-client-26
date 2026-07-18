@@ -1,10 +1,10 @@
-/* eslint-disable @typescript-eslint/naming-convention */
+ 
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 
 import { usePostMockScore } from '@repo/api/hooks';
 import { ARTS_PHYSICAL_SUBJECTS, GENERAL_SUBJECTS } from '@repo/constants';
@@ -45,7 +45,9 @@ const CalculatePage = () => {
   const isCandidate = graduationType === GraduationTypeValueEnum.CANDIDATE;
   const isGED = graduationType === GraduationTypeValueEnum.GED;
   const isGraduate = graduationType === GraduationTypeValueEnum.GRADUATE;
-  const isStep4Success = step4Schema.safeParse(step4UseForm.watch()).success;
+  // 렌더 중 구독은 watch() 대신 useWatch 사용 (React Compiler 호환)
+  const step4Values = useWatch({ control: step4UseForm.control });
+  const isStep4Success = step4Schema.safeParse(step4Values).success;
 
   const { mutate: postMockScore } = usePostMockScore(graduationType!, {
     onSuccess: (data) => {
@@ -68,8 +70,9 @@ const CalculatePage = () => {
       attendanceDays,
       volunteerTime,
       freeSemester,
+      // 이벤트 핸들러에서는 구독이 불필요 — RHF 권장 API인 getValues() 사용 (컴파일러 호환)
       gedAvgScore,
-    } = step4UseForm.watch();
+    } = step4UseForm.getValues();
 
     const body: MiddleSchoolAchievementType | GEDAchievementType = isGED
       ? {

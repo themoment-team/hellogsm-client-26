@@ -9,10 +9,11 @@ import { RegisterStepsPage } from '@/pageContainer';
 import { getEditability, getMyMemberInfo, getMyOneseo } from '../apis';
 
 interface RegisterProps {
-  searchParams?: { [key: string]: string | undefined };
+  searchParams?: Promise<{ [key: string]: string | undefined }>;
 }
 
-export default async function Register({ searchParams }: RegisterProps) {
+export default async function Register(props: RegisterProps) {
+  const searchParams = await props.searchParams;
   const step = searchParams?.step;
 
   const [data, info, dateList, editability] = await Promise.all([

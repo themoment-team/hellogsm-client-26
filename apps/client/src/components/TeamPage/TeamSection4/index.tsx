@@ -93,8 +93,9 @@ const TeamSection4 = ({ data }: TeamSection4Props) => {
           'text-center',
         )}
       >
-        &quot;입학지원 서비스, <br className={cn('block', 'sm:hidden')} />
-        누가 만들었을까요?&quot;
+        {'"입학지원 서비스, '}
+        <br className={cn('block', 'sm:hidden')} />
+        누가 만들었을까요?{'"'}
       </h3>
       <div className={cn('flex', 'flex-col', 'relative', 'w-full', 'overflow-hidden', 'gap-6')}>
         <div
@@ -130,7 +131,7 @@ const TeamSection4 = ({ data }: TeamSection4Props) => {
           ))}
         </div>
       </div>
-      <style jsx global>{`
+      <style>{`
         @keyframes scrollRight {
           0% {
             transform: translateX(0);
