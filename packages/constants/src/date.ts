@@ -12,64 +12,64 @@ export const ADMISSION_SCHEDULE = {
   /** 원서 접수 기간 */
   submission: {
     /** 메인 히어로·모집 안내 표기 (client Section1 / Section3) */
-    startLabel: '2025.10.20. (월) 오전 9시',
-    endLabel: '2025.10.23. (목) 오후 4시 30분',
+    startLabel: '2026.10.19. (월) 오전 9시',
+    endLabel: '2026.10.22. (목) 오후 5시',
     /** 모집절차 스텝 표기 (client Section2) — 시작/종료 라벨 분리 노출 */
-    stepStart: '2025. 10. 20.(월)~',
-    stepEnd: '23.(목) 09:00 ~ 16:30',
+    stepStart: '2026. 10. 19.(월)~',
+    stepEnd: '22.(목) 09:00 ~ 17:00',
   },
 
   /** 1차 전형 합격자 발표 */
   firstAnnouncement: {
     /** 모집절차 스텝 표기 (client Section2) */
-    step: '2025. 10. 28.(화) 10:00',
+    step: '2025. 10. 27.(화) 10:00',
   },
 
   /** 2차 전형 — 역량검사 */
   competencyEvaluation: {
     /** ISO 날짜 (로직/판별용) */
-    date: '2025-10-31',
+    date: '2026-10-30',
     /** 수험표 표기 (admin TicketPage) */
-    period: '2025. 10. 31.(금) 14:00 ~ 16:30',
+    period: '2026. 10. 30.(금) 14:00 ~ 16:30',
     /** 모집절차 스텝 표기 (client Section2) */
-    step: '2025. 10. 31.(금) 14:00-16:30',
+    step: '2026. 10. 30.(금) 14:00-16:30',
     /** 확인서 발급일 표기 (admin TicketPage) */
-    issueDateLabel: '2025년 10월 31일',
+    issueDateLabel: '2026년 10월 30일',
   },
 
   /** 2차 전형 — 심층면접 */
   inDepthInterview: {
     /** ISO 날짜 (로직/판별용) */
-    date: '2025-11-01',
+    date: '2026-10-31',
     /** 수험표 표기 (admin TicketPage) */
-    period: '2025. 11. 01.(토) 09:00 ~ 16:30',
+    period: '2026. 10. 31.(토) 09:00 ~ 16:30',
     /** 모집절차 스텝 표기 (client Section2) */
-    step: '2025. 11. 1.(토) 09:00-16:30',
+    step: '2026. 10. 31.(토) 09:00-16:30',
   },
 
   /** 최종 합격자 발표 */
   finalAnnouncement: {
     /** 수험표 표기 (admin TicketPage) */
-    label: '2025. 11. 05.(수) 10:00',
+    label: '2026. 11. 04.(수) 10:00',
     /** 모집절차 스텝 표기 (client Section2) */
-    step: '2025. 11. 5.(수) 10:00',
+    step: '2026. 11. 4.(수) 10:00',
   },
 
   /** 합격자 등록(서류 제출) */
   registration: {
     /** 모집절차 스텝 표기 (client Section2) — 시작/종료/비고 분리 노출 */
-    stepStart: '2025. 11. 5.(수) ~',
-    stepEnd: '11. 10.(월) 16:30',
-    stepNote: '(건강검진 관련서류 제출: 11. 10.(월) 16:30까지)',
+    stepStart: '2026. 11. 4.(수) ~',
+    stepEnd: '11. 9.(월) 17:00',
+    stepNote: '(건강검진 관련서류 제출: 11. 9.(월) 17:00까지)',
     /** 수험표 표기 (admin TicketPage) */
-    ticketPeriod: '2025. 11. 05.(수)~ 11. 10.(월) 16:30',
+    ticketPeriod: '2026. 11. 04.(수)~ 11. 9.(월) 17:00',
   },
 
   /** 비전캠프 */
   visionCamp: {
     /** admin TicketPage */
-    start: '2026. 01. 14.(수)',
-    end: '2026. 01. 16.(금)',
+    start: '2027. 01. 13.(수)',
+    end: '2027. 01. 15.(금)',
   },
 } as const;
 
