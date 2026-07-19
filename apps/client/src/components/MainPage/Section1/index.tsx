@@ -2,10 +2,10 @@
 
 import { useRouter } from 'next/navigation';
 
+import { ADMISSION_SCHEDULE } from '@repo/constants';
 import { cn, scrollToElement } from '@repo/utils';
 
 import { BottomArrow } from '@/assets';
-import { RECRUITMENT_PERIOD } from '@/constants';
 
 import Video from './Video';
 
@@ -96,7 +96,8 @@ const Section1 = ({ isServerCurrentActive }: { isServerCurrentActive: boolean })
                   'sm:text-[1.25rem]/[1.75rem]',
                 )}
               >
-                접수기간 : {RECRUITMENT_PERIOD.startDate} ~ {RECRUITMENT_PERIOD.endDate}
+                접수기간 : {ADMISSION_SCHEDULE.submission.startLabel} ~{' '}
+                {ADMISSION_SCHEDULE.submission.endLabel}
               </p>
             )}
           </div>
