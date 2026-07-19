@@ -118,7 +118,7 @@ const ApplicationForm = ({ oneseo, isPreview }: ApplicationFormProps) => {
           </div>
 
           <div className={cn('my-4', 'text-center')}>
-            2차 전형 응시 준비물 : 신분증[학생증], 필기구 등
+            ** 2차 전형 응시 준비물: 신분증(학생증), 필기구
           </div>
         </div>
       </div>

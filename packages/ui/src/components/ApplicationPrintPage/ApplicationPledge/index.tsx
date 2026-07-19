@@ -17,16 +17,31 @@ const ApplicationPledge = ({ oneseo }: OneseoStatusType) => {
         <p className={cn('mr-6')}>월</p>
         <p>일</p>
       </div>
-      <div className={cn('mb-4', 'flex', 'w-full', 'justify-end', 'gap-6')}>
+      <div className={cn('mb-1', 'flex', 'w-full', 'justify-end', 'gap-6')}>
         <p>지원자 :</p>
         <p>{oneseo.privacyDetail.name}</p>
         <p className={cn('text-end')}>(인)</p>
       </div>
-      <div className={cn('mb-4', 'flex', 'w-full', 'justify-end', 'gap-6')}>
+      <div
+        className={cn(
+          oneseo.privacyDetail.graduationType === 'CANDIDATE' ? 'mb-1' : 'mb-4',
+          'flex',
+          'w-full',
+          'justify-end',
+          'gap-6',
+        )}
+      >
         <p>보호자 :</p>
         <p>{oneseo.privacyDetail.guardianName}</p>
         <p className={cn('text-end')}>(인)</p>
       </div>
+      {oneseo.privacyDetail.graduationType === 'CANDIDATE' && (
+        <div className={cn('mb-4', 'flex', 'w-full', 'justify-end', 'gap-6')}>
+          <p>담임 :</p>
+          <p>{oneseo.privacyDetail.schoolTeacherName}</p>
+          <p className={cn('text-end')}>(인)</p>
+        </div>
+      )}
       <div className={cn('text-left')}>광주소프트웨어마이스터고등학교장 귀하</div>
       {oneseo.privacyDetail.graduationType !== 'GED' && (
         <>

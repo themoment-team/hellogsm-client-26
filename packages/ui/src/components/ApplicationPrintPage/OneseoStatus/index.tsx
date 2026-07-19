@@ -7,12 +7,21 @@ import {
 } from '@repo/types';
 import { cn } from '@repo/utils';
 
+import FormColgroup from '../FormColgroup';
+
 const tdStyle = 'border border-black';
 const thStyle = 'border border-black bg-[#e9e9e9] p-[0.2vh] font-medium align-middle';
 
 const OneseoStatus = ({ oneseo }: OneseoStatusType) => {
-  const { graduationDate, graduationType, schoolName, schoolAddress, studentNumber } =
-    oneseo.privacyDetail;
+  const {
+    graduationDate,
+    graduationType,
+    schoolName,
+    schoolAddress,
+    studentNumber,
+    schoolTeacherName,
+    schoolTeacherPhoneNumber,
+  } = oneseo.privacyDetail;
   const {
     attendanceScore,
     volunteerScore,
@@ -46,33 +55,17 @@ const OneseoStatus = ({ oneseo }: OneseoStatusType) => {
         'leading-[2.2vh]',
       )}
     >
-      <colgroup>
-        <col style={{ width: '3%' }} /> {/* 지원자현황 */}
-        <col style={{ width: '6%' }} /> {/* 교과성적 */}
-        <col style={{ width: '8%' }} /> {/* 1-1 */}
-        <col style={{ width: '8%' }} /> {/* 1-2 */}
-        <col style={{ width: '8%' }} /> {/* 2-1 */}
-        <col style={{ width: '8%' }} /> {/* 2-2 */}
-        <col style={{ width: '8%' }} /> {/* 3-1 */}
-        <col style={{ width: '8%' }} /> {/* 3-2 */}
-        <col style={{ width: '10%' }} /> {/* 예체능 */}
-        <col style={{ width: '8%' }} /> {/* 소계1 */}
-        <col style={{ width: '9%' }} /> {/* 소계2 */}
-        <col style={{ width: '8%' }} /> {/* 합계1 */}
-        <col style={{ width: '9%' }} /> {/* 합계2 */}
-      </colgroup>
+      <FormColgroup />
       <tbody>
         <tr>
           <td className={cn(thStyle, 'w-[3%]', 'border-l-0', 'border-t-0')} rowSpan={9}>
             지원자 현황
           </td>
-        </tr>
-        <tr>
-          <td className={cn(thStyle, 'border-t-0')} colSpan={2} rowSpan={2}>
+          <td className={cn(thStyle, 'border-t-0')} colSpan={2} rowSpan={3}>
             출신중학교
           </td>
           <td
-            colSpan={3}
+            colSpan={4}
             className={cn(
               tdStyle,
               isGED && ['bg-slash', 'bg-contain', 'bg-no-repeat'],
@@ -81,27 +74,66 @@ const OneseoStatus = ({ oneseo }: OneseoStatusType) => {
           >
             {!isGED && schoolName}
           </td>
-          <td colSpan={5} className={cn(tdStyle, 'border-t-0')}>
+          <td colSpan={6} className={cn(tdStyle, 'border-t-0')}>
             {year}년 {month}월 {GraduationEnum[graduationType]}
-          </td>
-          <td className={cn(thStyle, 'border-t-0')}>학번</td>
-          <td
-            className={cn(
-              tdStyle,
-              isGED && ['bg-slash', 'bg-contain', 'bg-no-repeat'],
-              'border-t-0',
-            )}
-          >
-            {!isGED && studentNumber}
           </td>
         </tr>
         <tr>
-          <td className={cn(thStyle)}>주소</td>
+          <td className={cn(thStyle)} colSpan={2}>
+            지원자 학번
+          </td>
           <td
-            colSpan={9}
+            colSpan={2}
+            className={cn(tdStyle, isGED && ['bg-slash', 'bg-contain', 'bg-no-repeat'])}
+          >
+            {!isGED && studentNumber}
+          </td>
+          <td className={cn(thStyle)} colSpan={2}>
+            학교 주소
+          </td>
+          <td
+            colSpan={4}
             className={cn(tdStyle, isGED && ['bg-slash', 'bg-contain', 'bg-no-repeat'])}
           >
             {!isGED && schoolAddress}
+          </td>
+        </tr>
+        <tr>
+          <td className={cn(thStyle, 'leading-tight')} colSpan={3}>
+            원서작성자(담임)
+            <br />
+            성명
+          </td>
+          <td
+            colSpan={2}
+            className={cn(
+              tdStyle,
+              'relative',
+              graduationType !== 'CANDIDATE' && ['bg-slash', 'bg-contain', 'bg-no-repeat'],
+            )}
+          >
+            {graduationType === 'CANDIDATE' && (
+              <>
+                {schoolTeacherName}
+                <span className={cn('absolute', 'right-1', 'top-1/2', '-translate-y-1/2')}>
+                  (인)
+                </span>
+              </>
+            )}
+          </td>
+          <td className={cn(thStyle, 'leading-tight')} colSpan={3}>
+            원서작성자(담임)
+            <br />
+            연락처
+          </td>
+          <td
+            colSpan={2}
+            className={cn(
+              tdStyle,
+              graduationType !== 'CANDIDATE' && ['bg-slash', 'bg-contain', 'bg-no-repeat'],
+            )}
+          >
+            {graduationType === 'CANDIDATE' && schoolTeacherPhoneNumber}
           </td>
         </tr>
         <tr>
