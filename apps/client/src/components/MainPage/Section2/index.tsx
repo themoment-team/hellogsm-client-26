@@ -1,5 +1,6 @@
 'use client';
 
+import { ADMISSION_SCHEDULE } from '@repo/constants';
 import { cn } from '@repo/utils';
 
 import {
@@ -17,8 +18,8 @@ const stepsData = [
     title: '원서 및 성적 입력',
     date: (
       <>
-        <span className={cn('whitespace-nowrap')}>2025. 10. 20.(월)~</span>
-        <span className={cn('whitespace-nowrap')}>23.(목) 09:00 ~ 16:30</span>
+        <span className={cn('whitespace-nowrap')}>{ADMISSION_SCHEDULE.submission.stepStart}</span>
+        <span className={cn('whitespace-nowrap')}>{ADMISSION_SCHEDULE.submission.stepEnd}</span>
       </>
     ),
     color: 'border-lime-500',
@@ -28,8 +29,8 @@ const stepsData = [
     title: '입학 원서 및 증빙서류 제출',
     date: (
       <>
-        <span className={cn('whitespace-nowrap')}>2025. 10. 20.(월)~</span>
-        <span className={cn('whitespace-nowrap')}>23.(목) 09:00 ~ 16:30</span>
+        <span className={cn('whitespace-nowrap')}>{ADMISSION_SCHEDULE.submission.stepStart}</span>
+        <span className={cn('whitespace-nowrap')}>{ADMISSION_SCHEDULE.submission.stepEnd}</span>
       </>
     ),
     color: 'border-sky-400',
@@ -37,25 +38,25 @@ const stepsData = [
   {
     icon: <Section2Icon3 />,
     title: '1차 전형 합격자 발표',
-    date: '2025. 10. 28.(화) 10:00',
+    date: ADMISSION_SCHEDULE.firstAnnouncement.step,
     color: 'border-sky-600',
   },
   {
     icon: <Section2Icon4 />,
     title: '2차 전형(역량검사)',
-    date: '2025. 10. 31.(금) 14:00-16:30',
+    date: ADMISSION_SCHEDULE.competencyEvaluation.step,
     color: 'border-lime-500',
   },
   {
     icon: <Section2Icon5 />,
     title: '2차 전형(심층면접)',
-    date: '2025. 11. 1.(토) 09:00-16:30',
+    date: ADMISSION_SCHEDULE.inDepthInterview.step,
     color: 'border-sky-600',
   },
   {
     icon: <Section2Icon6 />,
     title: '최종 합격자 발표',
-    date: '2025. 11. 5.(수) 10:00',
+    date: ADMISSION_SCHEDULE.finalAnnouncement.step,
     color: 'border-lime-500',
   },
   {
@@ -63,12 +64,10 @@ const stepsData = [
     title: '합격자 등록(서류 제출)',
     date: (
       <>
-        <span className={cn('whitespace-nowrap')}>2025. 11. 5.(수) ~</span>
-        <span className={cn('whitespace-nowrap')}>11. 10.(월) 16:30</span>
+        <span className={cn('whitespace-nowrap')}>{ADMISSION_SCHEDULE.registration.stepStart}</span>
+        <span className={cn('whitespace-nowrap')}>{ADMISSION_SCHEDULE.registration.stepEnd}</span>
         <br />
-        <span className={cn('whitespace-nowrap')}>
-          (건강검진 관련서류 제출: 11. 10.(월) 16:30까지)
-        </span>
+        <span className={cn('whitespace-nowrap')}>{ADMISSION_SCHEDULE.registration.stepNote}</span>
       </>
     ),
     color: 'border-sky-400',

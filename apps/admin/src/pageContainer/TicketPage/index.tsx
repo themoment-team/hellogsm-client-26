@@ -1,13 +1,7 @@
 'use client';
 
 import { useGetAdmissionTickets } from '@repo/api/hooks';
-import {
-  NEXT_YEAR,
-  passedMemberAnnounceDate,
-  visionCampDate,
-  심층면접시험기간,
-  역량검사시험기간,
-} from '@repo/constants';
+import { ADMISSION_SCHEDULE, NEXT_YEAR } from '@repo/constants';
 import { TicketType } from '@repo/types';
 import { PrintIcon } from '@repo/ui/icons';
 import { Button } from '@repo/ui/shadcn';
@@ -81,7 +75,7 @@ const TicketPage = ({ initialData }: TicketPageProps) => {
                     'font-normal',
                   )}
                 >
-                  {역량검사시험기간}
+                  {ADMISSION_SCHEDULE.competencyEvaluation.period}
                 </td>
 
                 <td rowSpan={7} className={cn('h-[200px]', 'w-[150px]', 'border', 'border-black')}>
@@ -124,7 +118,7 @@ const TicketPage = ({ initialData }: TicketPageProps) => {
                     'font-normal',
                   )}
                 >
-                  {심층면접시험기간}
+                  {ADMISSION_SCHEDULE.inDepthInterview.period}
                 </td>
                 <td
                   rowSpan={1}
@@ -181,7 +175,7 @@ const TicketPage = ({ initialData }: TicketPageProps) => {
                     'font-normal',
                   )}
                 >
-                  {passedMemberAnnounceDate}
+                  {ADMISSION_SCHEDULE.finalAnnouncement.label}
                 </td>
                 <td
                   className={cn(
@@ -229,7 +223,7 @@ const TicketPage = ({ initialData }: TicketPageProps) => {
                   <br />
                   (2) 건강진단서 1부
                   <br />
-                  2025. 11. 05.(수)~ 11. 10.(월) 16:30
+                  {ADMISSION_SCHEDULE.registration.ticketPeriod}
                   <br />
                   (※ 휴무일과 공휴일은 서류 접수하지 않음)
                 </td>
@@ -285,7 +279,7 @@ const TicketPage = ({ initialData }: TicketPageProps) => {
                     'font-normal',
                   )}
                 >
-                  {visionCampDate.startDate} ~ {visionCampDate.endDate} 예정
+                  {ADMISSION_SCHEDULE.visionCamp.start} ~ {ADMISSION_SCHEDULE.visionCamp.end} 예정
                 </td>
                 <td
                   rowSpan={2}
@@ -301,7 +295,7 @@ const TicketPage = ({ initialData }: TicketPageProps) => {
                 >
                   위 사람은 {NEXT_YEAR}학년도 <br /> 본교 신입생 입학전형 지원자임을 확인함.
                   <p className={cn('pr-[0.625rem]', 'text-center', 'font-normal')}>
-                    2025년 10월 31일
+                    {ADMISSION_SCHEDULE.competencyEvaluation.issueDateLabel}
                   </p>
                   <p>광주소프트웨어마이스터고등학교장 [직인생략]</p>
                 </td>

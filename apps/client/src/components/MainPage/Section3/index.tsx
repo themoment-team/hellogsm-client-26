@@ -2,10 +2,10 @@
 
 import Link from 'next/link';
 
+import { ADMISSION_SCHEDULE } from '@repo/constants';
 import { cn } from '@repo/utils';
 
 import * as I from '@/assets';
-import { RECRUITMENT_PERIOD } from '@/constants';
 
 const buttonStyle = [
   'font-semibold',
@@ -55,7 +55,8 @@ const Section3 = ({ isServerHealthy }: Section3Props) => {
             2026 신입생 모집
           </h1>
           <p className={cn('mb-0', 'lg:mb-8', 'mt-[1rem]', 'hidden', 'smx:flex', 'text-gray-500')}>
-            접수 기간: {RECRUITMENT_PERIOD.startDate} ~ {RECRUITMENT_PERIOD.endDate}
+            접수 기간: {ADMISSION_SCHEDULE.submission.startLabel} ~{' '}
+            {ADMISSION_SCHEDULE.submission.endLabel}
           </p>
           <Link
             href="/guide"
