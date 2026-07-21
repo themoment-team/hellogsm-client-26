@@ -6,19 +6,19 @@ import { FooterGSMLogo } from '@/assets';
 const LINKS = [
   {
     text: '개인정보처리방침',
-    link: 'https://official.hellogsm.kr/policy/privacy',
+    link: 'https://gsm.gen.hs.kr:453/sub/page.php?page_code=help_08',
   },
   {
     text: '영상정보처리기기운영·관리방침',
-    link: 'https://official.hellogsm.kr/policy/cctv',
+    link: 'https://gsm.gen.hs.kr:453/sub/page.php?page_code=help_09',
   },
   {
     text: '저작권신고 및 보호규정',
-    link: 'https://official.hellogsm.kr/policy/copyright',
+    link: 'https://gsm.gen.hs.kr:453/sub/page.php?page_code=help_10',
   },
   {
     text: '찾아오시는 길',
-    link: 'https://official.hellogsm.kr/about/location',
+    link: 'https://gsm.gen.hs.kr:453/sub/page.php?page_code=info_07',
   },
 ] as const;
 
