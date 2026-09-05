@@ -19,6 +19,15 @@ export const artPhysicalCandidateFreeYearArray = [
   '3학년 1학기',
 ] as const;
 
+export const artPhysicalGraduateFreeSemesterArray = [
+  '1학년 1학기',
+  '1학년 2학기',
+  '2학년 1학기',
+  '2학년 2학기',
+  '3학년 1학기',
+  '3학년 2학기',
+] as const;
+
 export const artPhysicalGraduationIndexArray = [
   { subject: '체육', registerIndexList: [0, 3, 6, 9] },
   { subject: '음악', registerIndexList: [1, 4, 7, 10] },
@@ -29,6 +38,12 @@ export const artPhysicalCandidateFreeSemesterIndexArray = [
   { subject: '체육', registerIndexList: [0, 3, 6, 9, 12] },
   { subject: '음악', registerIndexList: [1, 4, 7, 10, 13] },
   { subject: '미술', registerIndexList: [2, 5, 8, 11, 14] },
+] as const;
+
+export const artPhysicalGraduateFreeSemesterIndexArray = [
+  { subject: '체육', registerIndexList: [0, 3, 6, 9, 12, 15] },
+  { subject: '음악', registerIndexList: [1, 4, 7, 10, 13, 16] },
+  { subject: '미술', registerIndexList: [2, 5, 8, 11, 14, 17] },
 ] as const;
 
 export const artPhysicalCandidateFreeGradeIndexArray = [

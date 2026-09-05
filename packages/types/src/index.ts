@@ -10,6 +10,7 @@ export * from './modal';
 export * from './notion';
 export * from './oneseo';
 export * from './operation';
+export * from './schoolRecordExtraction';
 export * from './semester';
 export * from './step';
 export * from './value';

@@ -13,6 +13,7 @@ export { default as LoginDialog } from './LoginDialog';
 export { default as LoginDialogContent } from './LoginDialogContent';
 export { default as ModalContainer } from './ModalContainer';
 export { default as RadioButton } from './RadioButton';
+export { default as SchoolRecordUploader } from './SchoolRecordUploader';
 export { default as SearchDialog } from './SearchDialog';
 export { default as SearchElements } from './SearchElements';
 export { default as StepBar } from './StepBar';

@@ -24,10 +24,14 @@ const GeneralSubjectsTable = ({ oneseo }: OneseoStatusType) => {
   const { generalSubjectsScoreDetail } = oneseo.calculatedScore;
   const subjects = [...GENERAL_SUBJECTS, ...(oneseo.middleSchoolAchievement.newSubjects ?? [])];
 
+  const isFreeSemester = oneseo.middleSchoolAchievement.liberalSystem === '자유학기제';
+
   const semesters: SemesterKey[] =
     graduationType === 'CANDIDATE'
       ? ['1_1', '1_2', '2_1', '2_2', '3_1']
-      : ['2_1', '2_2', '3_1', '3_2'];
+      : isFreeSemester
+        ? ['1_1', '1_2', '2_1', '2_2', '3_1', '3_2']
+        : ['2_1', '2_2', '3_1', '3_2'];
 
   return (
     <table className={cn('w-full', 'border', 'border-black', 'text-center')}>

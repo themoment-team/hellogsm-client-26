@@ -11,6 +11,7 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
+    "@aws-sdk/client-lambda": "^3.1123.0",
     "@hookform/resolvers": "^5.2.2",
     "@repo/api": "workspace:*",
     "@repo/constants": "workspace:*",

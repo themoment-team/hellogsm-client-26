@@ -1,0 +1,19 @@
+# apps/ocr-lambda/Dockerfile은 저장소 루트를 빌드 컨텍스트로 써야 한다(turbo prune이
+# 전체 워크스페이스를 봐야 하기 때문) — 그래서 이 파일도 루트에 둔다. `docker build -f
+# apps/ocr-lambda/Dockerfile .`처럼 루트에서 빌드할 것.
+node_modules
+**/node_modules
+.git
+.next
+**/.next
+.turbo
+**/dist
+**/.env*
+!**/.env.example
+.vscode
+.github
+.claude
+.agents
+.codex
+.harness
+e2e

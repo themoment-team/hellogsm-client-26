@@ -45,16 +45,15 @@ const rowStyle = [
   'items-center',
 ];
 
-const getFreeSemesterIndices = (semester: FreeSemesterValueEnum | null, isGraduate: boolean) => {
+const getFreeSemesterIndices = (semester: FreeSemesterValueEnum | null) => {
   if (!semester) return [];
   const semesterParts = semester.split('-');
   const grade = Number(semesterParts[0]);
   const sem = Number(semesterParts[1]);
   if (!Number.isFinite(grade) || !Number.isFinite(sem)) return [];
 
-  // 재학생: 1학년부터 시작 (grade - 1), 졸업자: 2학년부터 시작 (grade - 2)
-  const gradeOffset = isGraduate ? 2 : 1;
-  const semesterNumber = (grade - gradeOffset) * 2 + (sem - 1);
+  // 자유학기제 표는 재학생·졸업자 모두 1학년 1학기부터 시작한다
+  const semesterNumber = (grade - 1) * 2 + (sem - 1);
 
   if (semesterNumber < 0) return []; // 유효하지 않은 학기
   return [semesterNumber * 3, semesterNumber * 3 + 1, semesterNumber * 3 + 2];
@@ -86,15 +85,33 @@ const ArtPhysicalForm = ({
     isFreeGrade,
   });
 
-  const disabledIndices = isFreeSemester ? getFreeSemesterIndices(freeSemester, isGraduate) : [];
+  // 표 전체 폭은 44.25rem(708px) 고정 — 과목명 6.75rem + 학기 영역 37.5rem
+  // 학기 열은 37.5rem을 학기 수로 나눈 값이다 (6학기 6.25 / 4학기 9.375 / 3학기 12.5 / 5학기 7.5)
+  const columnWidth = isGraduate
+    ? isFreeSemester
+      ? 'w-[6.25rem]'
+      : 'w-[9.375rem]'
+    : isFreeGrade
+      ? 'w-[12.5rem]'
+      : 'w-[7.5rem]';
+
+  const selectWidth = isGraduate
+    ? isFreeSemester
+      ? 'w-[5.47rem]'
+      : 'w-[7.34rem]'
+    : isFreeGrade
+      ? 'w-[10.46rem]'
+      : 'w-[5.47rem]';
+
+  const disabledIndices = isFreeSemester ? getFreeSemesterIndices(freeSemester) : [];
 
   useEffect(() => {
     if (!isFreeSemester) return;
-    const indices = getFreeSemesterIndices(freeSemester, isGraduate);
+    const indices = getFreeSemesterIndices(freeSemester);
     indices.forEach((index) => {
       setValue(`artsPhysicalAchievement.${index}`, 0);
     });
-  }, [freeSemester, isFreeSemester, isGraduate, setValue]);
+  }, [freeSemester, isFreeSemester, setValue]);
 
   return (
     <div className={cn('flex', 'flex-col', 'w-full')}>
@@ -110,13 +127,7 @@ const ArtPhysicalForm = ({
         <h1 className={cn([...itemStyle, 'w-[6.75rem]'])}>과목명</h1>
         <div className={cn('flex')}>
           {artPhysicalArray.map((title) => (
-            <h1
-              key={title}
-              className={cn([
-                ...itemStyle,
-                isGraduate ? 'w-[9.34rem]' : isFreeGrade ? 'w-[12.46rem]' : 'w-[7.47rem]',
-              ])}
-            >
+            <h1 key={title} className={cn([...itemStyle, columnWidth])}>
               {title}
             </h1>
           ))}
@@ -141,13 +152,7 @@ const ArtPhysicalForm = ({
               const isDisabled = disabledIndices.includes(registerIndex);
 
               return (
-                <div
-                  key={registerIndex}
-                  className={cn([
-                    ...itemStyle,
-                    isGraduate ? 'w-[9.34rem]' : isFreeGrade ? 'w-[12.46rem]' : 'w-[7.47rem]',
-                  ])}
-                >
+                <div key={registerIndex} className={cn([...itemStyle, columnWidth])}>
                   {isDisabled ? (
                     <div
                       className={cn(
@@ -181,8 +186,8 @@ const ArtPhysicalForm = ({
                           'text-slate-900',
                           'px-[0.5rem]',
                           'border-slate-300',
-                          isGraduate ? 'w-[7.34rem]' : isFreeGrade ? 'w-[10.46rem]' : 'w-[5.47rem]',
-                          score === undefined && showError && '!border-red-600',
+                          selectWidth,
+                          (score === undefined || score === null) && showError && '!border-red-600',
                         ])}
                       >
                         <SelectValue placeholder="성적 선택" />

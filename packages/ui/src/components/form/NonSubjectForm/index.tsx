@@ -10,8 +10,6 @@ interface NonSubjectFormProps {
   register: UseFormRegister<Step4FormType>;
   trigger: UseFormTrigger<Step4FormType>;
   errors: FieldErrors<Step4FormType>;
-  isFreeGrade: boolean;
-  isGraduate: boolean;
   showError: boolean;
   validateForm: () => void;
 }
@@ -56,14 +54,7 @@ const rowStyle = [
   'items-center',
 ];
 
-const NonSubjectForm = ({
-  register,
-  errors,
-  isFreeGrade,
-  isGraduate,
-  showError,
-  validateForm,
-}: NonSubjectFormProps) => {
+const NonSubjectForm = ({ register, errors, showError, validateForm }: NonSubjectFormProps) => {
   useEffect(() => {
     if (!showError) return;
 
@@ -88,11 +79,7 @@ const NonSubjectForm = ({
               key={title}
               className={cn([
                 ...itemStyle,
-                idx === volunteerTimeIndex
-                  ? isFreeGrade || isGraduate
-                    ? 'w-[14.895625rem]'
-                    : 'w-[14.875rem]'
-                  : 'w-[5.625rem]',
+                idx === volunteerTimeIndex ? 'w-[15rem]' : 'w-[5.625rem]',
               ])}
             >
               {title}
@@ -130,11 +117,7 @@ const NonSubjectForm = ({
                   className={cn([
                     ...itemStyle,
                     'px-[0.75rem]',
-                    idx === volunteerTimeIndex
-                      ? isFreeGrade || isGraduate
-                        ? 'w-[14.895625rem]'
-                        : 'w-[14.875rem]'
-                      : 'w-[5.625rem]',
+                    idx === volunteerTimeIndex ? 'w-[15rem]' : 'w-[5.625rem]',
                   ])}
                 >
                   <input

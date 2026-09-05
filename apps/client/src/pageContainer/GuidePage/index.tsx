@@ -69,6 +69,8 @@ const Elements: ElementType[] = [
         <a
           className={cn('flex', 'items-center', 'gap-3', 'mt-5', 'cursor-pointer', 'w-fit')}
           href={`${process.env.NEXT_PUBLIC_CDN_URL}/입학_원서_작성_요령.hwp`}
+          target="_blank"
+          rel="noopener noreferrer"
         >
           <CopyIcon color="#94A3B8" />
           <span

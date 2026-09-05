@@ -10,6 +10,7 @@ const ArtsPhysicalTable = ({ oneseo }: OneseoStatusType) => {
 
   const availableSemesters = semesterArray.filter((semester) => {
     if (oneseo.privacyDetail.graduationType === 'GRADUATE') {
+      if (oneseo.middleSchoolAchievement.liberalSystem === '자유학기제') return true;
       return ['2-1', '2-2', '3-1', '3-2'].includes(semester);
     } else if (oneseo.privacyDetail.graduationType === 'CANDIDATE') {
       return semester !== '3-2';

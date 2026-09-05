@@ -14,6 +14,8 @@ import * as I from '@/assets';
 
 import ActiveLink from '../ActiveLink';
 
+const THE_MOMENT_LANDING_URL = 'https://themoment-landing.hellogsm.kr/';
+
 const activeStyle = [
   'text-gray-900',
   'after:w-6',
@@ -55,12 +57,17 @@ interface HeaderProps {
 }
 
 interface NavProps {
-  links: Array<{ href: string; label: string }>;
+  links: Array<{ href: string; label: string; isExternal?: boolean }>;
   isRegisterPath: boolean;
 }
 
 interface MobileNavProps {
-  links: Array<{ href: string; label: string; icon: React.ElementType }>;
+  links: Array<{
+    href: string;
+    label: string;
+    icon: React.ElementType;
+    isExternal?: boolean;
+  }>;
   isRegisterPath: boolean;
   hoveredLink: string | null;
   setHoveredLink: (link: string | null) => void;
@@ -83,9 +90,15 @@ const PCNavigation = ({ links, isRegisterPath }: NavProps) => {
           'text-gray-500',
         )}
       >
-        {links.map(({ label, href }) => (
-          <a key={label} href={href} className={cn([...activeTextStyle])}>
+        {links.map(({ label, href, isExternal }) => (
+          <a
+            key={label}
+            href={href}
+            className={cn([...activeTextStyle, isExternal && ['flex', 'items-center', 'gap-1']])}
+            {...(isExternal && { target: '_blank', rel: 'noopener noreferrer' })}
+          >
             {label}
+            {isExternal && <I.ExternalLinkIcon size="1.25rem" color="#9EA7B9" />}
           </a>
         ))}
       </nav>
@@ -104,16 +117,29 @@ const PCNavigation = ({ links, isRegisterPath }: NavProps) => {
         'text-gray-500',
       )}
     >
-      {links.map(({ label, href }) => (
-        <ActiveLink
-          key={label}
-          href={href}
-          className={cn([...activeTextStyle])}
-          activeClassName={cn(...activeStyle)}
-        >
-          {label}
-        </ActiveLink>
-      ))}
+      {links.map(({ label, href, isExternal }) =>
+        isExternal ? (
+          <a
+            key={label}
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={cn([...activeTextStyle, 'flex', 'items-center', 'gap-1'])}
+          >
+            {label}
+            <I.ExternalLinkIcon size="1.25rem" color="#9EA7B9" />
+          </a>
+        ) : (
+          <ActiveLink
+            key={label}
+            href={href}
+            className={cn([...activeTextStyle])}
+            activeClassName={cn(...activeStyle)}
+          >
+            {label}
+          </ActiveLink>
+        ),
+      )}
     </nav>
   );
 };
@@ -148,6 +174,7 @@ const MobileNavigation = ({
               )}
               onMouseEnter={() => setHoveredLink(link.href)}
               onMouseLeave={() => setHoveredLink(null)}
+              {...(link.isExternal && { target: '_blank', rel: 'noopener noreferrer' })}
             >
               <IconComponent
                 size="1.75rem"
@@ -165,22 +192,41 @@ const MobileNavigation = ({
     <div className={cn('flex', 'flex-col', 'items-end', 'gap-[2.25rem]')}>
       {links.map((link) => {
         const IconComponent = link.icon;
-        return (
+        const navItemClassName = cn(
+          'flex',
+          'items-center',
+          'gap-4',
+          'text-slate-300',
+          'text-[1.5rem]',
+          'leading-normal',
+          'font-bold',
+          'hover:text-slate-500',
+          'duration-150',
+        );
+
+        return link.isExternal ? (
+          <a
+            key={link.href}
+            href={link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setIsMenu(false)}
+            className={navItemClassName}
+            onMouseEnter={() => setHoveredLink(link.href)}
+            onMouseLeave={() => setHoveredLink(null)}
+          >
+            <IconComponent
+              size="1.75rem"
+              color={hoveredLink === link.href ? '#64748B' : '#CBD5E1'}
+            />
+            {link.label}
+          </a>
+        ) : (
           <Link
             key={link.href}
             href={link.href}
             onClick={() => setIsMenu(false)}
-            className={cn(
-              'flex',
-              'items-center',
-              'gap-4',
-              'text-slate-300',
-              'text-[1.5rem]',
-              'leading-normal',
-              'font-bold',
-              'hover:text-slate-500',
-              'duration-150',
-            )}
+            className={navItemClassName}
             onMouseEnter={() => setHoveredLink(link.href)}
             onMouseLeave={() => setHoveredLink(null)}
           >
@@ -324,9 +370,10 @@ const Header = ({ isServerHealthy }: HeaderProps) => {
         { href: '/check-result', label: '합격자 조회', icon: I.MedalIcon },
         { href: '/mypage', label: '내 정보 페이지', icon: I.HeaderProfileIcon },
         {
-          href: '/introduce',
+          href: THE_MOMENT_LANDING_URL,
           label: '더모먼트',
           icon: I.SparkleIcon,
+          isExternal: true,
         },
       ]
     : [
@@ -334,9 +381,10 @@ const Header = ({ isServerHealthy }: HeaderProps) => {
         { href: '/guide', label: '원서 접수', icon: I.OneseoIcon },
         { href: '/faq', label: '자주 묻는 질문', icon: I.FaqIcon },
         {
-          href: '/introduce',
+          href: THE_MOMENT_LANDING_URL,
           label: '더모먼트',
           icon: I.SparkleIcon,
+          isExternal: true,
         },
       ];
 
@@ -348,8 +396,9 @@ const Header = ({ isServerHealthy }: HeaderProps) => {
         { href: '/oneseo/calculate', label: '모의 성적 계산' },
         { href: '/check-result', label: '합격자 조회' },
         {
-          href: '/introduce',
+          href: THE_MOMENT_LANDING_URL,
           label: '더모먼트',
+          isExternal: true,
         },
       ]
     : [
@@ -358,8 +407,9 @@ const Header = ({ isServerHealthy }: HeaderProps) => {
         { href: '/faq', label: '자주 묻는 질문' },
         { href: '/oneseo/calculate', label: '모의 성적 계산' },
         {
-          href: '/introduce',
+          href: THE_MOMENT_LANDING_URL,
           label: '더모먼트',
+          isExternal: true,
         },
       ];
 

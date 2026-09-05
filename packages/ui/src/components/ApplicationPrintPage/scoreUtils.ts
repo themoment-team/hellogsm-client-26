@@ -14,6 +14,19 @@ export const getArtPhysicalScores = (oneseo: GetMyOneseoType | PreviewOneseoType
   const isCandidate = graduationType === 'CANDIDATE';
 
   if (isGraduate) {
+    const { liberalSystem } = oneseo.middleSchoolAchievement;
+
+    if (liberalSystem === '자유학기제') {
+      return [
+        achievements.slice(0, 3),
+        achievements.slice(3, 6),
+        achievements.slice(6, 9),
+        achievements.slice(9, 12),
+        achievements.slice(12, 15),
+        achievements.slice(15, 18),
+      ];
+    }
+
     return [
       null,
       null,

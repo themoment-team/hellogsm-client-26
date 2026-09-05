@@ -2,7 +2,23 @@ packages:
   - apps/*
   - packages/*
 
+# kordoc은 pdfjs-dist를 optionalDependencies로만 선언하는데, 실제로는 스캔 PDF를
+# 이미지로 렌더링해 OCR에 넘기는 핵심 경로에서 필요하다(옵셔널이 아님). apps/ocr-lambda
+# 쪽 package.json에 pdfjs-dist를 직접 의존성으로 추가하는 것만으로는 kordoc 자신의
+# node_modules 안에 pdfjs-dist가 심어지지 않는다 — kordoc 내부의 require('pdfjs-dist')는
+# kordoc 자신의 위치를 기준으로 상위 디렉터리를 탐색하는데, 그 경로에 자동으로 걸리는
+# 것을 pnpm이 보장하지 않는다. packageExtensions로 kordoc의 의존성 선언 자체를 보정해,
+# kordoc의 node_modules 안에 pdfjs-dist가 직접 심어지도록 강제한다.
+packageExtensions:
+  kordoc:
+    dependencies:
+      pdfjs-dist: '*'
+
 onlyBuiltDependencies:
+  - '@sentry/cli'
+  - esbuild
   - msw
+  - onnxruntime-node
+  - protobufjs
   - sharp
   - unrs-resolver

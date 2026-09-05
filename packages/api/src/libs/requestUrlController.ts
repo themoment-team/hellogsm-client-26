@@ -24,6 +24,12 @@ export const oneseoUrl = {
   postMyOneseo: () => '/oneseo/v3/oneseo/me',
   putMyOneseo: () => '/oneseo/v3/oneseo/me',
   postImage: () => '/oneseo/v3/image',
+  postSchoolRecordExtraction: () => '/oneseo/v3/extraction/middle-school-achievement',
+  /** 생기부 PDF를 S3에 직접 업로드하기 위한 presigned URL 발급 */
+  postSchoolRecordOcrUploadUrl: (fileExtension: string) =>
+    `/oneseo/v3/extraction/middle-school-achievement/ocr-upload-url?fileExtension=${fileExtension}`,
+  /** Java 백엔드가 아니라 이 Next.js 앱 자신의 API Route(kordoc 직접 호출)로 간다 */
+  postSchoolRecordOcr: () => '/school-record-ocr',
   getOneseoByMemberId: (memberId: number) => `/oneseo/v3/oneseo/${memberId}`,
   putOneseoByMemberId: (memberId: number) => `/oneseo/v3/oneseo/${memberId}`,
   getSearchedOneseoList: (

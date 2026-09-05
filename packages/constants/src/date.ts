@@ -63,10 +63,10 @@ export const ADMISSION_SCHEDULE = {
   registration: {
     /** 모집절차 스텝 표기 (client Section2) — 시작/종료/비고 분리 노출 */
     stepStart: '2026. 11. 4.(수) ~',
-    stepEnd: '11. 9.(월) 17:00',
+    stepEnd: '11. 9.(월) 09:00 ~ 17:00',
     stepNote: '(건강검진 관련서류 제출: 11. 9.(월) 17:00까지)',
     /** 수험표 표기 (admin TicketPage) */
-    ticketPeriod: '2026. 11. 04.(수)~ 11. 9.(월) 17:00',
+    ticketPeriod: '2026. 11. 04.(수)~ 11. 9.(월) 09:00 ~ 17:00',
   },
 
   /** 비전캠프 */

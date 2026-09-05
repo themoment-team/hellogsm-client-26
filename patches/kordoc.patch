@@ -1,0 +1,124 @@
+diff --git a/dist/chunk-HOSNMNKU.cjs b/dist/chunk-HOSNMNKU.cjs
+index 55e670c21f0498585fb1e7084666e87d90fce768..5eb154fb0bde72c351983e94cac9f9f20f4c923b 100644
+--- a/dist/chunk-HOSNMNKU.cjs
++++ b/dist/chunk-HOSNMNKU.cjs
+@@ -9,7 +9,15 @@ var _chunkL5CDTOC3cjs = require('./chunk-L5CDTOC3.cjs');
+ var _chunk4R73ASZFcjs = require('./chunk-4R73ASZF.cjs');
+ 
+ // src/pdf/image-regions.ts
+-var _pdfmjs = require('pdfjs-dist/legacy/build/pdf.mjs');
++// PATCH(hellogsm): pdfjs-dist는 ESM 전용 모듈이라 require()로 동기 로드할 수 없다
++// (Node의 require(esm)도 top-level await 등이 있으면 지원 안 됨 — 실제 Lambda에서
++// ERR_REQUIRE_ESM 재현·확인됨). await import()로 지연 로드하고, 이를 쓰는 함수를
++// async로 바꿔 호출부에서 await하도록 한다.
++let _pdfmjs;
++async function _ensurePdfmjs() {
++  if (!_pdfmjs) _pdfmjs = await import('pdfjs-dist/legacy/build/pdf.mjs');
++  return _pdfmjs;
++}
+ function multiplyTransform(m, t) {
+   return [
+     m[0] * t[0] + m[2] * t[1],
+@@ -20,7 +28,8 @@ function multiplyTransform(m, t) {
+     m[1] * t[4] + m[3] * t[5] + m[5]
+   ];
+ }
+-function extractImageRegions(fnArray, argsArray) {
++async function extractImageRegions(fnArray, argsArray) {
++  await _ensurePdfmjs();
+   const regions = [];
+   let ctm = [1, 0, 0, 1, 0, 0];
+   const stack = [];
+diff --git a/dist/parser-ZLHOAZAA.cjs b/dist/parser-ZLHOAZAA.cjs
+index 990b4b4182a78768aad967b3af11524c1c80c473..5a755fef12a152d40b3c0f82d93fcbf0ffd4c422 100644
+--- a/dist/parser-ZLHOAZAA.cjs
++++ b/dist/parser-ZLHOAZAA.cjs
+@@ -29,7 +29,11 @@ var _chunk4R73ASZFcjs = require('./chunk-4R73ASZF.cjs');
+ var _chunkGS7T56RPcjs = require('./chunk-GS7T56RP.cjs');
+ 
+ // src/pdf/image-extract.ts
+-var _pdfmjs = require('pdfjs-dist/legacy/build/pdf.mjs');
++// PATCH(hellogsm): pdfjs-dist는 ESM 전용이라 require()로 동기 로드 불가 — 실제
++// Lambda에서 ERR_REQUIRE_ESM 재현·확인됨. _ensurePdfInit()(아래 parser.ts 섹션에서
++// 정의)이 await import()로 채워줄 때까지 이 변수는 비어 있다가, loadPdfWithTimeout이
++// 항상 먼저 호출되어 채워진 뒤에야 toRgba/extractPageImages 등에서 쓰인다.
++let _pdfmjs;
+ var IMAGE_RESOLVE_TIMEOUT_MS = 5e3;
+ function resolveImgData(page, objId) {
+   const store = objId.startsWith("g_") ? page.commonObjs : page.objs;
+@@ -543,27 +547,42 @@ function formatMb(bytes) {
+ }
+ 
+ // src/pdf/polyfill.ts
+-var _pdfworkermjs = require('pdfjs-dist/legacy/build/pdf.worker.mjs'); var pdfjsWorker = _interopRequireWildcard(_pdfworkermjs);
+-var g = globalThis;
+-if (typeof g.DOMMatrix === "undefined") {
+-  g.DOMMatrix = (_class = class DOMMatrix {
+-    __init() {this.m = [1, 0, 0, 1, 0, 0]}
+-    constructor(init) {;_class.prototype.__init.call(this);
+-      if (init) this.m = init;
+-    }
+-  }, _class);
+-}
+-if (typeof g.Path2D === "undefined") {
+-  g.Path2D = class Path2D {
+-  };
+-}
+-g.pdfjsWorker = pdfjsWorker;
++var pdfjsWorker;
+ 
+ // src/pdf/parser.ts
+ 
+ var _module = require('module');
+ var _path = require('path');
+-_pdfmjs.GlobalWorkerOptions.workerSrc = "";
++// PATCH(hellogsm): 위 polyfill.ts 섹션의 top-level require()들과 여기 있던
++// GlobalWorkerOptions 동기 설정을 전부 이 지연 초기화 함수 하나로 옮겼다 — pdfjs-dist/
++// pdf.worker.mjs 둘 다 ESM이라 require()로 즉시 실행할 수 없기 때문이다. 실제로 pdfjs-dist를
++// 쓰는 진입점(loadPdfWithTimeout)이 항상 이 함수를 먼저 await하므로, 아래에서 그 시점
++// 이전에 흐른 코드는 없다.
++var _pdfInitPromise;
++async function _ensurePdfInit() {
++  if (!_pdfInitPromise) {
++    _pdfInitPromise = (async () => {
++      _pdfmjs = await import('pdfjs-dist/legacy/build/pdf.mjs');
++      pdfjsWorker = await import('pdfjs-dist/legacy/build/pdf.worker.mjs');
++      var g = globalThis;
++      if (typeof g.DOMMatrix === "undefined") {
++        g.DOMMatrix = (_class = class DOMMatrix {
++          __init() {this.m = [1, 0, 0, 1, 0, 0]}
++          constructor(init) {;_class.prototype.__init.call(this);
++            if (init) this.m = init;
++          }
++        }, _class);
++      }
++      if (typeof g.Path2D === "undefined") {
++        g.Path2D = class Path2D {
++        };
++      }
++      g.pdfjsWorker = pdfjsWorker;
++      _pdfmjs.GlobalWorkerOptions.workerSrc = "";
++    })();
++  }
++  return _pdfInitPromise;
++}
+ var MAX_PAGES = 5e3;
+ var MAX_TOTAL_TEXT = 100 * 1024 * 1024;
+ var PDF_LOAD_TIMEOUT_MS = 3e4;
+@@ -577,6 +596,7 @@ try {
+ } catch (e3) {
+ }
+ async function loadPdfWithTimeout(buffer) {
++  await _ensurePdfInit();
+   const loadingTask = _pdfmjs.getDocument.call(void 0, {
+     data: new Uint8Array(buffer),
+     useSystemFonts: true,
+@@ -648,7 +668,7 @@ async function parsePdfDocument(buffer, options) {
+         const opList = await page.getOperatorList();
+         const pageArea = viewport.width * viewport.height;
+         if (pageArea > 0) {
+-          const imageRegions = _chunkHOSNMNKUcjs.extractImageRegions.call(void 0, opList.fnArray, opList.argsArray);
++          const imageRegions = await _chunkHOSNMNKUcjs.extractImageRegions.call(void 0, opList.fnArray, opList.argsArray);
+           let uncovered = 0;
+           for (const r of imageRegions) {
+             const area = (r.x2 - r.x1) * (r.y2 - r.y1);

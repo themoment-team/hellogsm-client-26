@@ -3,6 +3,8 @@ import {
   artPhysicalCandidateFreeSemesterArray,
   artPhysicalCandidateFreeSemesterIndexArray,
   artPhysicalCandidateFreeYearArray,
+  artPhysicalGraduateFreeSemesterArray,
+  artPhysicalGraduateFreeSemesterIndexArray,
   artPhysicalGraduationArray,
   artPhysicalGraduationIndexArray,
 } from './artPhysical';
@@ -24,6 +26,7 @@ export function getArtPhysicalArray({
     if (isFreeSemester) return artPhysicalCandidateFreeSemesterArray;
     if (isFreeGrade) return artPhysicalCandidateFreeYearArray;
   }
+  if (isFreeSemester) return artPhysicalGraduateFreeSemesterArray;
   return artPhysicalGraduationArray;
 }
 
@@ -36,5 +39,6 @@ export function getArtPhysicalIndexArray({
     if (isFreeSemester) return artPhysicalCandidateFreeSemesterIndexArray;
     if (isFreeGrade) return artPhysicalCandidateFreeGradeIndexArray;
   }
+  if (isFreeSemester) return artPhysicalGraduateFreeSemesterIndexArray;
   return artPhysicalGraduationIndexArray;
 }

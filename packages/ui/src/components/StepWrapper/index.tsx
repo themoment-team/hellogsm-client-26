@@ -685,6 +685,7 @@ const StepWrapper = ({ data, step, info, memberId, type, isModifyApproved }: Ste
             {step === StepEnum.FOUR && (
               <Step4Register
                 {...step4UseForm}
+                type={type}
                 graduationType={graduationType}
                 isGED={isGED}
                 isCandidate={isCandidate}
