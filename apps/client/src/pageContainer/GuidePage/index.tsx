@@ -128,7 +128,7 @@ const Elements: ElementType[] = [
     description: (
       <>
         <strong className={cn('font-semibold')}>
-          1차 서류심사(50%)와 2차 역량검사(30%), 심층면접(20%)
+          1차 서류심사(60%)와 2차 역량검사(20%), 심층면접(20%)
         </strong>
         를 통해 최종 합격자를 선발합니다.
       </>
