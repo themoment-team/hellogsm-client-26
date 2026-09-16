@@ -13,7 +13,11 @@ import {
   useWatch,
 } from 'react-hook-form';
 
-import { ACHIEVEMENT_FIELD_LIST, GENERAL_SUBJECTS } from '@repo/constants';
+import {
+  ACHIEVEMENT_FIELD_LIST,
+  GENERAL_SUBJECTS,
+  getUsedAchievementFields,
+} from '@repo/constants';
 import {
   AchievementType,
   FreeSemesterValueEnum,
@@ -308,10 +312,26 @@ const Step4Register = ({
     ]);
     setValue('newSubjects', ocrNewSubjects);
 
+    // 서버 추출 결과는 이번 전형에서 쓰지 않는 학기까지 값을 채워 보낼 수 있다. 실제로
+    // 자유학년제 생기부의 1학년은 성취도가 P(이수)로 찍히는데 이게 0('없음')으로 내려와,
+    // 자유학년제인데도 1-1·1-2가 전부 0인 채로 제출되어 성적 계산이 틀어졌다. 학기 열을
+    // 비우는 초기화(FreeGradeForm/FreeSemesterForm)는 mount 시 한 번만 돌기 때문에,
+    // 이미 해당 모드에 들어와 있는 상태에서 OCR을 적용하면 되돌려 주는 곳이 없다.
+    // 그래서 여기서 직접 쓰지 않는 학기를 null로 못박는다.
+    //
+    // 기준이 되는 전형 값은 이 함수가 방금 setValue한 OCR 결과를 우선한다 — 렌더 시점에
+    // 계산된 achievementList는 아직 OCR 이전 값이라 여기서는 쓸 수 없다.
+    const usedAchievementFields = getUsedAchievementFields({
+      liberalSystem: achievement.liberalSystem ?? getValues('liberalSystem'),
+      graduationType,
+      freeSemester: achievement.freeSemester ?? getValues('freeSemester'),
+    });
+
     // OCR이 인식하지 못한 칸은 null로 내려오는데, 기존 검증 로직이 null을 '입력 필요' 오류로
     // 표시해 주므로 이 값을 그대로 반영하는 것만으로 검수 표시를 겸할 수 있다.
     ACHIEVEMENT_FIELD_LIST.forEach((field) => {
-      setValue(field, (achievement[field] ?? null) as Step4FormType[typeof field]);
+      const value = usedAchievementFields.includes(field) ? (achievement[field] ?? null) : null;
+      setValue(field, value as Step4FormType[typeof field]);
     });
     setValue(
       'artsPhysicalAchievement',
