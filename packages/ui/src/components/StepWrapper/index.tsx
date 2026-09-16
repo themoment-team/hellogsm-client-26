@@ -615,7 +615,9 @@ const StepWrapper = ({ data, step, info, memberId, type, isModifyApproved }: Ste
           absentDays: absentDays!,
           attendanceDays: attendanceDays!,
           volunteerTime: volunteerTime!,
-          freeSemester: freeSemester || '',
+          // 제출 경로와 같은 이유로 ''를 보내지 않는다 — 서버 enum은 1-1~3-2만 받는다.
+          // 제출 쪽은 이미 null로 통일했는데(930119eb) 이 계산 경로만 남아 있었다.
+          freeSemester: liberalSystem === LiberalSystemValueEnum.FREE_GRADE ? null : freeSemester,
           generalSubjects: [...GENERAL_SUBJECTS],
           artsPhysicalSubjects: [...ARTS_PHYSICAL_SUBJECTS],
         };
