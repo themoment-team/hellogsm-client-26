@@ -24,7 +24,7 @@ const Section6 = () => {
           'text-center',
         )}
       >
-        광주소프트웨어고등학교에 대해 더 알아보고 싶다면?
+        광주소프트웨어마이스터고등학교에 대해 더 알아보고 싶다면?
         <br />
         학과 체험 신청 서비스 <span className={cn('text-[#4A80F8]')}>Ready, GSM</span>도 있습니다
       </h2>
