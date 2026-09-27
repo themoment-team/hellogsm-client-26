@@ -32,11 +32,6 @@ const nextConfig = {
       destination: 'https://themoment-landing.hellogsm.kr/',
       permanent: true,
     },
-    {
-      source: '/introduce/',
-      destination: 'https://themoment-landing.hellogsm.kr/',
-      permanent: true,
-    },
   ],
 };
 
