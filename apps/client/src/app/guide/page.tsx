@@ -1,9 +1,15 @@
+import type { Metadata } from 'next';
+
 import { getDate } from '@repo/api/apis';
 import { getKoreanDate, isTimeAfter, isTimeBefore } from '@repo/utils';
 
 import { GuidePage } from '@/pageContainer';
 
 import { getEditability, getMyOneseo } from '../apis';
+
+export const metadata: Metadata = {
+  title: '원서 접수',
+};
 
 export default async function Guide() {
   const [data, dateList, editability] = await Promise.all([

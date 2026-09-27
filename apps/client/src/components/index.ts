@@ -1,5 +1,4 @@
 export * from './MainPage';
-export * from './TeamPage';
 export { default as ActiveLink } from './ActiveLink';
 export { default as Footer } from './Footer';
 export { default as Header } from './Header';

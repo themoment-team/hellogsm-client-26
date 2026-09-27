@@ -7,6 +7,5 @@ export { default as PrintPage } from './PrintPage';
 export { default as FaqPage } from './FaqPage';
 export { default as CalculatePage } from './CalculatePage';
 export { default as NotFoundPage } from './NotFoundPage';
-export { default as IntroducePage } from './IntroducePage';
 export { default as CheckResultPage } from './CheckResultPage';
 export { default as CallbackPage } from './CallbackPage';
