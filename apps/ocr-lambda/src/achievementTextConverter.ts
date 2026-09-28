@@ -366,12 +366,18 @@ const convertTable = (block: IRBlock, state: ConversionState): void => {
       return;
     }
 
-    // 행 자체에 과목별로 위치 대응된 학기가 없을 때만 이력 기반 추론을 쓴다 — 이 추론은
-    // 과목마다 다르게 나올 근거가 없으므로(inferMissingSemesterDigit 설명 참고) 행의 모든
-    // 과목에 같은 값을 적용한다.
-    const inferredDigit = ownSemesterDigits
-      ? undefined
-      : inferMissingSemesterDigit(subjects, usedSemestersBySubject);
+    // 행 자체에 과목별로 위치 대응된 학기가 아예 없을 때만(학기 칸 자체가 없던 행) 이력
+    // 기반 추론을 쓴다. semesterAttributionUncertain(학기 칸은 있었는데 길이가 안 맞는
+    // 경우)까지 이 추론에 맡기면, 실제로는 이 행 안에서 학기가 섞였을 수도 있는데 이력만
+    // 보고 행 전체를 한 학기로 확정해버려 리뷰에서 지적된 것과 똑같이 잘못 찍힐 수 있다
+    // (예: 국어·사회·도덕·역사가 1학기로 이미 확정된 뒤, 같은 표에 같은 네 과목이 학기
+    // 칸 "12"로 다시 나오면 실제로는 섞였을 수 있는데도 이력상 "나머지 학기"인 2학기로
+    // 전부 확정해버림). 그래서 semesterAttributionUncertain이면 추론도 시도하지 않고
+    // 바로 검수 대상으로 넘긴다.
+    const inferredDigit =
+      ownSemesterDigits || semesterAttributionUncertain
+        ? undefined
+        : inferMissingSemesterDigit(subjects, usedSemestersBySubject);
     const semesterDigitsForSubjects: string[] | undefined = ownSemesterDigits
       ? ownSemesterDigits.split('')
       : inferredDigit

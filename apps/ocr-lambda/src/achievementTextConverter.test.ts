@@ -128,6 +128,44 @@ test('학기 칸 길이가 과목 수보다 짧아 과목별 귀속을 확정할
   ]);
 });
 
+test('학기 칸이 있었지만 길이가 안 맞는 행은 이력이 있어도 추론하지 않고 검수 대상으로 남긴다', () => {
+  // 리뷰 지적 재현: 같은 표의 첫 행에서 국어·사회·도덕·역사가 학기 "1111"로 이미 확정된
+  // 뒤, 다음 행에 같은 네 과목이 학기 칸 "12"(길이 불일치, 위치 대응 불가)로 다시 나오면
+  // 이력 기반 추론(inferMissingSemesterDigit)이 "나머지 학기"인 2학기로 통째로 확정해
+  // 버릴 위험이 있었다. 실제로는 이 행 안에서 학기가 섞였을 수도 있으므로, 학기 칸 자체가
+  // 없던 행과 달리 이 행은 이력 추론도 쓰지 않고 검수 대상으로 남아야 한다.
+  const rowASubjects = '국어사회도덕역사';
+  const rowAScores = [1, 2, 3, 4].map(scoreLine).join('\n');
+  const rowBScores = [5, 6, 7, 8].map(scoreLine).join('\n');
+
+  const table = makeTableBlock([
+    ['1111', rowASubjects, rowAScores],
+    ['12', rowASubjects, rowBScores],
+  ]);
+
+  const result = convertKordocBlocks([SAFE_SECTION, makeTextBlock('[1학년]'), table]);
+
+  assert.equal(
+    result.rawText,
+    [
+      '[1학년]',
+      '1',
+      `국어 ${scoreLine(1)}`,
+      `사회 ${scoreLine(2)}`,
+      `도덕 ${scoreLine(3)}`,
+      `역사 ${scoreLine(4)}`,
+    ].join('\n'),
+  );
+  assert.deepEqual(result.unrecognizedSubjectBlobs, [
+    [
+      `국어 ${scoreLine(5)}`,
+      `사회 ${scoreLine(6)}`,
+      `도덕 ${scoreLine(7)}`,
+      `역사 ${scoreLine(8)}`,
+    ].join(' / '),
+  ]);
+});
+
 test('같은 표 안에서 학기 칸이 비어도 이미 확정된 반대 학기로 안전하게 추론한다(기존 동작 회귀 테스트)', () => {
   const table = makeTableBlock([
     ['11', '국어사회', [1, 2].map(scoreLine).join('\n')],
