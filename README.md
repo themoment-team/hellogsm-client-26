@@ -29,7 +29,8 @@ $ pnpm --filter @repo/constants test
 $ pnpm --filter @repo/ui test
 $ pnpm --filter @repo/ocr-lambda test
 
-# 6. E2E 테스트 (로컬에 client 앱이 떠 있어야 함 — 별도로 `pnpm --filter client dev` 실행 후 진행)
+# 6. E2E 테스트 (client/admin 두 앱 모두 사전에 `pnpm build` 필요 — Playwright webServer가
+#    두 앱을 `next start`로 자동 실행함)
 $ pnpm test:e2e
 ```
 
