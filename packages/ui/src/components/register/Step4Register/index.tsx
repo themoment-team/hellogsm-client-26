@@ -13,11 +13,7 @@ import {
   useWatch,
 } from 'react-hook-form';
 
-import {
-  ACHIEVEMENT_FIELD_LIST,
-  GENERAL_SUBJECTS,
-  getUsedAchievementFields,
-} from '@repo/constants';
+import { ACHIEVEMENT_FIELD_LIST, GENERAL_SUBJECTS } from '@repo/constants';
 import {
   AchievementType,
   FreeSemesterValueEnum,
@@ -32,6 +28,7 @@ import { FormController, LiberalSystemSwitch, SchoolRecordUploader } from '../..
 import { Input } from '../../../shadcn';
 import { ArtPhysicalForm, FreeGradeForm, FreeSemesterForm, NonSubjectForm } from '../../form';
 
+import { mapOcrAchievementFields } from './mapOcrAchievementFields';
 import { reorderAttendanceDaysForForm } from './reorderAttendanceDaysForForm';
 
 const formWrapper = [
@@ -300,17 +297,15 @@ const Step4Register = ({
     //
     // 기준이 되는 전형 값은 이 함수가 방금 setValue한 OCR 결과를 우선한다 — 렌더 시점에
     // 계산된 achievementList는 아직 OCR 이전 값이라 여기서는 쓸 수 없다.
-    const usedAchievementFields = getUsedAchievementFields({
+    // OCR이 인식하지 못한 칸은 null로 내려오는데, 기존 검증 로직이 null을 '입력 필요' 오류로
+    // 표시해 주므로 이 값을 그대로 반영하는 것만으로 검수 표시를 겸할 수 있다.
+    const mappedAchievementFields = mapOcrAchievementFields(achievement, {
       liberalSystem: achievement.liberalSystem ?? getValues('liberalSystem'),
       graduationType,
       freeSemester: achievement.freeSemester ?? getValues('freeSemester'),
     });
-
-    // OCR이 인식하지 못한 칸은 null로 내려오는데, 기존 검증 로직이 null을 '입력 필요' 오류로
-    // 표시해 주므로 이 값을 그대로 반영하는 것만으로 검수 표시를 겸할 수 있다.
     ACHIEVEMENT_FIELD_LIST.forEach((field) => {
-      const value = usedAchievementFields.includes(field) ? (achievement[field] ?? null) : null;
-      setValue(field, value as Step4FormType[typeof field]);
+      setValue(field, mappedAchievementFields[field] as Step4FormType[typeof field]);
     });
     setValue(
       'artsPhysicalAchievement',
