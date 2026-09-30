@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint src",
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc --noEmit",
+    "test": "tsx --test src/**/*.test.ts"
   },
   "dependencies": {
     "@aws-sdk/client-lambda": "^3.1123.0",
@@ -42,6 +43,7 @@
     "eslint": "^9.39.4",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.17",
+    "tsx": "^4.23.15",
     "typescript": "5.9.2"
   }
 }
