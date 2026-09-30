@@ -2,12 +2,14 @@ import { InvokeCommand, LambdaClient } from '@aws-sdk/client-lambda';
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
-import { memberUrl } from '@repo/api/lib';
+import { oneseoUrl } from '@repo/api/lib';
+
+import { verifyOcrFileOwnership } from './verifyOcrFileOwnership';
 
 // OCR 자체(kordoc + onnxruntime-node/sharp/@napi-rs/canvas 네이티브 바이너리)는 Vercel
 // 서버리스 함수의 250MB 크기 제한에 계속 부딪혀 별도 Lambda 컨테이너 이미지로 분리했다
-// (apps/ocr-lambda 참고). 이 라우트는 인증만 하고 objectKey를 그대로 Lambda에 동기
-// 호출로 넘긴 뒤 결과를 그대로 중계한다.
+// (apps/ocr-lambda 참고). 이 라우트는 인증·소유권 검증만 하고 objectKey를 그대로 Lambda에
+// 동기 호출로 넘긴 뒤 결과를 그대로 중계한다.
 export const runtime = 'nodejs';
 
 // Lambda 실행 시간(최대 120초, apps/ocr-lambda/README 참고)보다 여유 있게 잡는다.
@@ -20,35 +22,6 @@ const lambdaClient = new LambdaClient({ region: process.env.AWS_REGION });
 // 공용 post() 훅이 그대로 통한다.
 const errorResponse = (message: string, status: number) =>
   NextResponse.json({ code: status, message, status: `${status}` }, { status });
-
-/**
- * 이 라우트는 인증·요청 제한 없이 그대로 두면 로그인 없이도 누구나 S3에서 파일을 내려받아
- * OCR을 돌릴 수 있어 리소스 남용에 노출된다(리뷰 지적). Lambda를 호출하기 전에 로그인
- * 페이지들이 쓰는 것과 같은 SESSION 쿠키를 백엔드 인증 확인 엔드포인트로 검증해 비로그인
- * 요청을 걷어낸다. 요청 빈도 제한(rate limit)은 이 라우트 코드가 아니라 인프라(Vercel/
- * 백엔드) 쪽에서 적용하기로 했다.
- */
-const isAuthenticated = async (): Promise<boolean> => {
-  const session = (await cookies()).get('SESSION')?.value;
-  if (!session) return false;
-
-  try {
-    const response = await fetch(
-      new URL(memberUrl.getMyAuthInfo(), process.env.NEXT_PUBLIC_API_BASE_URL),
-      {
-        method: 'GET',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          Cookie: `SESSION=${session}`,
-        },
-      },
-    );
-    return response.ok;
-  } catch {
-    return false;
-  }
-};
 
 interface OcrLambdaSuccess {
   success: true;
@@ -68,14 +41,19 @@ interface OcrLambdaFailure {
 type OcrLambdaResult = OcrLambdaSuccess | OcrLambdaFailure;
 
 export async function POST(request: NextRequest) {
-  if (!(await isAuthenticated())) {
-    return errorResponse('로그인이 필요합니다.', 401);
-  }
-
   const { objectKey } = (await request.json().catch(() => ({}))) as { objectKey?: string };
 
   if (!objectKey) {
     return errorResponse('objectKey가 없습니다.', 400);
+  }
+
+  const session = (await cookies()).get('SESSION')?.value;
+  const ownership = await verifyOcrFileOwnership({
+    session,
+    path: oneseoUrl.postSchoolRecordOcrDownloadUrl(objectKey),
+  });
+  if (!ownership.ok) {
+    return errorResponse(ownership.message, ownership.status);
   }
 
   const functionName = process.env.OCR_LAMBDA_FUNCTION_NAME;
