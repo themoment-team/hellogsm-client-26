@@ -1,11 +1,15 @@
 import { GraduationType } from '@repo/types';
 
-const addParameters = (key: string, value: number | string | boolean | undefined) => {
+const addParam = (
+  searchParams: URLSearchParams,
+  key: string,
+  value: number | string | boolean | undefined,
+) => {
   if (value === undefined || value === null || value === '') {
-    return '';
+    return;
   }
 
-  return `&${key}=${String(value)}`;
+  searchParams.set(key, String(value));
 };
 
 export const exampleUrl = {
@@ -40,8 +44,19 @@ export const oneseoUrl = {
     isSubmitted?: string,
     keyword?: string,
     status?: string,
-  ) =>
-    `/oneseo/v3/oneseo/search?page=${page}&size=${size}&testResultTag=${testResultTag}${addParameters('screeningTag', screeningTag)}${addParameters('isSubmitted', isSubmitted)}${addParameters('keyword', keyword)}${addParameters('status', status)}`,
+  ) => {
+    const searchParams = new URLSearchParams();
+
+    searchParams.set('page', String(page));
+    searchParams.set('size', String(size));
+    searchParams.set('testResultTag', testResultTag);
+    addParam(searchParams, 'screeningTag', screeningTag);
+    addParam(searchParams, 'isSubmitted', isSubmitted);
+    addParam(searchParams, 'keyword', keyword);
+    addParam(searchParams, 'status', status);
+
+    return `/oneseo/v3/oneseo/search?${searchParams.toString()}`;
+  },
   getExcel: () => '/oneseo/v3/excel',
   patchArrivedStatus: (memberId: number) => `/oneseo/v3/arrived-status/${memberId}`,
   patchAgreeDocStatus: (memberId: number) => `/oneseo/v3/entrance-intention/${memberId}`,
