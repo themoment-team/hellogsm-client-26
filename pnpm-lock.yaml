@@ -296,9 +296,15 @@ importers:
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
+      '@types/node':
+        specifier: ^20.19.33
+        version: 20.19.33
       eslint:
         specifier: ^9.39.4
         version: 9.39.4(jiti@1.21.7)
+      tsx:
+        specifier: ^4.23.15
+        version: 4.23.15
       typescript:
         specifier: 5.9.2
         version: 5.9.2
@@ -544,6 +550,9 @@ importers:
       tailwindcss:
         specifier: ^3.4.17
         version: 3.4.19(tsx@4.23.15)(yaml@2.9.0)
+      tsx:
+        specifier: ^4.23.15
+        version: 4.23.15
       typescript:
         specifier: 5.9.2
         version: 5.9.2
