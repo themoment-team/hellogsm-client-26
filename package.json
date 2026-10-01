@@ -6,6 +6,7 @@
     "dev": "turbo run dev --concurrency=11",
     "lint": "turbo run lint",
     "check-types": "turbo run check-types",
+    "test": "turbo run test",
     "test:e2e": "playwright test",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,md}\"",
     "lint:fix": "turbo run lint -- --fix"

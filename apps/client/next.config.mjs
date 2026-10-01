@@ -26,6 +26,13 @@ const nextConfig = {
       destination: `${process.env.NEXT_PUBLIC_API_BASE_URL}/:path*`,
     },
   ],
+  redirects: async () => [
+    {
+      source: '/introduce',
+      destination: 'https://themoment-landing.hellogsm.kr/',
+      permanent: true,
+    },
+  ],
 };
 
 export default withSentryConfig(nextConfig, {

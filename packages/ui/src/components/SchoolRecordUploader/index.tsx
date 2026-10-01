@@ -135,14 +135,22 @@ const SchoolRecordUploader = ({
         response.meta.confidence < OCR_FAILURE_CONFIDENCE_THRESHOLD;
       setRecognitionFailed(failed);
 
+      // unrecognizedSubjectBlobs(OCR 표 변환 단계에서 과목/학기를 확정하지 못해 걸러낸
+      // 항목)는 rawText에 실려 나가지 않아 백엔드 추출(extractSchoolRecord)이 아예 보지
+      // 못한다 — 그래서 meta.warnings에도 잡히지 않는다(리뷰 지적: 사용자에게 누락 사실이
+      // 전혀 전달되지 않았었다). 완전한 검수 UI 대신, 최소한 "몇 개 항목은 직접 확인이
+      // 필요하다"는 기존 경고에 이 개수도 합산해 사용자가 놓치지 않게 한다.
+      const reviewItemCount =
+        response.meta.warnings.length + extraction.unrecognizedSubjectBlobs.length;
+
       if (failed) {
         toast.error(
           '스캔 이미지라 자동 인식이 어려웠어요. 성적·출결·봉사 항목을 직접 입력해 주세요.',
           toastOption,
         );
-      } else if (response.meta.warnings.length > 0) {
+      } else if (reviewItemCount > 0) {
         toast.warn(
-          `생기부 내용을 초안으로 채웠어요. ${response.meta.warnings.length}개 항목은 직접 확인이 필요해요.`,
+          `생기부 내용을 초안으로 채웠어요. ${reviewItemCount}개 항목은 직접 확인이 필요해요.`,
           toastOption,
         );
       } else {

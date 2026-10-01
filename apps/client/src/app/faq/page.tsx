@@ -1,6 +1,12 @@
+import type { Metadata } from 'next';
+
 import { FaqListResponse, FaqPageData } from '@repo/types';
 
 import { FaqPage } from '@/pageContainer';
+
+export const metadata: Metadata = {
+  title: '자주 묻는 질문',
+};
 
 const getFaqData = async (): Promise<FaqPageData[]> => {
   const response = await fetch(

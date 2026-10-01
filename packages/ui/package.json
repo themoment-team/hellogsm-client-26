@@ -17,7 +17,8 @@
     "check-types": "tsc --noEmit",
     "dev:styles": "tailwindcss -i ./src/styles.css -o ./dist/index.css --watch",
     "dev:components": "tsc --watch",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "test": "tsx --test src/**/*.test.ts"
   },
   "peerDependencies": {
     "next": "^16.0.0",
@@ -59,6 +60,7 @@
     "postcss": "^8.5.6",
     "shadcn": "^3.8.5",
     "tailwindcss": "^3.4.17",
+    "tsx": "^4.23.15",
     "typescript": "5.9.2"
   }
 }

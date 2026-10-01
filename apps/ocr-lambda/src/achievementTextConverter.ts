@@ -35,7 +35,8 @@ const GRADE_HEADING = /^\[?\s*([1-3])?\s*학년\s*]?$/;
 // 숫자를 이어붙여서 내보낸다(예: 3과목 병합 → "111", 8과목 병합 → "11111111"). 그래서
 // 정확히 한 글자짜리 "1"/"2"만 인정하면 이런 병합 행의 학기를 전부 놓친다. 실제로는
 // 한 행에 서로 다른 학기가 섞여 병합되는 경우도 있어(예: "11111111222") 순수 반복이
-// 아닐 수 있다 — 이때도 놓치지 않도록 1/2로만 이루어진 문자열이면 다수결로 학기를 정한다.
+// 아닐 수 있다 — 이때도 놓치지 않도록 1/2로만 이루어진 문자열이면 인정하고, 병합 셀의
+// 각 글자를 같은 순서의 과목에 그대로 대응시켜 과목별로 학기를 정한다(convertTable 참고).
 const SEMESTER_DIGITS = /^[12]+$/;
 // 원점수/과목평균 부분은 선택 사항이다. 예체능처럼 성취도만 있는 과목이 이 표에 섞여
 // 나올 가능성을 배제할 수 없어, 점수 없이 성취도 글자만 있는 줄도 원점수/성취도 열로 인식한다.
@@ -140,14 +141,7 @@ const resolveSubjects = (
   return { subjects: null, fallbackText: candidates[0] ? textOrEmpty(candidates[0]) : undefined };
 };
 
-/** "1"/"2"로만 이루어진 문자열에서 더 많이 나온 숫자를 고른다(병합 행에 서로 다른 학기가 섞인 경우 대비) */
-const majoritySemesterDigit = (digits: string): string => {
-  const oneCount = (digits.match(/1/g) ?? []).length;
-  const twoCount = digits.length - oneCount;
-  return oneCount >= twoCount ? '1' : '2';
-};
-
-/** 학기 칸의 원문(다수결 적용 전)을 그대로 돌려준다 — 길이가 과목 수와 안 맞을 때 잘라 쓰기 위함 */
+/** 학기 칸의 원문을 그대로 돌려준다 — 길이가 과목 수와 안 맞을 때 잘라 쓰거나 다음 행에 넘기기 위함 */
 const findSemesterDigitString = (cells: IRCell[]): string | undefined => {
   for (const cell of cells) {
     const text = textOrEmpty(cell).trim();
@@ -169,6 +163,9 @@ const cellTextAt = (cells: IRCell[], index: number): string => {
   const cell = cells[index];
   return cell ? textOrEmpty(cell) : '';
 };
+
+/** semesterDigitsForSubjects는 항상 subjects와 길이가 같으므로, 이 안에서 인덱싱은 안전하다 */
+const digitAt = (digits: string[], index: number): string => digits[index] ?? '';
 
 /** 출결상황 표의 열 헤딩. 이 행을 만나면 이후 데이터 행을 출결 전용 형식으로 처리한다 */
 const isAttendanceHeaderRow = (cells: IRCell[]): boolean =>
@@ -331,16 +328,28 @@ const convertTable = (block: IRBlock, state: ConversionState): void => {
       : achievementLines;
     const expectedCount = achievementLines.length;
 
-    let ownSemesterDigit: string | undefined;
+    // ownSemesterDigits는 "이 행의 각 과목에 위치로 대응되는 학기 숫자 문자열"이다(길이가
+    // expectedCount와 정확히 같을 때만 위치 대응을 신뢰할 수 있다 — 병합 셀은 항상 같은
+    // 순서로 이어붙기 때문이다). 더 길면 다음 행 몫이 섞여 붙은 것이니 앞부분만 이 행에
+    // 쓰고 나머지는 다음 행에 넘긴다. 더 짧으면 학기 칸 일부가 비어 있다는 뜻인데, 그러면
+    // 어느 과목이 빠졌는지 알 길이 없어 위치 대응 자체가 성립하지 않는다 — 이때 다수결처럼
+    // 아무 학기나 행 전체에 밀어 넣으면 실제로는 다른 학기인 과목이 잘못 찍히므로, 이 행의
+    // 학기 칸 정보는 버리고(이월도 폐기) 아래 추론(inferMissingSemesterDigit)에 맡긴다.
+    // 추론마저 실패하면(semesterAttributionUncertain) 자동 기입 대신 검수 대상으로 남긴다.
+    let ownSemesterDigits: string | undefined;
     let usedCarry = false;
+    let semesterAttributionUncertain = false;
     if (rawSemesterDigits && rawSemesterDigits.length > expectedCount) {
-      ownSemesterDigit = majoritySemesterDigit(rawSemesterDigits.slice(0, expectedCount));
+      ownSemesterDigits = rawSemesterDigits.slice(0, expectedCount);
       pendingSemesterCarry = rawSemesterDigits.slice(expectedCount);
+    } else if (rawSemesterDigits && rawSemesterDigits.length === expectedCount) {
+      ownSemesterDigits = rawSemesterDigits;
+      pendingSemesterCarry = undefined;
     } else if (rawSemesterDigits) {
-      ownSemesterDigit = majoritySemesterDigit(rawSemesterDigits);
+      semesterAttributionUncertain = true;
       pendingSemesterCarry = undefined;
     } else if (pendingSemesterCarry && pendingSemesterCarry.length === expectedCount) {
-      ownSemesterDigit = majoritySemesterDigit(pendingSemesterCarry);
+      ownSemesterDigits = pendingSemesterCarry;
       usedCarry = true;
       pendingSemesterCarry = undefined;
     } else {
@@ -357,21 +366,48 @@ const convertTable = (block: IRBlock, state: ConversionState): void => {
       return;
     }
 
-    const semesterDigit =
-      ownSemesterDigit ?? inferMissingSemesterDigit(subjects, usedSemestersBySubject);
+    // 행 자체에 과목별로 위치 대응된 학기가 아예 없을 때만(학기 칸 자체가 없던 행) 이력
+    // 기반 추론을 쓴다. semesterAttributionUncertain(학기 칸은 있었는데 길이가 안 맞는
+    // 경우)까지 이 추론에 맡기면, 실제로는 이 행 안에서 학기가 섞였을 수도 있는데 이력만
+    // 보고 행 전체를 한 학기로 확정해버려 리뷰에서 지적된 것과 똑같이 잘못 찍힐 수 있다
+    // (예: 국어·사회·도덕·역사가 1학기로 이미 확정된 뒤, 같은 표에 같은 네 과목이 학기
+    // 칸 "12"로 다시 나오면 실제로는 섞였을 수 있는데도 이력상 "나머지 학기"인 2학기로
+    // 전부 확정해버림). 그래서 semesterAttributionUncertain이면 추론도 시도하지 않고
+    // 바로 검수 대상으로 넘긴다.
+    const inferredDigit =
+      ownSemesterDigits || semesterAttributionUncertain
+        ? undefined
+        : inferMissingSemesterDigit(subjects, usedSemestersBySubject);
+    const semesterDigitsForSubjects: string[] | undefined = ownSemesterDigits
+      ? ownSemesterDigits.split('')
+      : inferredDigit
+        ? subjects.map(() => inferredDigit)
+        : undefined;
+
     const gradeForRow = resolveGradeForRow(state, subjects);
     kordocDebug(
-      `[KORDOC-DEBUG] row ${rowIndex}: 성공. grade=${gradeForRow ?? '(없음)'}(heading=${state.headingGrade ?? '-'},lastGeneral=${state.lastGeneralSubjectsGrade ?? '-'}) semester=${semesterDigit ?? '(없음)'}${usedCarry ? '(이월)' : ownSemesterDigit ? '' : semesterDigit ? '(추론)' : ''} subjects=${JSON.stringify(subjects)} cells=${JSON.stringify(rawCells)}`,
+      `[KORDOC-DEBUG] row ${rowIndex}: 성공. grade=${gradeForRow ?? '(없음)'}(heading=${state.headingGrade ?? '-'},lastGeneral=${state.lastGeneralSubjectsGrade ?? '-'}) semesters=${semesterDigitsForSubjects ? JSON.stringify(semesterDigitsForSubjects) : '(없음)'}${usedCarry ? '(이월)' : ownSemesterDigits ? '' : inferredDigit ? '(추론)' : ''} subjects=${JSON.stringify(subjects)} cells=${JSON.stringify(rawCells)}`,
     );
-    if (!semesterDigit) return;
+    if (!semesterDigitsForSubjects) {
+      // 학기 칸 정보가 있었는데도(길이 불일치) 과목별 귀속을 끝내 확정하지 못한 경우에만
+      // 검수 대상으로 남긴다 — 애초에 학기 칸 자체가 없던 행(첫 학기가 나오기 전 등)까지
+      // 전부 검수 큐에 밀어 넣으면 정상적으로 건너뛰어야 할 행까지 뒤섞여 검수 부담만 커진다.
+      if (semesterAttributionUncertain) {
+        const blob = subjects
+          .map((subject, index) => `${subject} ${scoreLines[index]}`)
+          .join(' / ');
+        state.unrecognizedSubjectBlobs.push(blob);
+      }
+      return;
+    }
     // 학년을 하나도 확정 못 한 행(첫 [N학년] 헤딩보다 앞서 나온 행 등)을 그대로 출력하면,
     // 이전에 이미 써넣은 "[N학년]" 줄이 아직 유효한 상태라 서버 파서가 이 학기·과목 줄을
     // 직전 학년 것으로 잘못 붙여버릴 수 있다(리뷰 지적). 학년이 없으면 이 행 자체를 건너뛴다.
     if (gradeForRow === undefined) return;
 
-    subjects.forEach((subject) => {
+    subjects.forEach((subject, index) => {
       const seen = usedSemestersBySubject.get(subject) ?? new Set<string>();
-      seen.add(semesterDigit);
+      seen.add(digitAt(semesterDigitsForSubjects, index));
       usedSemestersBySubject.set(subject, seen);
     });
 
@@ -384,11 +420,22 @@ const convertTable = (block: IRBlock, state: ConversionState): void => {
       state.lastEmittedGrade = gradeForRow;
     }
 
-    state.lines.push(semesterDigit);
+    // 한 행 안에서도 과목마다 학기가 다를 수 있다(병합 행에 서로 다른 학기가 섞인 경우) —
+    // 학기가 바뀌는 경계마다 새 학기 줄을 끼워 넣어, 같은 학기끼리 묶어서 내보낸다.
+    let groupStart = 0;
+    for (let index = 0; index <= subjects.length; index += 1) {
+      const isGroupBoundary =
+        index === subjects.length ||
+        digitAt(semesterDigitsForSubjects, index) !==
+          digitAt(semesterDigitsForSubjects, groupStart);
+      if (!isGroupBoundary) continue;
 
-    subjects.forEach((subject, index) => {
-      state.lines.push(`${subject} ${scoreLines[index]}`);
-    });
+      state.lines.push(digitAt(semesterDigitsForSubjects, groupStart));
+      for (let subjectIndex = groupStart; subjectIndex < index; subjectIndex += 1) {
+        state.lines.push(`${subjects[subjectIndex]} ${scoreLines[subjectIndex]}`);
+      }
+      groupStart = index;
+    }
   });
 };
 

@@ -47,6 +47,8 @@ import EditBar from '../EditBar';
 import { Step1Register, Step2Register, Step3Register, Step4Register } from '../register';
 import StepBar from '../StepBar';
 
+import { normalizeAchievements } from './normalizeAchievements';
+
 /** step 4에서 마지막 입력 이후 이 시간만큼 입력이 없으면 자동으로 임시저장한다 */
 const IDLE_AUTO_SAVE_DELAY = 2 * 60 * 1000;
 
@@ -274,14 +276,9 @@ const StepWrapper = ({ data, step, info, memberId, type, isModifyApproved }: Ste
       schoolTeacherName,
       schoolTeacherPhoneNumber,
     } = step3UseForm.getValues();
+    const step4FormValues = step4UseForm.getValues();
     const {
       liberalSystem,
-      achievement1_1,
-      achievement1_2,
-      achievement2_1,
-      achievement2_2,
-      achievement3_1,
-      achievement3_2,
       newSubjects,
       artsPhysicalAchievement,
       absentDays,
@@ -289,7 +286,15 @@ const StepWrapper = ({ data, step, info, memberId, type, isModifyApproved }: Ste
       volunteerTime,
       freeSemester,
       gedAvgScore,
-    } = step4UseForm.getValues();
+    } = step4FormValues;
+    const {
+      achievement1_1,
+      achievement1_2,
+      achievement2_1,
+      achievement2_2,
+      achievement3_1,
+      achievement3_2,
+    } = normalizeAchievements(step4FormValues, graduationType);
 
     const body: PostOneseoType = {
       // step 1
@@ -530,14 +535,9 @@ const StepWrapper = ({ data, step, info, memberId, type, isModifyApproved }: Ste
   const handleCheckScoreButtonClick = () => {
     if (isClient) sendGAEvent('score_calculate_click', { step: Number(step) });
 
+    const step4FormValues = step4UseForm.getValues();
     const {
       liberalSystem,
-      achievement1_1,
-      achievement1_2,
-      achievement2_1,
-      achievement2_2,
-      achievement3_1,
-      achievement3_2,
       newSubjects,
       artsPhysicalAchievement,
       absentDays,
@@ -545,7 +545,15 @@ const StepWrapper = ({ data, step, info, memberId, type, isModifyApproved }: Ste
       volunteerTime,
       freeSemester,
       gedAvgScore,
-    } = step4UseForm.getValues();
+    } = step4FormValues;
+    const {
+      achievement1_1,
+      achievement1_2,
+      achievement2_1,
+      achievement2_2,
+      achievement3_1,
+      achievement3_2,
+    } = normalizeAchievements(step4FormValues, graduationType);
 
     const body: MiddleSchoolAchievementType | GEDAchievementType = isGED
       ? {
@@ -564,7 +572,9 @@ const StepWrapper = ({ data, step, info, memberId, type, isModifyApproved }: Ste
           absentDays: absentDays!,
           attendanceDays: attendanceDays!,
           volunteerTime: volunteerTime!,
-          freeSemester: freeSemester || '',
+          // 제출 경로와 같은 이유로 ''를 보내지 않는다 — 서버 enum은 1-1~3-2만 받는다.
+          // 제출 쪽은 이미 null로 통일했는데(930119eb) 이 계산 경로만 남아 있었다.
+          freeSemester: liberalSystem === LiberalSystemValueEnum.FREE_GRADE ? null : freeSemester,
           generalSubjects: [...GENERAL_SUBJECTS],
           artsPhysicalSubjects: [...ARTS_PHYSICAL_SUBJECTS],
         };
