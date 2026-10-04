@@ -22,7 +22,16 @@ interface Section3Props {
 
 const Section3 = ({ isServerHealthy }: Section3Props) => {
   return (
-    <section className={cn('w-full', 'bg-white', 'relative', 'py-[11.25rem]')}>
+    <section
+      className={cn(
+        'w-full',
+        'bg-white',
+        'relative',
+        'py-[11.25rem]',
+        'break-keep',
+        '[overflow-wrap:anywhere]',
+      )}
+    >
       <div
         className={cn(
           'flex',
@@ -84,20 +93,37 @@ const Section3 = ({ isServerHealthy }: Section3Props) => {
           )}
         >
           <div
-            className={cn('grid', 'grid-cols-6', 'grid-rows-3', 'gap-[0.75rem]', 'min-h-[39rem]')}
+            className={cn(
+              'grid',
+              'grid-cols-1',
+              'gap-[0.75rem]',
+              'sm:grid-cols-6',
+              'sm:grid-rows-3',
+              'sm:min-h-[39rem]',
+            )}
           >
-            <div className={cn('col-span-2', 'row-span-1', 'rounded-[0.75rem]', 'bg-lime-400 p-6')}>
+            <div
+              className={cn(
+                'hidden',
+                'sm:block',
+                'sm:col-span-2',
+                'row-span-1',
+                'rounded-[0.75rem]',
+                'bg-lime-400 p-6',
+              )}
+            >
               <div className={cn('flex', 'h-full', 'w-full', 'items-center', 'justify-center')}>
                 <I.StarIcon />
               </div>
             </div>
             <div
               className={cn(
-                'col-span-4',
+                'sm:col-span-4',
                 'row-span-1',
                 'flex',
                 'flex-col',
                 'justify-between',
+                'gap-6',
                 'rounded-[0.75rem]',
                 'p-6',
                 'bg-sky-800',
@@ -106,14 +132,14 @@ const Section3 = ({ isServerHealthy }: Section3Props) => {
               <p
                 className={cn(
                   'self-start',
-                  'text-[1rem][1.75rem]',
+                  'text-[1rem]/[1.75rem]',
                   'xs:text-xl',
                   'font-medium',
                   'text-white',
                 )}
               >
                 최종 합격하려면 중학교 내신 성적이
-                <br /> 최소 몇 %가 되어야 할까?{'\u00A0'} 🤷🏻‍♀️
+                <br className={cn('hidden', 'sm:inline')} /> 최소 몇 %가 되어야 할까?{'\u00A0'} 🤷🏻‍♀️
               </p>
               <Link href="/faq" className={cn([...buttonStyle, 'self-end'])}>
                 FAQ 바로가기
@@ -122,11 +148,12 @@ const Section3 = ({ isServerHealthy }: Section3Props) => {
 
             <div
               className={cn(
-                'col-span-3',
+                'sm:col-span-3',
                 'row-span-1',
                 'flex',
                 'flex-col',
                 'justify-between',
+                'gap-6',
                 'rounded-[0.75rem]',
                 'bg-sky-400',
                 'p-6',
@@ -137,7 +164,7 @@ const Section3 = ({ isServerHealthy }: Section3Props) => {
                   className={cn(
                     'self-start',
                     'pt-[0.25rem]',
-                    'text-[1rem][1.75rem]',
+                    'text-[1rem]/[1.75rem]',
                     'xs:text-xl',
                     'font-medium',
                   )}
@@ -154,21 +181,24 @@ const Section3 = ({ isServerHealthy }: Section3Props) => {
             </div>
             <div
               className={cn(
-                'col-span-3',
+                'sm:col-span-3',
                 'row-span-1',
                 'flex',
                 'flex-col',
                 'justify-between',
+                'gap-6',
                 'rounded-[0.75rem]',
                 'p-6',
+                "bg-[url('/images/Pattern.png')]",
+                'bg-center',
+                'bg-no-repeat',
+                'bg-[length:150%]',
+                'max-smxm:bg-cover',
               )}
-              style={{
-                background: "url('/images/Pattern.png') center / 150% no-repeat",
-              }}
             >
               <div>
                 <p
-                  className={cn('self-start', 'text-[1rem][1.75rem]', 'xs:text-xl', 'font-medium')}
+                  className={cn('self-start', 'text-[1rem]/[1.75rem]', 'xs:text-xl', 'font-medium')}
                 >
                   모의 성적 계산하기
                 </p>
@@ -187,10 +217,11 @@ const Section3 = ({ isServerHealthy }: Section3Props) => {
             <div
               className={cn(
                 'flex',
-                'col-span-4',
+                'sm:col-span-4',
                 'row-span-1',
                 'flex-col',
                 'justify-between',
+                'gap-6',
                 'rounded-[0.75rem]',
                 'bg-sky-800',
                 'p-6',
@@ -202,7 +233,8 @@ const Section3 = ({ isServerHealthy }: Section3Props) => {
                   className={cn(
                     'self-start',
                     'pt-[0.5rem]',
-                    'text-xl',
+                    'text-[1rem]/[1.75rem]',
+                    'xs:text-xl',
                     'font-medium',
                     'text-white',
                   )}
@@ -225,7 +257,15 @@ const Section3 = ({ isServerHealthy }: Section3Props) => {
               </div>
             </div>
             <div
-              className={cn('col-span-2', 'row-span-1', 'rounded-[0.75rem]', 'bg-lime-400', 'p-6')}
+              className={cn(
+                'hidden',
+                'sm:block',
+                'sm:col-span-2',
+                'row-span-1',
+                'rounded-[0.75rem]',
+                'bg-lime-400',
+                'p-6',
+              )}
             >
               <div className={cn('flex', 'h-full', 'w-full', 'items-center', 'justify-center')}>
                 <I.Star2Icon />
