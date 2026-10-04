@@ -1,4 +1,3 @@
- 
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -91,7 +90,8 @@ const CalculatePage = () => {
           absentDays: absentDays!,
           attendanceDays: attendanceDays!,
           volunteerTime: volunteerTime!,
-          freeSemester: freeSemester || '',
+          // 서버 enum은 1-1~3-2만 받으므로 ''를 보내지 않는다(원서 제출 경로와 동일)
+          freeSemester: liberalSystem === LiberalSystemValueEnum.FREE_GRADE ? null : freeSemester,
           generalSubjects: [...GENERAL_SUBJECTS],
           artsPhysicalSubjects: [...ARTS_PHYSICAL_SUBJECTS],
         };

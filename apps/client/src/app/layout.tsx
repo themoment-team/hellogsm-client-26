@@ -12,7 +12,10 @@ import { getIsServerHealthy } from '@/utils';
 import Provider from './provider';
 
 export const metadata: Metadata = {
-  title: '광주소프트웨어마이스터고등학교 입학지원 서비스',
+  title: {
+    default: '광주소프트웨어마이스터고등학교 입학지원 서비스',
+    template: '%s | Hello, GSM',
+  },
   description: '광주소프트웨어마이스터고등학교 입학지원 서비스 홈페이지입니다.',
   applicationName: 'Hello, GSM',
   keywords: [

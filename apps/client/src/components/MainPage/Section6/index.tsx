@@ -10,6 +10,7 @@ const Section6 = () => {
         'justify-center',
         'pb-20',
         'pt-10',
+        'px-6',
         'bg-white',
         'gap-20',
       )}
@@ -17,16 +18,22 @@ const Section6 = () => {
       <h2
         className={cn(
           'font-bold',
-          'text-[2rem]',
-          'leading-[3rem]',
-          'whitespace-pre-wrap',
+          'text-[1.25rem]/[2rem]',
+          'xs:text-[1.5rem]/[2.25rem]',
+          'sm:text-[2rem]/[3rem]',
+          'break-keep',
+          '[overflow-wrap:anywhere]',
+          'text-balance',
           'text-[#292B2F]',
           'text-center',
         )}
       >
-        광주소프트웨어고등학교에 대해 더 알아보고 싶다면?
+        광주소프트웨어마이스터고등학교에 대해 더 알아보고 싶다면?
         <br />
-        학과 체험 신청 서비스 <span className={cn('text-[#4A80F8]')}>Ready, GSM</span>도 있습니다
+        학과 체험 신청 서비스{' '}
+        <span className={cn('whitespace-nowrap')}>
+          <span className={cn('text-[#4A80F8]')}>Ready, GSM</span>도 있습니다
+        </span>
       </h2>
       <a
         href="https://www.ready.hellogsm.kr/"

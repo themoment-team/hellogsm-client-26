@@ -5,6 +5,8 @@ import { ComputerRecommendedPage, StepWrapper } from '@repo/ui/components';
 
 import { getOneseoByMemberId } from '@/app/apis';
 
+import { resolveInvalidStepRedirectPath } from './resolveInvalidStepRedirectPath';
+
 interface EditProps {
   params: Promise<{ memberId: string }>;
   searchParams?: Promise<{ [key: string]: string | undefined }>;
@@ -14,14 +16,13 @@ export default async function Edit(props: EditProps) {
   const searchParams = await props.searchParams;
   const params = await props.params;
 
-  const {
-    memberId
-  } = params;
+  const { memberId } = params;
 
   const step = searchParams?.step;
   const id = Number(memberId);
 
-  if (!step || !['1', '2', '3', '4'].includes(step)) redirect(`/register/${id}?step=1`);
+  const redirectPath = resolveInvalidStepRedirectPath(id, step);
+  if (redirectPath) redirect(redirectPath);
 
   const data = await getOneseoByMemberId(id);
 

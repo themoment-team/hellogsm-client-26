@@ -1,7 +1,10 @@
-import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import type { Readable } from 'node:stream';
+
+import { GetObjectCommand, HeadObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { parse } from 'kordoc';
 
 import { convertKordocBlocks } from './achievementTextConverter';
+import { FileTooLargeError, readBodyWithLimit } from './s3Download';
 
 const MAX_FILE_SIZE = 30 * 1024 * 1024;
 
@@ -48,24 +51,37 @@ export const handler = async (event: OcrLambdaEvent): Promise<OcrLambdaResult> =
     return failure(400, 'objectKey가 없습니다.');
   }
 
+  try {
+    const head = await s3Client.send(
+      new HeadObjectCommand({ Bucket: process.env.AWS_S3_BUCKET, Key: objectKey }),
+    );
+    if (head.ContentLength !== undefined && head.ContentLength > MAX_FILE_SIZE) {
+      return failure(400, '파일 용량은 30MB 이하만 지원합니다.');
+    }
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('[ocr-lambda] S3 객체 크기를 확인하지 못함', error);
+    return failure(404, '업로드된 파일을 찾지 못했어요. 다시 업로드해주세요.');
+  }
+
   let buffer: Buffer;
   try {
     const object = await s3Client.send(
       new GetObjectCommand({ Bucket: process.env.AWS_S3_BUCKET, Key: objectKey }),
     );
-    const byteArray = await object.Body?.transformToByteArray();
-    if (!byteArray) {
+    if (!object.Body) {
       throw new Error('empty S3 object body');
     }
-    buffer = Buffer.from(byteArray);
+    // Content-Length를 이미 확인했더라도 실제 전송 바이트 수가 다를 수 있으므로,
+    // 다운로드 중에도 상한을 적용해 메모리 사용량을 제한한다.
+    buffer = await readBodyWithLimit(object.Body as Readable, MAX_FILE_SIZE);
   } catch (error) {
+    if (error instanceof FileTooLargeError) {
+      return failure(400, '파일 용량은 30MB 이하만 지원합니다.');
+    }
     // eslint-disable-next-line no-console
     console.error('[ocr-lambda] S3에서 파일을 내려받지 못함', error);
     return failure(404, '업로드된 파일을 찾지 못했어요. 다시 업로드해주세요.');
-  }
-
-  if (buffer.byteLength > MAX_FILE_SIZE) {
-    return failure(400, '파일 용량은 30MB 이하만 지원합니다.');
   }
 
   // 손상되거나 암호화된 PDF는 kordoc이 ParseFailure로 감싸 돌려주지 않고 그냥 throw할 수

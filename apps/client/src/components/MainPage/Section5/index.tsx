@@ -43,7 +43,16 @@ const Elements = [
 const Section5 = () => {
   return (
     <section
-      className={cn('flex', 'flex-col', 'bg-white', 'pt-[11.25rem]', 'pb-[7.5rem]', 'w-full')}
+      className={cn(
+        'flex',
+        'flex-col',
+        'bg-white',
+        'pt-[11.25rem]',
+        'pb-[7.5rem]',
+        'w-full',
+        'break-keep',
+        '[overflow-wrap:anywhere]',
+      )}
     >
       <div className={cn('flex', 'justify-center', 'gap-[4.25rem]', 'flex-col')}>
         <div
@@ -73,7 +82,14 @@ const Section5 = () => {
               글로벌 소프트웨어 학과 소개
             </span>
           </div>
-          <span className={cn('text-gray-700', 'sm:text-[1.25rem]/[1.75rem]', 'font-normal')}>
+          <span
+            className={cn(
+              'text-gray-700',
+              'text-center',
+              'sm:text-[1.25rem]/[1.75rem]',
+              'font-normal',
+            )}
+          >
             체계적인 교육과정을 제공하는 소프트웨어 학과
           </span>
         </div>
@@ -96,6 +112,9 @@ const Section5 = () => {
             'max-sm:flex-nowrap',
             'max-sm:justify-start',
             'max-sm:pb-4',
+            'max-sm:snap-x',
+            'max-sm:snap-mandatory',
+            'max-sm:scroll-px-6',
           )}
         >
           {Elements.map((element, index) => (
@@ -103,13 +122,14 @@ const Section5 = () => {
               key={index}
               className={cn(
                 'flex',
-                'w-[26rem]',
+                'w-[85%]',
                 'sm:w-full',
                 'mdx:w-[26rem]',
                 'flex-col',
                 'items-start',
                 'gap-6',
                 'max-sm:flex-shrink-0',
+                'max-sm:snap-start',
               )}
             >
               <Image
@@ -124,35 +144,32 @@ const Section5 = () => {
                   <p
                     className={cn(
                       'text-gray-900',
-                      'text-[0.75rem]/[1.25rem]',
+                      'text-[1rem]/[1.5rem]',
                       'font-semibold',
-                      'sm:text-[1rem]/[1.5rem]',
                       'sm:text-[1.5rem]/[2rem]',
                     )}
                   >
                     {element.department}
                   </p>
-                  <div className={cn('flex', 'w-full', 'items-center', 'gap-2')}>
+                  <div className={cn('flex', 'flex-wrap', 'w-full', 'items-center', 'gap-2')}>
                     {element.learn.map((item, idx) => (
                       <div
                         key={idx}
                         className={cn([
                           'flex',
-                          'px-1',
+                          'px-2',
                           'py-1',
                           'justify-center',
                           'items-center',
                           'rounded-[5rem]',
-                          'sm:px-2',
                           element.tagColor,
                         ])}
                       >
                         <p
                           className={cn([
                             element.textColor,
-                            'text-[0.5rem]/[0.75rem]',
+                            'text-[0.75rem]/[1rem]',
                             'font-normal',
-                            'sm:text-[0.75rem]/[1rem]',
                             'sm:text-[0.875rem]/[1.25rem]',
                           ])}
                         >
@@ -165,9 +182,8 @@ const Section5 = () => {
                 <span
                   className={cn(
                     'text-gray-600',
-                    'text-[0.75rem]/[1.25rem]',
+                    'text-[0.875rem]/[1.375rem]',
                     'font-normal',
-                    'sm:text-[1rem]/[1.5rem]',
                     'sm:text-[1.125rem]/[1.75rem]',
                   )}
                 >

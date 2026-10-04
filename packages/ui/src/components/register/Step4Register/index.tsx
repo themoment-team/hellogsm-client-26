@@ -28,6 +28,9 @@ import { FormController, LiberalSystemSwitch, SchoolRecordUploader } from '../..
 import { Input } from '../../../shadcn';
 import { ArtPhysicalForm, FreeGradeForm, FreeSemesterForm, NonSubjectForm } from '../../form';
 
+import { mapOcrAchievementFields } from './mapOcrAchievementFields';
+import { reorderAttendanceDaysForForm } from './reorderAttendanceDaysForForm';
+
 const formWrapper = [
   'flex',
   'flex-col',
@@ -248,29 +251,6 @@ const Step4Register = ({
     setSubjectKeys((prev) => [...prev, nextSubjectKey()]);
   };
 
-  /**
-   * 서버(MiddleSchoolRecordParser)가 내려주는 attendanceDays는 학년 단위로 묶여 있다
-   * (index = (학년-1)*3 + [지각,조퇴,결과]). 그런데 이 폼(NonSubjectForm)과 제출된
-   * 원서를 보여주는 ApplicationPrintPage/ExtracurricularTable은 항목 단위로 묶은
-   * 배열을 쓴다(지각 3칸이 [0,1,2], 조퇴가 [3,4,5], 결과가 [6,7,8]). 이 둘을 그대로
-   * 이어붙이면 학년2의 지각 자리에 학년1의 조퇴 값이 들어가는 식으로 값이 뒤섞인다.
-   * 그래서 서버 배열을 폼이 기대하는 순서로 재배열한다.
-   */
-  const reorderAttendanceDaysForForm = (
-    serverAttendanceDays: SchoolRecordExtractionAchievementType['attendanceDays'],
-  ): SchoolRecordExtractionAchievementType['attendanceDays'] => {
-    if (!serverAttendanceDays) return serverAttendanceDays;
-    const reordered: (number | null)[] = new Array(9).fill(null);
-    for (let grade = 1; grade <= 3; grade += 1) {
-      for (let typeOffset = 0; typeOffset < 3; typeOffset += 1) {
-        const serverIndex = (grade - 1) * 3 + typeOffset;
-        const formIndex = typeOffset * 3 + (grade - 1);
-        reordered[formIndex] = serverAttendanceDays[serverIndex] ?? null;
-      }
-    }
-    return reordered;
-  };
-
   const handleApplyOcrAchievement = (achievement: SchoolRecordExtractionAchievementType) => {
     if (achievement.liberalSystem) {
       setValue('liberalSystem', achievement.liberalSystem);
@@ -308,10 +288,24 @@ const Step4Register = ({
     ]);
     setValue('newSubjects', ocrNewSubjects);
 
+    // 서버 추출 결과는 이번 전형에서 쓰지 않는 학기까지 값을 채워 보낼 수 있다. 실제로
+    // 자유학년제 생기부의 1학년은 성취도가 P(이수)로 찍히는데 이게 0('없음')으로 내려와,
+    // 자유학년제인데도 1-1·1-2가 전부 0인 채로 제출되어 성적 계산이 틀어졌다. 학기 열을
+    // 비우는 초기화(FreeGradeForm/FreeSemesterForm)는 mount 시 한 번만 돌기 때문에,
+    // 이미 해당 모드에 들어와 있는 상태에서 OCR을 적용하면 되돌려 주는 곳이 없다.
+    // 그래서 여기서 직접 쓰지 않는 학기를 null로 못박는다.
+    //
+    // 기준이 되는 전형 값은 이 함수가 방금 setValue한 OCR 결과를 우선한다 — 렌더 시점에
+    // 계산된 achievementList는 아직 OCR 이전 값이라 여기서는 쓸 수 없다.
     // OCR이 인식하지 못한 칸은 null로 내려오는데, 기존 검증 로직이 null을 '입력 필요' 오류로
     // 표시해 주므로 이 값을 그대로 반영하는 것만으로 검수 표시를 겸할 수 있다.
+    const mappedAchievementFields = mapOcrAchievementFields(achievement, {
+      liberalSystem: achievement.liberalSystem ?? getValues('liberalSystem'),
+      graduationType,
+      freeSemester: achievement.freeSemester ?? getValues('freeSemester'),
+    });
     ACHIEVEMENT_FIELD_LIST.forEach((field) => {
-      setValue(field, (achievement[field] ?? null) as Step4FormType[typeof field]);
+      setValue(field, mappedAchievementFields[field] as Step4FormType[typeof field]);
     });
     setValue(
       'artsPhysicalAchievement',
