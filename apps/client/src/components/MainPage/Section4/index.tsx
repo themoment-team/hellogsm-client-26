@@ -82,9 +82,10 @@ const TitleCard = ({ firstText, lastText, icon }: TitleCardProps) => (
       'flex',
       'pt-[2rem]',
       'pb-[1.5rem]',
-      'px-[1.5rem]',
+      'px-[1rem]',
+      'xs:px-[1.5rem]',
       'flex-col',
-      'justify-end',
+      'justify-between',
       'rounded-[0.75rem]',
       'shadow-lg',
       'gap-[1.8125rem]',
@@ -97,8 +98,10 @@ const TitleCard = ({ firstText, lastText, icon }: TitleCardProps) => (
       <p
         className={cn(
           'text-sky-800',
+          'text-balance',
           'font-[600]',
-          'text-[1.25rem]/[1.875rem]',
+          'text-[1.125rem]/[1.625rem]',
+          'xs:text-[1.25rem]/[1.875rem]',
           'sm:text-[1.5rem]/[2.25rem]',
         )}
       >
@@ -107,7 +110,16 @@ const TitleCard = ({ firstText, lastText, icon }: TitleCardProps) => (
         {lastText}
       </p>
     </div>
-    <p className={cn('text-right', 'text-[4.25rem]/[5.95rem]', 'font-[600]')}>{icon}</p>
+    <p
+      className={cn(
+        'text-right',
+        'text-[3rem]/[4.2rem]',
+        'xs:text-[4.25rem]/[5.95rem]',
+        'font-[600]',
+      )}
+    >
+      {icon}
+    </p>
   </div>
 );
 
@@ -122,6 +134,8 @@ const Section4 = () => {
         'bg-[#F5F9FB]',
         'py-[11.25rem]',
         'w-full',
+        'break-keep',
+        '[overflow-wrap:anywhere]',
       )}
     >
       <div className={cn('flex', 'flex-col', 'items-center', 'w-full')}>
@@ -140,7 +154,7 @@ const Section4 = () => {
           'flex',
           'flex-wrap',
           'w-full',
-          'items-center',
+          'items-stretch',
           'gap-[0.75rem]',
           'justify-center',
           'px-6',
