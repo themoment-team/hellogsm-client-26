@@ -1,8 +1,8 @@
 ---
 name: resolve-reviews
-description: Collect PR review comments, critically assess each one against project conventions, auto-apply valid ones, post refutation replies for invalid ones, and prompt for partial ones.
+description: Collect unresolved PR review threads, critically assess each one against project conventions, auto-apply valid ones, post refutation replies for invalid ones, prompt for partial ones, and resolve threads opened by bot reviewers.
 disable-model-invocation: true
-allowed-tools: Bash(bash *get-pr-data.sh:*), Bash(gh api:*), Bash(gh pr view:*), Bash(gh repo:*), Bash(git add:*), Bash(git commit:*), Bash(git log:*), Bash(git push:*), Bash(git rev-parse:*), Bash(rm:*), Edit, Read
+allowed-tools: Bash(bash *get-pr-data.sh:*), Bash(gh api:*), Bash(git add:*), Bash(git commit:*), Bash(git log:*), Bash(git push:*), Bash(git rev-parse:*), Bash(rm -rf .pr-tmp), Edit, Read
 ---
 
 ## Step 1 — Collect PR Data
@@ -12,17 +12,12 @@ bash "${CLAUDE_SKILL_DIR}/scripts/get-pr-data.sh"
 ```
 
 Output files:
-- `.pr-tmp/pr_comments.json` — inline review comments (id, path, line, body, user)
+- `.pr-tmp/pr_comments.json` — the first comment of each unresolved review thread (`id`, `thread_id`, `path`, `line`, `outdated`, `body`, `user`, `is_bot`)
 - `.pr-tmp/pr_changed_files.txt` — changed files
 - `.pr-tmp/pr_commits.txt` — commits in this PR
 - `.pr-tmp/pr_diff.txt` — full diff
 
-Also fetch repo and PR metadata:
-
-```bash
-gh repo view --json nameWithOwner -q .nameWithOwner
-gh pr view --json number,baseRefName -q '{number: .number, base: .baseRefName}'
-```
+The script collects every page of review threads and excludes threads that are already resolved or that the current user has already replied to, so rerunning the skill does not post duplicate replies. Use the `PR #<number> | Repo: <owner>/<repo> | Base: <base>` line it prints for the API calls below.
 
 ## Step 2 — Load Rules and Assess Each Comment
 
@@ -39,9 +34,10 @@ For each comment in `pr_comments.json`, apply the following **layered judgment c
 ### Judgment criteria (priority order)
 
 1. **Project conventions** (primary): apply rules discovered above
-   - DTO annotation rules, commit scope, logging style, exception message format, etc.
-2. **Language/framework best practices** (secondary): Kotlin official guide, Spring Boot recommendations
+   - naming, layering, logging style, error handling, commit scope, etc.
+2. **Language/framework best practices** (secondary): official style guides and documentation for the language and framework the target file actually uses (detect them from the file extension and project build or package configuration)
    - Apply only when no matching project rule exists
+   - Do not apply guidance from a language or framework the target file does not use
 
 ### Verdicts
 
@@ -49,7 +45,7 @@ For each comment in `pr_comments.json`, apply the following **layered judgment c
 - **INVALID**: reviewer is wrong with a clear refutation → skip, post refutation reply
 - **PARTIAL**: intent is correct but application method or scope is ambiguous → confirm with AskUserQuestion
 
-Always cite an actual source in the rationale (e.g. `AGENTS.md §Logging Style`, `Kotlin: prefer val over var`).
+Always cite an actual source in the rationale (e.g. `AGENTS.md §Logging Style`, `Kotlin coding conventions: prefer val over var`, `React docs: Rules of Hooks`).
 
 ## Step 3 — Act on Each Verdict
 
@@ -91,7 +87,7 @@ Accept? (y / n / s = skip for now)
 
 | # | Reviewer | File | Verdict | Rationale | Action |
 |---|----------|------|---------|-----------|--------|
-| 1 | alice | Foo.kt:12 | ✅ VALID | AGENTS.md §Logging Style | Auto-fixed (abc1234) |
+| 1 | gemini-code-assist (bot) | Foo.kt:12 | ✅ VALID | AGENTS.md §Logging Style | Auto-fixed (abc1234), resolve |
 | 2 | bob | Bar.kt:34 | ❌ INVALID | AGENTS.md §Exception Message | Skipped |
 | 3 | alice | Baz.kt:56 | ⚠️ PARTIAL | - | PENDING |
 ```
@@ -114,6 +110,20 @@ gh api "repos/<owner>/<repo>/pulls/<pr_number>/comments/<comment_id>/replies" \
 ```
 
 For reply body templates, read `${CLAUDE_SKILL_DIR}/references/reply-formats.md`.
+
+### Resolve bot threads
+
+After replying, resolve the thread only when **both** conditions hold:
+
+- `is_bot` is `true` for the comment
+- the outcome is final: VALID fixed, INVALID, PARTIAL accepted and fixed, or PARTIAL rejected
+
+```bash
+gh api graphql -f query='mutation($id: ID!) { resolveReviewThread(input: {threadId: $id}) { thread { isResolved } } }' \
+  -f id="<thread_id>"
+```
+
+Never resolve a thread opened by a human reviewer, even after the fix is applied; leave resolution to that reviewer. Do not resolve PENDING or fix-failed threads either. If resolving fails, record the error in the report and continue.
 
 ## Step 7 — Cleanup
 
