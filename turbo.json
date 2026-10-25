@@ -15,7 +15,11 @@
         "AWS_REGION",
         "AWS_ACCESS_KEY_ID",
         "AWS_SECRET_ACCESS_KEY",
-        "OCR_LAMBDA_FUNCTION_NAME"
+        "OCR_LAMBDA_FUNCTION_NAME",
+        "SENTRY_DSN",
+        "SENTRY_ORG",
+        "SENTRY_PROJECT",
+        "SENTRY_AUTH_TOKEN"
       ]
     },
     "@repo/ocr-lambda#build": {
