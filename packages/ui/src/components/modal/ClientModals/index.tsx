@@ -44,6 +44,8 @@ const ClientModals = () => {
     setResultNotAnnouncedModal,
     oneseoModifyRequestModal,
     setOneseoModifyRequestModal,
+    interviewQuestionNotReadyModal,
+    setInterviewQuestionNotReadyModal,
   } = useModalStore();
 
   const { back } = useRouter();
@@ -294,6 +296,21 @@ const ClientModals = () => {
               취소
             </Button>
             <AlertDialogAction onClick={oneseoModifyRequestModal.onConfirm}>확인</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={interviewQuestionNotReadyModal.isOpen}>
+        <AlertDialogContent className={cn('w-[400px]')}>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              심층면접 예상문제는 아직 준비 중입니다. <br /> 준비가 완료되면 다시 확인해주세요.
+            </AlertDialogTitle>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={() => setInterviewQuestionNotReadyModal(false)}>
+              확인
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
