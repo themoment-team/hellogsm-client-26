@@ -1,6 +1,7 @@
 'use client';
 
 import { ADMISSION_SCHEDULE } from '@repo/constants';
+import { useModalStore } from '@repo/store';
 import { Majors, MyMemberInfoType, MyTotalTestResultType } from '@repo/types';
 import { Button, Dialog, DialogContent, DialogTitle } from '@repo/ui/shadcn';
 import { cn } from '@repo/utils';
@@ -9,6 +10,8 @@ import { BlurIcon, CopyIcon, HelloGSMIcon } from '@/assets';
 
 const FINAL_PASS_DOCUMENT_URL = `${process.env.NEXT_PUBLIC_CDN_URL}/2027학년도 신입생 최종 합격자 제출 서류 안내.hwpx`;
 const FIRST_PASS_NOTICE_URL = `${process.env.NEXT_PUBLIC_CDN_URL}/2027학년도 신입생 선발 1차 전형 합격자 안내사항.hwp`;
+// 2027학년도 면접 문항이 아직 게시되지 않아 링크를 끊어두고 준비 중 안내 모달을 띄운다. 게시 안내가 나오면 URL을 채운다.
+const INTERVIEW_QUESTION_URL: string | null = null;
 
 interface PassResultProps {
   isPassOpen: boolean;
@@ -27,6 +30,8 @@ const PassResultDialog = ({
   memberInfo,
   onClick = () => setIsPassOpen(false),
 }: PassResultProps) => {
+  const { setInterviewQuestionNotReadyModal } = useModalStore();
+
   const firstTestPass = isFinishFirstTest && resultInfo?.firstTestPassYn === 'YES';
   const secondTestPass = !isFinishFirstTest && resultInfo?.secondTestPassYn === 'YES';
   const major = resultInfo?.decidedMajor;
@@ -125,11 +130,9 @@ const PassResultDialog = ({
   };
 
   const handleInterviewClick = () => {
-    window.open(
-      'http://gsm.gen.hs.kr/xboard/board.php?mode=view&number=10452&tbnum=65&sCat=0&page=1&keyset=&searchword=',
-      '_blank',
-      'noopener,noreferrer',
-    );
+    if (!INTERVIEW_QUESTION_URL) return setInterviewQuestionNotReadyModal(true);
+
+    window.open(INTERVIEW_QUESTION_URL, '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -199,7 +202,7 @@ const PassResultDialog = ({
                 <Button
                   variant="reverseFill"
                   className={cn('w-[10.625rem]', 'h-[3.25rem]', 'font-semibold', 'text-base')}
-                  onClick={() => handleInterviewClick()}
+                  onClick={handleInterviewClick}
                 >
                   심층면접 예상문제
                 </Button>
