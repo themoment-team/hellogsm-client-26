@@ -15,6 +15,7 @@ import {
   Section5,
   Section6,
   TestResultDialog,
+  TuberculosisTestNoticeDialog,
 } from '@/components';
 
 import DevNoticeDialog from './DevNoticeDialog';
@@ -67,6 +68,7 @@ const MainPage = ({ memberInfo, resultInfo, isServerHealthy }: MainPageProps) =>
       />
 
       <DevNoticeDialog />
+      <TuberculosisTestNoticeDialog isFinalPass={resultInfo?.secondTestPassYn === 'YES'} />
     </>
   );
 };

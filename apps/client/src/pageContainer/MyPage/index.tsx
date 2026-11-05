@@ -25,6 +25,7 @@ import {
 import { cn } from '@repo/utils';
 
 import { AlertIcon, DocumentIcon, PrintIcon, ProfileIcon, ResultCheckIcon } from '@/assets';
+import { TuberculosisTestNoticeDialog } from '@/components';
 
 interface MyInfoProps {
   initialData: GetMyOneseoType | undefined;
@@ -128,6 +129,7 @@ const MyPage = ({ initialData, isOneseoWrite }: MyInfoProps) => {
 
   return (
     <div className={cn('flex', 'w-full', 'min-h-screen', 'justify-center', 'bg-white', 'pb-10')}>
+      <TuberculosisTestNoticeDialog isFinalPass={resultInfo.secondTestPassYn === 'YES'} />
       <div
         className={cn(
           'flex',

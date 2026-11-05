@@ -8,4 +8,5 @@ export { default as FaqElement } from './FaqElement';
 export { default as TestResultDialog } from './TestResultDialog';
 export { default as PassResultDialog } from './PassResultDialog';
 export { default as LoginNoticeDialog } from './LoginNoticeDialog';
+export { default as TuberculosisTestNoticeDialog } from './TuberculosisTestNoticeDialog';
 export { default as TestPeriodDialog } from './TestPeriodDialog';
