@@ -9,9 +9,14 @@ const HIDE_KEY = 'hideTuberculosisTestNoticeDialog';
 
 interface TuberculosisTestNoticeDialogProps {
   isFinalPass: boolean;
+  /** 다른 모달이 열려 있는 동안 true — 모달이 겹치지 않도록 그 모달이 닫힌 뒤에 연다 */
+  isWaiting?: boolean;
 }
 
-const TuberculosisTestNoticeDialog = ({ isFinalPass }: TuberculosisTestNoticeDialogProps) => {
+const TuberculosisTestNoticeDialog = ({
+  isFinalPass,
+  isWaiting = false,
+}: TuberculosisTestNoticeDialogProps) => {
   // 오늘 숨김 여부는 마운트 전엔 알 수 없으므로 숨김으로 시작해 깜빡임을 막는다
   const [isHiddenToday, setIsHiddenToday] = useState<boolean>(true);
   const [isClosed, setIsClosed] = useState<boolean>(false);
@@ -23,7 +28,7 @@ const TuberculosisTestNoticeDialog = ({ isFinalPass }: TuberculosisTestNoticeDia
   }, []);
 
   // 내 정보 페이지는 합격 결과를 클라이언트에서 받아오므로, 결과가 도착하면 그때 열린다
-  const isOpen = isFinalPass && !isHiddenToday && !isClosed;
+  const isOpen = isFinalPass && !isWaiting && !isHiddenToday && !isClosed;
 
   const close = () => setIsClosed(true);
 

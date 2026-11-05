@@ -68,7 +68,10 @@ const MainPage = ({ memberInfo, resultInfo, isServerHealthy }: MainPageProps) =>
       />
 
       <DevNoticeDialog />
-      <TuberculosisTestNoticeDialog isFinalPass={resultInfo?.secondTestPassYn === 'YES'} />
+      <TuberculosisTestNoticeDialog
+        isFinalPass={resultInfo?.secondTestPassYn === 'YES'}
+        isWaiting={isOpen || isPassOpen}
+      />
     </>
   );
 };
