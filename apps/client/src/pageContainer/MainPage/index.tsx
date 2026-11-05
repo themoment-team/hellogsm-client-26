@@ -8,7 +8,6 @@ import {
   Footer,
   LoginNoticeDialog,
   PassResultDialog,
-  SchoolRecordNoticeDialog,
   Section1,
   Section2,
   Section3,
@@ -68,7 +67,6 @@ const MainPage = ({ memberInfo, resultInfo, isServerHealthy }: MainPageProps) =>
       />
 
       <DevNoticeDialog />
-      <SchoolRecordNoticeDialog />
     </>
   );
 };

@@ -25,7 +25,6 @@ import {
 import { cn } from '@repo/utils';
 
 import { AlertIcon, DocumentIcon, PrintIcon, ProfileIcon, ResultCheckIcon } from '@/assets';
-import { SchoolRecordNoticeDialog } from '@/components';
 
 interface MyInfoProps {
   initialData: GetMyOneseoType | undefined;
@@ -129,7 +128,6 @@ const MyPage = ({ initialData, isOneseoWrite }: MyInfoProps) => {
 
   return (
     <div className={cn('flex', 'w-full', 'min-h-screen', 'justify-center', 'bg-white', 'pb-10')}>
-      <SchoolRecordNoticeDialog />
       <div
         className={cn(
           'flex',
