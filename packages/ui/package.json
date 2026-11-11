@@ -21,7 +21,7 @@
     "test": "tsx --test src/**/*.test.ts"
   },
   "peerDependencies": {
-    "next": "^16.0.0",
+    "next": "^16.4.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
@@ -40,7 +40,7 @@
     "@repo/types": "workspace:*",
     "@repo/utils": "workspace:*",
     "@tanstack/react-query": "^5.90.21",
-    "axios": "^1.13.5",
+    "axios": "^1.21.1",
     "class-variance-authority": "^0.7.1",
     "lucide-react": "^0.564.0",
     "react-daum-postcode": "^3.2.0",
