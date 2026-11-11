@@ -12,7 +12,8 @@
     "dev": "tsc --watch",
     "build": "tsc",
     "lint": "eslint src",
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc --noEmit",
+    "test": "tsx --test src/**/*.test.ts"
   },
   "dependencies": {
     "@repo/constants": "workspace:*",
@@ -31,6 +32,7 @@
     "@types/node": "^20.19.33",
     "@types/react": "^19.2.17",
     "eslint": "^9.39.4",
+    "tsx": "^4.23.15",
     "typescript": "5.9.2"
   }
 }
