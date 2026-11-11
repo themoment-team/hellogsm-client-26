@@ -21,7 +21,8 @@
         "SENTRY_PROJECT",
         "SENTRY_AUTH_TOKEN",
         "MOCK_SCORE_URL",
-        "MOCK_SCORE_API_KEY"
+        "MOCK_SCORE_API_KEY",
+        "NOTION_SECRET_API_KEY"
       ]
     },
     "admin#build": {
