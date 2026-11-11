@@ -10,11 +10,13 @@ import { useOAuthLogin } from '@repo/api/hooks';
 import { memberQueryKeys } from '@repo/api/lib';
 import { cn } from '@repo/utils';
 
+import type { OAuthFlow } from '@/app/api/auth/oauth/oauthState';
+
 interface ErrorResponse {
   message?: string;
 }
 
-const CallbackPage = ({ code, provider }: { code: string; provider: string }) => {
+const CallbackPage = ({ code, provider }: { code: string; provider: OAuthFlow | null }) => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const isCalled = useRef(false);
