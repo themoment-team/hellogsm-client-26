@@ -34,4 +34,17 @@ test.describe('client 스모크', () => {
     await expect(page.locator('body')).toBeVisible();
     expect(consoleErrors).toEqual([]);
   });
+
+  test('state 쿠키 없는 callback은 로그인 요청 없이 메인으로 이동한다', async ({ page }) => {
+    const loginRequests: string[] = [];
+    page.on('request', (request) => {
+      if (request.url().includes('/auth/v3/auth/')) loginRequests.push(request.url());
+    });
+
+    await page.goto(`${CLIENT_URL}/callback?code=test-code&state=google`);
+
+    await page.waitForURL(`${CLIENT_URL}/`);
+    await expect(page.getByText('로그인에 실패했습니다.')).toBeVisible();
+    expect(loginRequests).toEqual([]);
+  });
 });
