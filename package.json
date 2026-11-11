@@ -21,7 +21,8 @@
   "pnpm": {
     "overrides": {
       "@types/react": "^19.2.17",
-      "@types/react-dom": "^19.2.3"
+      "@types/react-dom": "^19.2.3",
+      "next": "^16.4.6"
     },
     "patchedDependencies": {
       "kordoc": "patches/kordoc.patch"

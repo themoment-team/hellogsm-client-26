@@ -21,7 +21,7 @@
     "test": "tsx --test src/**/*.test.ts"
   },
   "peerDependencies": {
-    "next": "^16.4.6",
+    "next": "^16.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
