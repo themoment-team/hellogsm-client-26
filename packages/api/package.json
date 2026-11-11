@@ -5,7 +5,8 @@
   "exports": {
     "./apis": "./src/apis/index.ts",
     "./hooks": "./src/hooks/index.ts",
-    "./lib": "./src/libs/index.ts"
+    "./lib": "./src/libs/index.ts",
+    "./server": "./src/server/index.ts"
   },
   "scripts": {
     "dev": "tsc --watch",
