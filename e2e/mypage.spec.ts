@@ -1,3 +1,5 @@
+import type { Page } from '@playwright/test';
+
 import { expect, test } from './fixtures';
 
 const CLIENT_URL = 'http://localhost:3000';
@@ -11,27 +13,62 @@ const submittedOneseo = {
   step: null,
 };
 
-/** 학교생활기록부 간인 생략 안내 팝업의 "오늘 하루 그만보기" 저장 키 */
-const SCHOOL_RECORD_NOTICE_HIDE_KEY = 'hideSchoolRecordNoticeDialog';
+/** 건강검진 결핵검사 안내 팝업의 "오늘 하루 그만보기" 저장 키 */
+const TUBERCULOSIS_NOTICE_HIDE_KEY = 'hideTuberculosisTestNoticeDialog';
 
-test.describe('마이페이지 학교생활기록부 간인 생략 안내 팝업', () => {
-  test('진입 시 팝업이 뜨고 확인을 누르면 닫힌다', async ({ page }) => {
+const TUBERCULOSIS_NOTICE_TITLE = '건강검진 결핵검사 안내';
+
+test.describe('마이페이지 건강검진 결핵검사 안내 팝업', () => {
+  const mockSecondTestResult = async (page: Page, secondTestPassYn: 'YES' | 'NO') => {
+    await page.route('**/api/member/v3/second-test-result/me', (route) =>
+      route.fulfill({ json: { data: { secondTestPassYn, decidedMajor: 'SW' } } }),
+    );
+  };
+
+  test('최종 합격자에게 팝업이 뜨고 확인을 누르면 닫힌다', async ({ page }) => {
+    await mockSecondTestResult(page, 'YES');
     await page.goto(`${CLIENT_URL}/mypage`);
 
-    const dialog = page.getByRole('dialog', { name: '학교생활기록부 제출 시 간인 생략 안내' });
+    const dialog = page.getByRole('dialog', { name: TUBERCULOSIS_NOTICE_TITLE });
     await expect(dialog).toBeVisible();
 
     await dialog.getByRole('button', { name: '확인', exact: true }).click();
     await expect(dialog).toBeHidden();
   });
+
+  test('"오늘 하루 그만보기"를 누르면 다시 들어와도 당일에는 뜨지 않는다', async ({ page }) => {
+    await mockSecondTestResult(page, 'YES');
+    await page.goto(`${CLIENT_URL}/mypage`);
+
+    const dialog = page.getByRole('dialog', { name: TUBERCULOSIS_NOTICE_TITLE });
+    await dialog.getByRole('button', { name: '오늘 하루 그만보기', exact: true }).click();
+    await expect(dialog).toBeHidden();
+
+    const hiddenDate = await page.evaluate(
+      (key) => localStorage.getItem(key),
+      TUBERCULOSIS_NOTICE_HIDE_KEY,
+    );
+    expect(hiddenDate).toBe(await page.evaluate(() => new Date().toDateString()));
+
+    // 결과 응답이 도착한 뒤에도 팝업이 열리지 않아야 한다.
+    const resultResponse = page.waitForResponse('**/api/member/v3/second-test-result/me');
+    await page.reload();
+    await resultResponse;
+    await expect(dialog).toBeHidden();
+  });
+
+  test('최종 합격자가 아니면 팝업이 뜨지 않는다', async ({ page }) => {
+    await mockSecondTestResult(page, 'NO');
+    const resultResponse = page.waitForResponse('**/api/member/v3/second-test-result/me');
+    await page.goto(`${CLIENT_URL}/mypage`);
+    await resultResponse;
+
+    await expect(page.getByRole('dialog', { name: TUBERCULOSIS_NOTICE_TITLE })).toBeHidden();
+  });
 });
 
 test.describe('마이페이지 관련서류 다운로드', () => {
   test.beforeEach(async ({ page, context }) => {
-    // 안내 팝업 오버레이가 버튼 클릭을 가리지 않도록 "오늘 하루 그만보기" 상태로 시작한다.
-    await context.addInitScript((key) => {
-      localStorage.setItem(key, new Date().toDateString());
-    }, SCHOOL_RECORD_NOTICE_HIDE_KEY);
     await page.route('**/api/oneseo/v3/oneseo/me', (route) =>
       route.fulfill({ json: { data: submittedOneseo } }),
     );

@@ -16,7 +16,8 @@ const getFaqData = async (): Promise<FaqPageData[]> => {
     {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_NOTION_SECRET_API_KEY}`,
+        // 서버 컴포넌트에서만 읽는 서버 전용 환경변수
+        Authorization: `Bearer ${process.env.NOTION_SECRET_API_KEY}`,
         'Notion-Version': '2022-06-28',
         'Content-Type': 'application/json',
       },
@@ -34,16 +35,10 @@ const getFaqData = async (): Promise<FaqPageData[]> => {
   return sortedResults;
 };
 
-export default async function Faq(
-  props: {
-    searchParams: Promise<{ openIndex?: string }>;
-  }
-) {
+export default async function Faq(props: { searchParams: Promise<{ openIndex?: string }> }) {
   const searchParams = await props.searchParams;
 
-  const {
-    openIndex
-  } = searchParams;
+  const { openIndex } = searchParams;
 
   const data = await getFaqData();
 

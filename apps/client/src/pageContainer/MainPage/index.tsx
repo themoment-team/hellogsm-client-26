@@ -8,7 +8,6 @@ import {
   Footer,
   LoginNoticeDialog,
   PassResultDialog,
-  SchoolRecordNoticeDialog,
   Section1,
   Section2,
   Section3,
@@ -16,6 +15,7 @@ import {
   Section5,
   Section6,
   TestResultDialog,
+  TuberculosisTestNoticeDialog,
 } from '@/components';
 
 import DevNoticeDialog from './DevNoticeDialog';
@@ -68,7 +68,10 @@ const MainPage = ({ memberInfo, resultInfo, isServerHealthy }: MainPageProps) =>
       />
 
       <DevNoticeDialog />
-      <SchoolRecordNoticeDialog />
+      <TuberculosisTestNoticeDialog
+        isFinalPass={resultInfo?.secondTestPassYn === 'YES'}
+        isWaiting={isOpen || isPassOpen}
+      />
     </>
   );
 };
