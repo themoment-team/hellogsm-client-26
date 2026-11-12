@@ -1,5 +1,5 @@
 // OAuth 로그인 state 발급·검증 순수 로직.
-// 로그인 시작 Route Handler(./route.ts)와 콜백 페이지(app/callback/page.tsx)가 함께 쓴다.
+// 로그인 시작 Route Handler(./route.ts)와 콜백 Server Action(app/callback/actions.ts)이 함께 쓴다.
 
 export type OAuthProvider = 'google' | 'kakao';
 
