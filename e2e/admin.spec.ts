@@ -42,6 +42,8 @@ test.describe('admin 스모크', () => {
 
     const location = new URL(response.headers()['location'] ?? '');
     expect(location.hostname).toBe('accounts.google.com');
+    // client id 누락은 500으로 실패하므로, 302라면 값이 채워져 있어야 한다
+    expect(location.searchParams.get('client_id')).toBeTruthy();
     expect(location.searchParams.get('redirect_uri')).toBe(`${CLIENT_URL}/callback`);
 
     const state = location.searchParams.get('state');

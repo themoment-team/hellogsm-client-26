@@ -41,11 +41,21 @@ export const handleGetOAuthLogin = ({
     return new NextResponse('잘못된 로그인 요청입니다.', { status: 400 });
   }
 
-  const { state, cookieValue } = issueOAuthState(flow, generateState);
   const oauthProvider = getOAuthProvider(flow);
+  const clientId = clientIds[oauthProvider];
+  if (!clientId) {
+    // NEXT_PUBLIC_* 값은 빌드 시점에 인라인된다. 누락된 채 제공자로 보내면 원인이 서버에 남지 않는다.
+    // eslint-disable-next-line no-console
+    console.error('[oauth-login] 제공자 client id 환경변수가 설정되지 않음', {
+      provider: oauthProvider,
+    });
+    return new NextResponse('로그인 설정이 올바르지 않습니다.', { status: 500 });
+  }
+
+  const { state, cookieValue } = issueOAuthState(flow, generateState);
   const authorizeUrl = buildOAuthAuthorizeUrl({
     provider: oauthProvider,
-    clientId: clientIds[oauthProvider],
+    clientId,
     redirectUri: getOAuthRedirectUri(origin),
     state,
   });

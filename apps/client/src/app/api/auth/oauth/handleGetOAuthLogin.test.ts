@@ -113,6 +113,31 @@ test('지원하지 않는 provider나 조합이면 쿠키 없이 400을 응답�
   }
 });
 
+test('제공자 client id가 비어 있으면 리다이렉트·쿠키 없이 500을 응답하고 서버 로그를 남긴다', (t) => {
+  const consoleError = t.mock.method(console, 'error', () => {});
+
+  for (const [provider, isAdmin, expectedProvider] of [
+    ['google', false, 'google'],
+    ['google', true, 'google'],
+    ['kakao', false, 'kakao'],
+  ] as const) {
+    const response = handleGetOAuthLogin({
+      provider,
+      isAdmin,
+      headers: httpsHeaders,
+      clientIds: { google: '', kakao: '' },
+    });
+
+    assert.equal(response.status, 500);
+    assert.equal(response.headers.get('location'), null);
+    assert.equal(response.headers.get('set-cookie'), null);
+    assert.deepEqual(consoleError.mock.calls.at(-1)?.arguments[1], {
+      provider: expectedProvider,
+    });
+  }
+  assert.equal(consoleError.mock.callCount(), 3);
+});
+
 test('요청 host를 알 수 없거나 허용 목록에 없으면 쿠키 없이 400을 응답한다', () => {
   for (const headers of [
     new Headers(),
