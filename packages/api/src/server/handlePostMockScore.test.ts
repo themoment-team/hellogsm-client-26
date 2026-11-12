@@ -116,6 +116,94 @@ test('본문이 크기 상한을 넘으면 업스트림을 호출하지 않고 4
   assert.equal(response.status, 413);
 });
 
+test('content-length 없이 스트림으로 들어온 본문도 상한을 넘는 순간 읽기를 멈추고 413을 반환한다', async () => {
+  const spy = fetchReturning('{}', { status: 200 });
+  const chunk = new Uint8Array(1024).fill(0x61);
+  let pullCount = 0;
+  let cancelled = false;
+  // 끝나지 않는 본문. 상한에서 읽기를 멈추지 않으면 이 테스트는 끝나지 않는다.
+  const endlessBody = new ReadableStream<Uint8Array>({
+    pull(controller) {
+      pullCount += 1;
+      controller.enqueue(chunk);
+    },
+    cancel() {
+      cancelled = true;
+    },
+  });
+  const request = new Request('http://localhost:3000/api/mock-score', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: endlessBody,
+    duplex: 'half',
+  } as RequestInit);
+  assert.equal(request.headers.get('content-length'), null);
+
+  const response = await handlePostMockScore({
+    request,
+    upstreamUrl: UPSTREAM_URL,
+    apiKey: API_KEY,
+    fetchImpl: spy as unknown as typeof fetch,
+  });
+
+  assert.equal(spy.mock.callCount(), 0);
+  assert.equal(response.status, 413);
+  assert.ok(cancelled, '상한을 넘으면 본문 스트림을 취소한다');
+  // 상한(32KiB)을 넘는 첫 청크까지만 읽는다. 스트림 내부 버퍼링 몫으로 약간의 여유를 둔다.
+  assert.ok(
+    pullCount <= MOCK_SCORE_MAX_BODY_BYTES / chunk.byteLength + 3,
+    `pullCount=${pullCount}`,
+  );
+});
+
+test('본문이 정확히 크기 상한이면 거르지 않고 업스트림에 전달한다', async () => {
+  const spy = fetchReturning('{}', { status: 200 });
+  const base = JSON.stringify({ gedAvgScore: 95.5, graduationType: 'GED', padding: '' });
+  const exact = base.replace(
+    '"padding":""',
+    `"padding":"${'a'.repeat(MOCK_SCORE_MAX_BODY_BYTES - base.length)}"`,
+  );
+  assert.equal(new TextEncoder().encode(exact).byteLength, MOCK_SCORE_MAX_BODY_BYTES);
+
+  const response = await handlePostMockScore({
+    request: buildRequest(exact),
+    upstreamUrl: UPSTREAM_URL,
+    apiKey: API_KEY,
+    fetchImpl: spy as unknown as typeof fetch,
+  });
+
+  assert.equal(spy.mock.callCount(), 1);
+  assert.equal(response.status, 200);
+});
+
+test('여러 바이트 문자가 청크 경계에서 나뉘어도 본문을 깨뜨리지 않고 전달한다', async () => {
+  const spy = fetchReturning('{}', { status: 200 });
+  const text = JSON.stringify({ graduationType: 'GED', gedAvgScore: 95.5, note: '자유학기제' });
+  const bytes = new TextEncoder().encode(text);
+  // 한 바이트씩 흘려보내 한글(3바이트)이 반드시 청크 경계에서 나뉘게 한다.
+  const byteStream = new ReadableStream<Uint8Array>({
+    start(controller) {
+      for (const byte of bytes) controller.enqueue(new Uint8Array([byte]));
+      controller.close();
+    },
+  });
+
+  await handlePostMockScore({
+    request: new Request('http://localhost:3000/api/mock-score', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: byteStream,
+      duplex: 'half',
+    } as RequestInit),
+    upstreamUrl: UPSTREAM_URL,
+    apiKey: API_KEY,
+    fetchImpl: spy as unknown as typeof fetch,
+  });
+
+  assert.equal(spy.mock.callCount(), 1);
+  assert.equal(spy.mock.calls[0]?.arguments[1]?.body, text);
+});
+
 test('업스트림이 오류 상태와 JSON 본문을 돌려주면 그 상태 코드와 본문을 그대로 전달한다', async () => {
   const upstreamBody = JSON.stringify({
     code: 400,

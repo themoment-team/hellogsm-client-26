@@ -11,7 +11,11 @@
  * tsx/node:test로 바로 단위 테스트할 수 있다.
  */
 
-/** 모의 성적 계산 요청은 성적 배열 몇 개라 수 KB를 넘지 않는다. 넉넉하게 잡은 상한. */
+/**
+ * 모의 성적 계산 요청은 성적 배열 몇 개라 수 KB를 넘지 않는다. 넉넉하게 잡은 상한.
+ * 본문을 스트림으로 읽으면서 이 크기를 넘는 순간 읽기를 멈추므로, 상한을 넘는 본문을 끝까지
+ * 메모리에 올리지 않는다(readBodyWithLimit 참고).
+ */
 export const MOCK_SCORE_MAX_BODY_BYTES = 32 * 1024;
 
 /** 업스트림 응답 대기 상한. 넘기면 네트워크 오류와 같이 502로 응답한다. */
@@ -41,6 +45,33 @@ const isJsonObject = (text: string) => {
   }
 };
 
+/**
+ * 요청 본문을 스트림으로 읽으면서 누적 크기가 maxBytes를 넘는 순간 읽기를 멈추고 null을 반환한다.
+ * content-length 헤더는 생략되거나 실제와 다를 수 있어 빠른 실패 용도로만 쓰고, 상한은 여기서 지킨다.
+ */
+const readBodyWithLimit = async (request: Request, maxBytes: number): Promise<string | null> => {
+  if (!request.body) return '';
+
+  const reader = request.body.getReader();
+  const decoder = new TextDecoder();
+  let byteLength = 0;
+  let text = '';
+
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+
+    byteLength += value.byteLength;
+    if (byteLength > maxBytes) {
+      reader.cancel().catch(() => {});
+      return null;
+    }
+    text += decoder.decode(value, { stream: true });
+  }
+
+  return text + decoder.decode();
+};
+
 export interface HandlePostMockScoreParams {
   request: Request;
   /** 서버 전용 환경변수 MOCK_SCORE_URL */
@@ -68,19 +99,20 @@ export const handlePostMockScore = async ({
     return errorResponse('모의 성적 계산 서비스가 설정되지 않았어요.', 500);
   }
 
+  // content-length가 있으면 본문을 읽기 전에 빠르게 거른다. 실제 상한은 readBodyWithLimit가 지킨다.
   const contentLength = Number(request.headers.get('content-length') ?? 0);
   if (contentLength > MOCK_SCORE_MAX_BODY_BYTES) {
     return errorResponse('요청 본문이 너무 커요.', 413);
   }
 
-  let body: string;
+  let body: string | null;
   try {
-    body = await request.text();
+    body = await readBodyWithLimit(request, MOCK_SCORE_MAX_BODY_BYTES);
   } catch {
     return errorResponse('요청 본문을 읽지 못했어요.', 400);
   }
 
-  if (new TextEncoder().encode(body).byteLength > MOCK_SCORE_MAX_BODY_BYTES) {
+  if (body === null) {
     return errorResponse('요청 본문이 너무 커요.', 413);
   }
 
