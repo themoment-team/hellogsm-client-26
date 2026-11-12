@@ -10,21 +10,34 @@ import { useOAuthLogin } from '@repo/api/hooks';
 import { memberQueryKeys } from '@repo/api/lib';
 import { cn } from '@repo/utils';
 
+import type { OAuthFlow } from '@/app/api/auth/oauth/oauthState';
+import { consumeOAuthState } from '@/app/callback/actions';
+
 interface ErrorResponse {
   message?: string;
 }
 
-const CallbackPage = ({ code, provider }: { code: string; provider: string }) => {
+interface CallbackPageProps {
+  code: string | undefined;
+  state: string | undefined;
+}
+
+const CallbackPage = ({ code, state }: CallbackPageProps) => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const isCalled = useRef(false);
 
-  const handleLoginSuccess = async () => {
+  const handleLoginSuccess = async (flow: OAuthFlow) => {
     await queryClient.invalidateQueries({ queryKey: memberQueryKeys.getMyMemberInfo() });
 
     const nextUrl =
-      provider === 'admin' ? `${window.location.origin}/?isAdmin=true` : window.location.origin;
+      flow === 'admin' ? `${window.location.origin}/?isAdmin=true` : window.location.origin;
     router.replace(nextUrl);
+  };
+
+  const handleLoginFailure = () => {
+    router.replace('/');
+    toast.error('로그인에 실패했습니다.');
   };
 
   const handleLoginError = (error: AxiosError) => {
@@ -37,37 +50,33 @@ const CallbackPage = ({ code, provider }: { code: string; provider: string }) =>
     }
   };
 
-  const { mutate: googleLogin } = useOAuthLogin('google', {
-    onSuccess: handleLoginSuccess,
-    onError: handleLoginError,
-  });
+  const { mutate: googleLogin } = useOAuthLogin('google', { onError: handleLoginError });
 
-  const { mutate: kakaoLogin } = useOAuthLogin('kakao', {
-    onSuccess: handleLoginSuccess,
-    onError: handleLoginError,
-  });
+  const { mutate: kakaoLogin } = useOAuthLogin('kakao', { onError: handleLoginError });
 
   useEffect(() => {
     if (isCalled.current) return;
     isCalled.current = true;
 
-    if (!code || !provider) {
-      router.replace('/');
-      toast.error('로그인에 실패했습니다.');
+    if (!code || !state) {
+      handleLoginFailure();
       return;
     }
 
-    const redirectUri = `${window.location.origin}/callback`;
+    // state 검증에 실패하면 로그인 요청 없이 실패 처리한다.
+    consumeOAuthState(state)
+      .then((result) => {
+        if (!result) {
+          handleLoginFailure();
+          return;
+        }
 
-    if (provider === 'google' || provider === 'admin') {
-      googleLogin({ code, redirectUri });
-    } else if (provider === 'kakao') {
-      kakaoLogin({ code, redirectUri });
-    } else {
-      router.replace('/');
-      toast.error('로그인에 실패했습니다.');
-    }
-  }, [code, provider]);
+        const { flow, redirectUri } = result;
+        const login = flow === 'kakao' ? kakaoLogin : googleLogin;
+        login({ code, redirectUri }, { onSuccess: () => handleLoginSuccess(flow) });
+      })
+      .catch(handleLoginFailure);
+  }, [code, state]);
 
   return (
     <div className={cn('flex', 'h-[calc(100vh-4.625rem)]', 'items-center', 'justify-center')}>
