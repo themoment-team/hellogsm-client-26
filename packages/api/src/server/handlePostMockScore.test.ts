@@ -1,12 +1,38 @@
 import assert from 'node:assert/strict';
 import { mock, test } from 'node:test';
 
+import { ARTS_PHYSICAL_SUBJECTS, GENERAL_SUBJECTS } from '@repo/constants';
+
 import { handlePostMockScore, MOCK_SCORE_MAX_BODY_BYTES } from './handlePostMockScore';
 
 const UPSTREAM_URL = 'https://mock-score.test/oneseo/v3/calculate-mock-score';
 const API_KEY = 'test-api-key';
 
 const REQUEST_BODY = JSON.stringify({ gedAvgScore: 95.5, graduationType: 'GED' });
+
+const generalScores = GENERAL_SUBJECTS.map(() => 5);
+
+/**
+ * StepWrapper·CalculatePage가 보내는 자유학기제 졸업예정자 본문. 쓰지 않는 학기는 null, 자유학기의
+ * 예체능 칸은 0, 추가 과목이 없으면 newSubjects는 undefined라 JSON에서 빠진다.
+ */
+const middleSchoolBody = {
+  liberalSystem: '자유학기제',
+  achievement1_1: null,
+  achievement1_2: generalScores,
+  achievement2_1: generalScores,
+  achievement2_2: generalScores,
+  achievement3_1: generalScores,
+  achievement3_2: null,
+  artsPhysicalAchievement: [0, 0, 0, 5, 4, 3, 5, 5, 5, 4, 4, 4],
+  absentDays: [0, 0, 0],
+  attendanceDays: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  volunteerTime: [10, 10, 10],
+  freeSemester: '1-1',
+  generalSubjects: [...GENERAL_SUBJECTS],
+  artsPhysicalSubjects: [...ARTS_PHYSICAL_SUBJECTS],
+  graduationType: 'CANDIDATE',
+};
 
 const buildRequest = (body: string) =>
   new Request('http://localhost:3000/api/mock-score', {
@@ -40,7 +66,7 @@ test('요청 본문을 그대로 X-HG-API-KEY 헤더와 함께 업스트림에 �
   const [url, init] = call.arguments;
   assert.equal(url.toString(), UPSTREAM_URL);
   assert.equal(init?.method, 'POST');
-  assert.equal(init?.body, REQUEST_BODY);
+  assert.deepEqual(JSON.parse(init?.body as string), JSON.parse(REQUEST_BODY));
   const headers = init?.headers as Record<string, string>;
   assert.equal(headers['X-HG-API-KEY'], API_KEY);
   assert.equal(headers['Content-Type'], 'application/json');
@@ -178,7 +204,7 @@ test('본문이 정확히 크기 상한이면 거르지 않고 업스트림에 �
 
 test('여러 바이트 문자가 청크 경계에서 나뉘어도 본문을 깨뜨리지 않고 전달한다', async () => {
   const spy = fetchReturning('{}', { status: 200 });
-  const text = JSON.stringify({ graduationType: 'GED', gedAvgScore: 95.5, note: '자유학기제' });
+  const text = JSON.stringify({ ...middleSchoolBody, newSubjects: ['한문'] });
   const bytes = new TextEncoder().encode(text);
   // 한 바이트씩 흘려보내 한글(3바이트)이 반드시 청크 경계에서 나뉘게 한다.
   const byteStream = new ReadableStream<Uint8Array>({
@@ -201,8 +227,96 @@ test('여러 바이트 문자가 청크 경계에서 나뉘어도 본문을 깨�
   });
 
   assert.equal(spy.mock.callCount(), 1);
-  assert.equal(spy.mock.calls[0]?.arguments[1]?.body, text);
+  assert.deepEqual(JSON.parse(spy.mock.calls[0]?.arguments[1]?.body as string), JSON.parse(text));
 });
+
+const validBodyCases = [
+  { name: '졸업예정(자유학기제, 쓰지 않는 학기 null)', body: middleSchoolBody },
+  {
+    name: '졸업(자유학년제, freeSemester null, 추가 과목 있음)',
+    body: {
+      ...middleSchoolBody,
+      liberalSystem: '자유학년제',
+      freeSemester: null,
+      achievement3_2: generalScores,
+      newSubjects: ['한문', '정보'],
+      graduationType: 'GRADUATE',
+    },
+  },
+  {
+    name: '아직 채우지 않은 칸(null 원소)·빈 freeSemester',
+    body: { ...middleSchoolBody, achievement1_2: [5, null, 4], freeSemester: '' },
+  },
+  { name: '검정고시', body: { gedAvgScore: 95.5, graduationType: 'GED' } },
+];
+
+for (const { name, body } of validBodyCases) {
+  test(`화면이 보내는 본문은 그대로 업스트림에 전달한다: ${name}`, async () => {
+    const spy = fetchReturning('{}', { status: 200 });
+
+    const response = await handlePostMockScore({
+      request: buildRequest(JSON.stringify(body)),
+      upstreamUrl: UPSTREAM_URL,
+      apiKey: API_KEY,
+      fetchImpl: spy as unknown as typeof fetch,
+    });
+
+    assert.equal(response.status, 200);
+    assert.equal(spy.mock.callCount(), 1);
+    assert.deepEqual(JSON.parse(spy.mock.calls[0]?.arguments[1]?.body as string), body);
+  });
+}
+
+test('정의하지 않은 필드는 버리고 업스트림에 전달한다', async () => {
+  const spy = fetchReturning('{}', { status: 200 });
+
+  await handlePostMockScore({
+    request: buildRequest(
+      JSON.stringify({ ...middleSchoolBody, unknownField: 'x', nested: { a: 1 } }),
+    ),
+    upstreamUrl: UPSTREAM_URL,
+    apiKey: API_KEY,
+    fetchImpl: spy as unknown as typeof fetch,
+  });
+
+  assert.equal(spy.mock.callCount(), 1);
+  assert.deepEqual(JSON.parse(spy.mock.calls[0]?.arguments[1]?.body as string), middleSchoolBody);
+});
+
+const schemaMismatchCases = [
+  { name: 'graduationType이 없으면', body: { gedAvgScore: 95.5 } },
+  {
+    name: 'graduationType이 정의된 값이 아니면',
+    body: { ...middleSchoolBody, graduationType: 'X' },
+  },
+  { name: '검정고시인데 gedAvgScore가 없으면', body: { graduationType: 'GED' } },
+  {
+    name: '검정고시 gedAvgScore가 숫자가 아니면',
+    body: { graduationType: 'GED', gedAvgScore: '95' },
+  },
+  { name: '성적 배열 원소가 숫자가 아니면', body: { ...middleSchoolBody, achievement2_1: ['5'] } },
+  { name: '성적이 배열이 아니면', body: { ...middleSchoolBody, absentDays: 3 } },
+  { name: 'liberalSystem이 정의된 값이 아니면', body: { ...middleSchoolBody, liberalSystem: 'X' } },
+  { name: 'freeSemester가 정의된 값이 아니면', body: { ...middleSchoolBody, freeSemester: '4-1' } },
+];
+
+for (const { name, body } of schemaMismatchCases) {
+  test(`${name} 업스트림을 호출하지 않고 400을 반환한다`, async () => {
+    const spy = fetchReturning('{}', { status: 200 });
+
+    const response = await handlePostMockScore({
+      request: buildRequest(JSON.stringify(body)),
+      upstreamUrl: UPSTREAM_URL,
+      apiKey: API_KEY,
+      fetchImpl: spy as unknown as typeof fetch,
+    });
+
+    assert.equal(spy.mock.callCount(), 0);
+    assert.equal(response.status, 400);
+    const responseBody = await response.json();
+    assert.equal(responseBody.code, 400);
+  });
+}
 
 test('업스트림이 오류 상태와 JSON 본문을 돌려주면 그 상태 코드와 본문을 그대로 전달한다', async () => {
   const upstreamBody = JSON.stringify({

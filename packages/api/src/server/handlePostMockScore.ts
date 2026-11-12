@@ -11,6 +11,8 @@
  * tsx/node:test로 바로 단위 테스트할 수 있다.
  */
 
+import { mockScoreRequestSchema } from '@repo/types';
+
 /**
  * 모의 성적 계산 요청은 성적 배열 몇 개라 수 KB를 넘지 않는다. 넉넉하게 잡은 상한.
  * 본문을 스트림으로 읽으면서 이 크기를 넘는 순간 읽기를 멈추므로, 상한을 넘는 본문을 끝까지
@@ -40,12 +42,13 @@ const isJson = (text: string) => {
   }
 };
 
-const isJsonObject = (text: string) => {
+/** JSON 객체면 파싱한 값을, 파싱에 실패하거나 객체가 아니면(배열·null 등) undefined를 반환한다. */
+const parseJsonObject = (text: string): object | undefined => {
   try {
     const value: unknown = JSON.parse(text);
-    return typeof value === 'object' && value !== null && !Array.isArray(value);
+    return typeof value === 'object' && value !== null && !Array.isArray(value) ? value : undefined;
   } catch {
-    return false;
+    return undefined;
   }
 };
 
@@ -87,7 +90,7 @@ export interface HandlePostMockScoreParams {
 }
 
 /**
- * 요청 본문을 검증한 뒤 그대로 업스트림에 전달하고, 업스트림의 상태 코드와 JSON 본문을 그대로
+ * 요청 본문을 검증해 허용한 필드만 업스트림에 전달하고, 업스트림의 상태 코드와 JSON 본문을 그대로
  * 돌려준다. 업스트림의 다른 응답 헤더는 전달하지 않고 Content-Type만 새로 붙인다.
  */
 export const handlePostMockScore = async ({
@@ -120,9 +123,17 @@ export const handlePostMockScore = async ({
     return errorResponse('요청 본문이 너무 커요.', 413);
   }
 
-  if (!isJsonObject(body)) {
+  const json = parseJsonObject(body);
+  if (!json) {
     return errorResponse('요청 본문이 올바른 JSON 형식이 아니에요.', 400);
   }
+
+  // 화면이 보내는 필드와 타입만 확인하고 그 밖의 필드는 버린 뒤 전달한다(mockScoreRequestSchema 참고).
+  const parsed = mockScoreRequestSchema.safeParse(json);
+  if (!parsed.success) {
+    return errorResponse('요청 본문 형식이 올바르지 않아요.', 400);
+  }
+  const upstreamRequestBody = JSON.stringify(parsed.data);
 
   let upstream: Response;
   let upstreamBody: string;
@@ -134,7 +145,7 @@ export const handlePostMockScore = async ({
         Accept: 'application/json',
         'X-HG-API-KEY': apiKey,
       },
-      body,
+      body: upstreamRequestBody,
       signal: AbortSignal.timeout(timeoutMs),
     });
     upstreamBody = await upstream.text();
