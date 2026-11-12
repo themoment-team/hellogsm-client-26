@@ -6,12 +6,9 @@ import { verifyOAuthState } from './oauthState';
 
 const clientIds = { google: 'google-client-id', kakao: 'kakao-rest-api-key' };
 
-const httpsHeaders = new Headers({
-  'x-forwarded-host': 'www.hellogsm.kr',
-  'x-forwarded-proto': 'https',
-});
+const httpsHeaders = new Headers({ 'x-forwarded-host': 'www.hellogsm.kr' });
 
-const localHeaders = new Headers({ host: 'localhost:3000', 'x-forwarded-proto': 'http' });
+const localHeaders = new Headers({ host: 'localhost:3000' });
 
 const parseSetCookie = (response: Response) => {
   const header = response.headers.get('set-cookie');
@@ -116,14 +113,16 @@ test('지원하지 않는 provider나 조합이면 쿠키 없이 400을 응답�
   }
 });
 
-test('요청 host를 알 수 없으면 쿠키 없이 400을 응답한다', () => {
-  const response = handleGetOAuthLogin({
-    provider: 'google',
-    isAdmin: false,
-    headers: new Headers(),
-    clientIds,
-  });
+test('요청 host를 알 수 없거나 허용 목록에 없으면 쿠키 없이 400을 응답한다', () => {
+  for (const headers of [
+    new Headers(),
+    new Headers({ 'x-forwarded-host': 'example.com' }),
+    new Headers({ host: 'hellogsm-client.vercel.app' }),
+  ]) {
+    const response = handleGetOAuthLogin({ provider: 'google', isAdmin: false, headers, clientIds });
 
-  assert.equal(response.status, 400);
-  assert.equal(response.headers.get('set-cookie'), null);
+    assert.equal(response.status, 400);
+    assert.equal(response.headers.get('location'), null);
+    assert.equal(response.headers.get('set-cookie'), null);
+  }
 });

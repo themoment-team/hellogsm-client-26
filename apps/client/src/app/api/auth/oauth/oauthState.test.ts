@@ -4,11 +4,12 @@ import { test } from 'node:test';
 import {
   buildOAuthAuthorizeUrl,
   getOAuthProvider,
+  getOAuthRedirectUri,
   getOAuthStateCookieName,
-  getRequestOrigin,
-  isSecureRequest,
+  isSecureOrigin,
   issueOAuthState,
   parseOAuthFlow,
+  resolveClientOrigin,
   verifyOAuthState,
 } from './oauthState';
 
@@ -76,27 +77,41 @@ test('HTTPS 요청에서만 __Host- 접두사 쿠키 이름을 쓴다', () => {
   assert.equal(getOAuthStateCookieName(false), 'hellogsm-oauth-state');
 });
 
-test('x-forwarded-* 헤더로 요청 origin과 HTTPS 여부를 판단한다', () => {
+test('허용 목록에 있는 host만 클라이언트 origin으로 인정한다', () => {
   const proxiedHeaders = new Headers({
     host: 'internal-host',
     'x-forwarded-host': 'www.hellogsm.kr',
-    'x-forwarded-proto': 'https',
   });
-  assert.equal(isSecureRequest(proxiedHeaders), true);
-  assert.equal(getRequestOrigin(proxiedHeaders), 'https://www.hellogsm.kr');
-
-  const localHeaders = new Headers({ host: 'localhost:3000', 'x-forwarded-proto': 'http' });
-  assert.equal(isSecureRequest(localHeaders), false);
-  assert.equal(getRequestOrigin(localHeaders), 'http://localhost:3000');
+  assert.equal(resolveClientOrigin(proxiedHeaders), 'https://www.hellogsm.kr');
 
   const chainedHeaders = new Headers({
     'x-forwarded-host': 'www.stage.hellogsm.kr, proxy.internal',
-    'x-forwarded-proto': 'https, http',
   });
-  assert.equal(getRequestOrigin(chainedHeaders), 'https://www.stage.hellogsm.kr');
+  assert.equal(resolveClientOrigin(chainedHeaders), 'https://www.stage.hellogsm.kr');
 
-  assert.equal(isSecureRequest(new Headers()), false);
-  assert.equal(getRequestOrigin(new Headers()), null);
+  assert.equal(
+    resolveClientOrigin(new Headers({ host: 'localhost:3000' })),
+    'http://localhost:3000',
+  );
+  assert.equal(
+    resolveClientOrigin(new Headers({ host: 'WWW.HELLOGSM.KR' })),
+    'https://www.hellogsm.kr',
+  );
+
+  assert.equal(resolveClientOrigin(new Headers({ 'x-forwarded-host': 'example.com' })), null);
+  assert.equal(resolveClientOrigin(new Headers({ host: 'hellogsm-client.vercel.app' })), null);
+  assert.equal(resolveClientOrigin(new Headers({ host: 'localhost:3001' })), null);
+  assert.equal(resolveClientOrigin(new Headers()), null);
+});
+
+test('프로토콜은 프록시 헤더가 아니라 허용 목록의 origin으로 정한다', () => {
+  const headers = new Headers({ host: 'www.hellogsm.kr', 'x-forwarded-proto': 'http' });
+  const origin = resolveClientOrigin(headers);
+
+  assert.equal(origin, 'https://www.hellogsm.kr');
+  assert.equal(isSecureOrigin('https://www.hellogsm.kr'), true);
+  assert.equal(isSecureOrigin('http://localhost:3000'), false);
+  assert.equal(getOAuthRedirectUri('https://www.hellogsm.kr'), 'https://www.hellogsm.kr/callback');
 });
 
 test('Google 인가 URL에 redirect_uri·scope·state를 인코딩해 싣는다', () => {

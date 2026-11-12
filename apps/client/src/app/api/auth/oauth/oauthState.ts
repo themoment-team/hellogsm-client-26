@@ -24,21 +24,45 @@ const isOAuthFlow = (value: string): value is OAuthFlow =>
 const getFirstHeaderValue = (headers: HeaderReader, name: string) =>
   headers.get(name)?.split(',')[0]?.trim() || undefined;
 
+// 로그인을 시작하고 콜백을 받을 수 있는 클라이언트 origin.
+// Google/Kakao 콘솔에 등록된 redirect_uri의 origin과 같아야 한다. 프로토콜도 이 목록으로 정해
+// 프록시 헤더(x-forwarded-proto)에 의존하지 않는다. 목록에 없는 host(프리뷰 배포 등)는 로그인을 거절한다.
+const ALLOWED_CLIENT_ORIGINS = [
+  'https://www.hellogsm.kr',
+  'https://www.stage.hellogsm.kr',
+  'http://localhost:3000',
+] as const;
+
+// Google/Kakao 콘솔에 등록된 콜백 경로. 바꾸면 인가 요청이 거절된다.
+const OAUTH_CALLBACK_PATH = '/callback';
+
+// 요청 host가 허용 목록에 있을 때만 그 origin을 돌려준다.
+export const resolveClientOrigin = (headers: HeaderReader): string | null => {
+  const host = (
+    getFirstHeaderValue(headers, 'x-forwarded-host') ?? getFirstHeaderValue(headers, 'host')
+  )?.toLowerCase();
+  if (!host) return null;
+  return ALLOWED_CLIENT_ORIGINS.find((origin) => new URL(origin).host === host) ?? null;
+};
+
+export const isSecureOrigin = (origin: string) => origin.startsWith('https://');
+
+// 인가 요청과 백엔드 토큰 교환 요청이 같은 redirect_uri를 쓰도록 한 곳에서 만든다.
+export const getOAuthRedirectUri = (origin: string) => `${origin}${OAUTH_CALLBACK_PATH}`;
+
 // HTTPS에서는 __Host- 접두사로 Secure·Path=/·Domain 미지정 조건을 브라우저가 강제하게 한다.
 // 로컬 http 개발 환경에서는 접두사 쿠키를 저장할 수 없어 일반 이름을 쓴다.
 export const getOAuthStateCookieName = (isSecure: boolean) =>
   isSecure ? `__Host-${OAUTH_STATE_COOKIE_NAME}` : OAUTH_STATE_COOKIE_NAME;
 
-// Next.js 서버와 Vercel 모두 x-forwarded-proto를 채워 준다.
-export const isSecureRequest = (headers: HeaderReader) =>
-  getFirstHeaderValue(headers, 'x-forwarded-proto') === 'https';
-
-export const getRequestOrigin = (headers: HeaderReader): string | null => {
-  const host =
-    getFirstHeaderValue(headers, 'x-forwarded-host') ?? getFirstHeaderValue(headers, 'host');
-  if (!host) return null;
-  return `${isSecureRequest(headers) ? 'https' : 'http'}://${host}`;
-};
+// 발급과 삭제가 같은 속성을 써야 브라우저가 같은 쿠키로 취급한다.
+// OAuth 제공자에서 돌아오는 top-level GET 이동에도 전송되도록 Lax를 쓴다.
+export const getOAuthStateCookieOptions = (isSecure: boolean) => ({
+  httpOnly: true,
+  secure: isSecure,
+  sameSite: 'lax' as const,
+  path: '/',
+});
 
 // 어드민 로그인은 google만 지원한다.
 export const parseOAuthFlow = (provider: string | null, isAdmin: boolean): OAuthFlow | null => {

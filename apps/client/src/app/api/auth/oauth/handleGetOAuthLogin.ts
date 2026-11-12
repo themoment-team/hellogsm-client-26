@@ -3,17 +3,16 @@ import { NextResponse } from 'next/server';
 import {
   buildOAuthAuthorizeUrl,
   getOAuthProvider,
+  getOAuthRedirectUri,
   getOAuthStateCookieName,
-  getRequestOrigin,
-  isSecureRequest,
+  getOAuthStateCookieOptions,
+  isSecureOrigin,
   issueOAuthState,
   OAUTH_STATE_MAX_AGE_SECONDS,
   type OAuthProvider,
   parseOAuthFlow,
+  resolveClientOrigin,
 } from './oauthState';
-
-// Google/Kakao 콘솔에 등록된 콜백 경로. 바꾸면 인가 요청이 거절된다.
-const CALLBACK_PATH = '/callback';
 
 // 두 값 모두 브라우저에 공개되어도 되는 값이다.
 const DEFAULT_CLIENT_IDS: Record<OAuthProvider, string> = {
@@ -37,7 +36,7 @@ export const handleGetOAuthLogin = ({
   generateState,
 }: HandleGetOAuthLoginParams) => {
   const flow = parseOAuthFlow(provider, isAdmin);
-  const origin = getRequestOrigin(headers);
+  const origin = resolveClientOrigin(headers);
   if (!flow || !origin) {
     return new NextResponse('잘못된 로그인 요청입니다.', { status: 400 });
   }
@@ -47,19 +46,15 @@ export const handleGetOAuthLogin = ({
   const authorizeUrl = buildOAuthAuthorizeUrl({
     provider: oauthProvider,
     clientId: clientIds[oauthProvider],
-    redirectUri: `${origin}${CALLBACK_PATH}`,
+    redirectUri: getOAuthRedirectUri(origin),
     state,
   });
 
-  const isSecure = isSecureRequest(headers);
+  const isSecure = isSecureOrigin(origin);
   const response = NextResponse.redirect(authorizeUrl, 302);
   response.headers.set('Cache-Control', 'no-store');
-  // OAuth 제공자에서 돌아오는 top-level GET 이동에도 전송되도록 Lax를 쓴다.
   response.cookies.set(getOAuthStateCookieName(isSecure), cookieValue, {
-    httpOnly: true,
-    secure: isSecure,
-    sameSite: 'lax',
-    path: '/',
+    ...getOAuthStateCookieOptions(isSecure),
     maxAge: OAUTH_STATE_MAX_AGE_SECONDS,
   });
   return response;
