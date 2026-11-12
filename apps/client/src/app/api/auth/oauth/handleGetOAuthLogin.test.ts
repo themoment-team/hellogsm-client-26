@@ -144,7 +144,12 @@ test('요청 host를 알 수 없거나 허용 목록에 없으면 쿠키 없이 
     new Headers({ 'x-forwarded-host': 'example.com' }),
     new Headers({ host: 'hellogsm-client.vercel.app' }),
   ]) {
-    const response = handleGetOAuthLogin({ provider: 'google', isAdmin: false, headers, clientIds });
+    const response = handleGetOAuthLogin({
+      provider: 'google',
+      isAdmin: false,
+      headers,
+      clientIds,
+    });
 
     assert.equal(response.status, 400);
     assert.equal(response.headers.get('location'), null);
