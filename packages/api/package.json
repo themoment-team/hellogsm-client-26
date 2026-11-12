@@ -18,7 +18,7 @@
     "@repo/types": "workspace:*",
     "@repo/utils": "workspace:*",
     "@tanstack/react-query": "^5.90.21",
-    "axios": "^1.13.5"
+    "axios": "^1.21.1"
   },
   "peerDependencies": {
     "next": "^16.0.0",
