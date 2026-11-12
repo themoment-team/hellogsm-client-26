@@ -5,6 +5,10 @@ import { handlePostMockScore } from '@repo/api/server';
 // packages/api/src/server/handlePostMockScore.ts 참고(admin 앱의 같은 경로 라우트와 공유).
 export const runtime = 'nodejs';
 
+// 업스트림 대기 상한(MOCK_SCORE_UPSTREAM_TIMEOUT_MS, 10초)보다 여유 있게 잡아, 업스트림이 느려도
+// 플랫폼이 함수를 끊기 전에 handler가 만든 502 JSON이 먼저 나가게 한다.
+export const maxDuration = 15;
+
 export async function POST(request: Request) {
   return handlePostMockScore({
     request,

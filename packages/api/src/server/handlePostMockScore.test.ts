@@ -260,3 +260,33 @@ test('업스트림 호출이 네트워크 오류로 실패하면 502를 반환�
   const body = await response.json();
   assert.equal(body.code, 502);
 });
+
+test('업스트림이 대기 상한 안에 응답하지 않으면 요청을 중단하고 502를 반환한다', async () => {
+  let aborted = false;
+  // 응답하지 않는 업스트림. abort 신호를 받을 때만 실패한다.
+  const spy = mock.fn<typeof fetch>(
+    (_input, init) =>
+      new Promise<Response>((_resolve, reject) => {
+        init?.signal?.addEventListener('abort', () => {
+          aborted = true;
+          reject(init.signal?.reason);
+        });
+      }),
+  );
+  const consoleError = silenceConsoleError();
+
+  const response = await handlePostMockScore({
+    request: buildRequest(REQUEST_BODY),
+    upstreamUrl: UPSTREAM_URL,
+    apiKey: API_KEY,
+    fetchImpl: spy as unknown as typeof fetch,
+    timeoutMs: 20,
+  });
+  consoleError.mock.restore();
+
+  assert.equal(spy.mock.callCount(), 1);
+  assert.ok(aborted, '대기 상한이 지나면 업스트림 요청을 abort한다');
+  assert.equal(response.status, 502);
+  const body = await response.json();
+  assert.equal(body.code, 502);
+});

@@ -18,7 +18,11 @@
  */
 export const MOCK_SCORE_MAX_BODY_BYTES = 32 * 1024;
 
-/** 업스트림 응답 대기 상한. 넘기면 네트워크 오류와 같이 502로 응답한다. */
+/**
+ * 업스트림 응답 대기 상한. 넘기면 네트워크 오류와 같이 502로 응답한다.
+ * client·admin의 `app/api/mock-score/route.ts`는 이 값보다 긴 `maxDuration`(15초)을 두어,
+ * 플랫폼이 함수를 끊기 전에 이 502 응답이 먼저 나가게 한다. 이 값을 늘리면 두 route도 함께 늘린다.
+ */
 export const MOCK_SCORE_UPSTREAM_TIMEOUT_MS = 10_000;
 
 const UPSTREAM_FAILURE_MESSAGE = '성적을 계산하지 못했어요. 잠시 후 다시 시도해주세요.';
