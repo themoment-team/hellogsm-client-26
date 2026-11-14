@@ -1,29 +1,28 @@
+enabled: true
 groups: []
-
+language: ko
 overrides:
-  claude/skills/git-commit: true
-  claude/skills/write-pr: true
-  claude/skills/resolve-reviews: true
   claude/agents/contradiction-finder: true
   claude/agents/doc-polisher: true
   claude/agents/web-researcher: true
-  claude/settings: true
   claude/hooks/dispatcher: true
   claude/hooks/eslint: true
   claude/hooks/prettier: true
   claude/hooks/ts-check: true
-
-  codex/skills/git-commit: true
-  codex/skills/write-pr: true
-  codex/skills/resolve-reviews: true
+  claude/settings: true
+  claude/skills/git-commit: true
+  claude/skills/react-best-practices: true
+  claude/skills/resolve-reviews: true
+  claude/skills/write-pr: true
   codex/agents/contradiction-finder: true
   codex/agents/doc-polisher: true
   codex/agents/web-researcher: true
   codex/config: true
-  codex/hooks/dispatcher: true
   codex/hooks-json: true
+  codex/hooks/dispatcher: true
   codex/hooks/eslint: true
   codex/hooks/prettier: true
   codex/hooks/ts-check: true
-
-language: ko
+  codex/skills/git-commit: true
+  codex/skills/resolve-reviews: true
+  codex/skills/write-pr: true
