@@ -34,7 +34,7 @@ import { ChevronIcon } from '@/assets';
 import { Footer, SexToggle } from '@/components';
 import { usePostMemberRegister, useSendCode, useVerifyCode } from '@/hooks';
 import { signupFormSchema } from '@/schemas';
-import { isTestPeriod } from '@/utils';
+import { isTestPeriod, safeStorage } from '@/utils';
 
 const PERMIT_YEAR = 50;
 const VERIFICATION_CODE_TIMEOUT = 180;
@@ -92,7 +92,7 @@ const SignUpPage = ({ isPastAnnouncement }: SignUpProps) => {
     const initialTime = VERIFICATION_CODE_TIMEOUT;
     // sessionStorage는 클라이언트 전용 외부 저장소 — hydration 불일치 방지를 위해
     // 마운트 후 effect에서 타이머를 복원해야 함
-    const savedTime = sessionStorage.getItem('timerStart');
+    const savedTime = safeStorage.getItem('sessionStorage', 'timerStart');
 
     if (savedTime) {
       const elapsedTime = Math.floor((Date.now() - parseInt(savedTime, 10)) / 1000);
@@ -105,7 +105,7 @@ const SignUpPage = ({ isPastAnnouncement }: SignUpProps) => {
       } else {
         // 저장된 시작 시간보다 현재 시간이 더 많이 지난 경우 (3분 초과)
         // 타이머를 초기화하고 sessionStorage를 정리
-        sessionStorage.removeItem('timerStart');
+        safeStorage.removeItem('sessionStorage', 'timerStart');
         setTimeLeft(0);
       }
     }
@@ -114,7 +114,7 @@ const SignUpPage = ({ isPastAnnouncement }: SignUpProps) => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
           // 타이머 카운트다운이 완료되면 sessionStorage를 정리하고 타이머 종료
-          sessionStorage.removeItem('timerStart');
+          safeStorage.removeItem('sessionStorage', 'timerStart');
           return 0;
         }
         return prev - 1;
@@ -170,7 +170,7 @@ const SignUpPage = ({ isPastAnnouncement }: SignUpProps) => {
       setIsVerifyClicked(true);
       formMethods.setValue('isSentCertificationNumber', true);
       setTimeLeft(VERIFICATION_CODE_TIMEOUT);
-      sessionStorage.setItem('timerStart', Date.now().toString());
+      safeStorage.setItem('sessionStorage', 'timerStart', Date.now().toString());
     },
     onError: () => setVerificationCodeSendErrorModal(true),
   });

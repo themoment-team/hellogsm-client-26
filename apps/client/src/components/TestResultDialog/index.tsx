@@ -5,6 +5,7 @@ import { Button, Dialog, DialogContent, DialogTitle } from '@repo/ui/shadcn';
 import { cn } from '@repo/utils';
 
 import { BlurIcon } from '@/assets';
+import { safeStorage } from '@/utils';
 
 interface TestResultProps {
   isOpen: boolean;
@@ -86,7 +87,7 @@ const TestResultDialog = ({
               className={cn([...buttonStyle])}
               onClick={() => {
                 const today = new Date().toDateString();
-                localStorage.setItem('hideTestResultDialog', today);
+                safeStorage.setItem('localStorage', 'hideTestResultDialog', today);
                 setIsOpen(false);
               }}
             >
