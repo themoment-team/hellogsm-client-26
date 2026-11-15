@@ -7,20 +7,20 @@ import { CheckResultPage } from '@/pageContainer';
 import { getMyFirstTestResult, getMyMemberInfo, getMyOneseo, getMySecondTestResult } from '../apis';
 
 export default async function CheckResult() {
-  const [memberInfo, firstResultInfo, secondResultInfo, isOneseoWrite] = await Promise.all([
-    getMyMemberInfo('/check-result'),
-    getMyFirstTestResult(),
-    getMySecondTestResult(),
-    getMyOneseo(),
-  ]);
+  const [memberInfo, firstResultInfo, secondResultInfo, isOneseoWrite, dateList] =
+    await Promise.all([
+      getMyMemberInfo('/check-result'),
+      getMyFirstTestResult(),
+      getMySecondTestResult(),
+      getMyOneseo(),
+      getDate(),
+    ]);
 
   const resultInfo = {
     firstTestPassYn: firstResultInfo?.firstTestPassYn ?? null,
     secondTestPassYn: secondResultInfo?.secondTestPassYn ?? null,
     decidedMajor: secondResultInfo?.decidedMajor ?? null,
   };
-
-  const dateList = await getDate();
 
   const currentTime = getKoreanDate();
 
