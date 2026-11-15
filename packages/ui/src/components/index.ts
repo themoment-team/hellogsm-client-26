@@ -11,7 +11,6 @@ export { default as LiberalSystemSwitch } from './LiberalSystemSwitch';
 export { default as LoginButton } from './LoginButton';
 export { default as LoginDialog } from './LoginDialog';
 export { default as LoginDialogContent } from './LoginDialogContent';
-export { default as ModalContainer } from './ModalContainer';
 export { default as RadioButton } from './RadioButton';
 export { default as SchoolRecordUploader } from './SchoolRecordUploader';
 export { default as SearchDialog } from './SearchDialog';
