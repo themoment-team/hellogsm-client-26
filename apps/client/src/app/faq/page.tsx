@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import { FaqListResponse, FaqPageData } from '@repo/types';
+import { FaqItem, FaqListResponse } from '@repo/types';
 
 import { FaqPage } from '@/pageContainer';
 
@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: '자주 묻는 질문',
 };
 
-const getFaqData = async (): Promise<FaqPageData[]> => {
+const getFaqData = async (): Promise<FaqItem[]> => {
   const response = await fetch(
     new URL(
       `https://api.notion.com/v1/databases/${process.env.NEXT_PUBLIC_NOTION_FAQ_DATABASE_ID}/query`,
@@ -31,19 +31,17 @@ const getFaqData = async (): Promise<FaqPageData[]> => {
     (a, b) => a.properties.id.number - b.properties.id.number,
   );
 
-  return sortedResults;
+  // 클라이언트 컴포넌트로 넘어가는 RSC payload를 줄이기 위해 화면에서 쓰는 텍스트만 남깁니다.
+  return sortedResults.map((result) => ({
+    title: result.properties.title.title[0]?.plain_text,
+    content: result.properties.content.rich_text[0]?.plain_text || '',
+  }));
 };
 
-export default async function Faq(
-  props: {
-    searchParams: Promise<{ openIndex?: string }>;
-  }
-) {
+export default async function Faq(props: { searchParams: Promise<{ openIndex?: string }> }) {
   const searchParams = await props.searchParams;
 
-  const {
-    openIndex
-  } = searchParams;
+  const { openIndex } = searchParams;
 
   const data = await getFaqData();
 

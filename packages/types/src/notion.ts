@@ -93,4 +93,11 @@ interface BaseNotionResponse<T> {
 
 export type FaqListResponse = BaseNotionResponse<FaqPageData>;
 
+/** FAQ 화면에 넘기는 값. Notion 페이지 객체 대신 화면에서 쓰는 텍스트만 담습니다. */
+export interface FaqItem {
+  /** 제목이 비어 있는 FAQ는 목록에서 제외되므로 undefined를 그대로 유지합니다. */
+  title: string | undefined;
+  content: string;
+}
+
 export type MemberListResponse = BaseNotionResponse<MemberPageData>;
