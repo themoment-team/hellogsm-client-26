@@ -724,16 +724,23 @@ const StepWrapper = ({ data, step, info, memberId, type, isModifyApproved }: Ste
     // 스텝 전환(URL 라우팅) 시 이전 스텝의 에러 표시 초기화 — 전환 진입점이
     // 라우터 경유라 이벤트 핸들러로 일원화 불가, effect 유지가 정당
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (errorStep !== step) clearStepError();
+    setErrorStep(null);
+  }, [step]);
 
-    if (step === StepEnum.TWO && !isStepSuccess[1]) push(`${BASE_URL}?step=1`);
+  const isStep1Success = isStepSuccess['1'];
+  const isStep2Success = isStepSuccess['2'];
+  const isStep3Success = isStepSuccess['3'];
 
-    if (step === StepEnum.THREE && (!isStepSuccess[1] || !isStepSuccess[2]))
-      push(`${BASE_URL}?step=2`);
+  // 앞 단계가 완료되지 않았으면 그 단계로 돌려보낸다. 입력마다 새로 만들어지는 isStepSuccess
+  // 객체 대신 단계별 boolean에만 반응해야 키 입력마다 다시 돌지 않는다.
+  useEffect(() => {
+    if (step === StepEnum.TWO && !isStep1Success) push(`${BASE_URL}?step=1`);
 
-    if (step === StepEnum.FOUR && (!isStepSuccess[1] || !isStepSuccess[2] || !isStepSuccess[3]))
+    if (step === StepEnum.THREE && (!isStep1Success || !isStep2Success)) push(`${BASE_URL}?step=2`);
+
+    if (step === StepEnum.FOUR && (!isStep1Success || !isStep2Success || !isStep3Success))
       push(`${BASE_URL}?step=3`);
-  }, [step, isStepSuccess, push, BASE_URL]);
+  }, [step, isStep1Success, isStep2Success, isStep3Success, push, BASE_URL]);
 
   return (
     <>
