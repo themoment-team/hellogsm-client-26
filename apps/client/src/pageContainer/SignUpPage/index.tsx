@@ -9,7 +9,6 @@ import { z } from 'zod';
 import { useGetDuplicateMember } from '@repo/api/hooks';
 import { memberQueryKeys } from '@repo/api/lib';
 import { CURRENT_YEAR } from '@repo/constants';
-import { useDebounce } from '@repo/hooks';
 import { useModalStore } from '@repo/store';
 import { MemberRegisterType, SendCodeType, SexType } from '@repo/types';
 import { CustomFormItem, LoginDialogContent } from '@repo/ui/components';
@@ -39,6 +38,7 @@ import { isTestPeriod } from '@/utils';
 
 const PERMIT_YEAR = 50;
 const VERIFICATION_CODE_TIMEOUT = 180;
+const VERIFICATION_CODE_DEBOUNCE_MS = 500;
 
 interface SignUpProps {
   isPastAnnouncement: boolean;
@@ -48,6 +48,7 @@ const SignUpPage = ({ isPastAnnouncement }: SignUpProps) => {
   const [showPrivacyPolicy, setShowPrivacyPolicy] = useState(false);
   // 인증번호 중복 제출 방지 플래그 — 렌더에 쓰이지 않으므로 ref
   const lastSubmittedCodeRef = useRef<string>('');
+  const verifyCodeTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   const [isSuccess, setIsSuccess] = useState<boolean | undefined>(undefined);
   const [isVerifyClicked, setIsVerifyClicked] = useState(false);
 
@@ -130,28 +131,19 @@ const SignUpPage = ({ isPastAnnouncement }: SignUpProps) => {
   };
 
   // 렌더 중 구독은 watch() 대신 useWatch 사용 (React Compiler 호환 — Compilation Skipped 해소)
-  const [
-    phoneNumber,
-    certificationNumber,
-    isAgreed,
-    isSentCertificationNumber,
-    sex,
-    birthYear,
-    birthMonth,
-    birthDay,
-  ] = useWatch({
-    control: formMethods.control,
-    name: [
-      'phoneNumber',
-      'certificationNumber',
-      'isAgreed',
-      'isSentCertificationNumber',
-      'sex',
-      'birth.year',
-      'birth.month',
-      'birth.day',
-    ],
-  });
+  const [phoneNumber, isAgreed, isSentCertificationNumber, sex, birthYear, birthMonth, birthDay] =
+    useWatch({
+      control: formMethods.control,
+      name: [
+        'phoneNumber',
+        'isAgreed',
+        'isSentCertificationNumber',
+        'sex',
+        'birth.year',
+        'birth.month',
+        'birth.day',
+      ],
+    });
 
   const isCertificationButtonDisabled =
     !signupFormSchema.shape.phoneNumber.safeParse(phoneNumber).success;
@@ -188,19 +180,29 @@ const SignUpPage = ({ isPastAnnouncement }: SignUpProps) => {
     onError: () => setIsSuccess(false),
   });
 
-  const codeDebounce = useDebounce(certificationNumber ?? '', 500);
+  // 화면을 떠난 뒤 남은 타이머가 인증번호 확인 요청을 보내지 않도록 정리
+  useEffect(() => () => clearTimeout(verifyCodeTimerRef.current), []);
 
-  useEffect(() => {
-    if (codeDebounce.length === 6 && codeDebounce !== lastSubmittedCodeRef.current) {
-      const payload = {
-        code: codeDebounce,
-      };
+  const certificationNumberField = formMethods.register('certificationNumber');
 
-      mutateVerifyCode(payload);
+  // 입력이 멈추고 500ms 뒤 6자리이면서 직전에 보낸 번호가 아닐 때만 인증번호 확인 요청
+  const handleCertificationNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    void certificationNumberField.onChange(e);
 
-      lastSubmittedCodeRef.current = codeDebounce;
-    }
-  }, [codeDebounce, mutateVerifyCode]);
+    const code = e.target.value;
+    clearTimeout(verifyCodeTimerRef.current);
+    verifyCodeTimerRef.current = setTimeout(() => {
+      if (code.length === 6 && code !== lastSubmittedCodeRef.current) {
+        const payload = {
+          code,
+        };
+
+        mutateVerifyCode(payload);
+
+        lastSubmittedCodeRef.current = code;
+      }
+    }, VERIFICATION_CODE_DEBOUNCE_MS);
+  };
 
   const onSubmit = (data: z.infer<typeof signupFormSchema>) => {
     const month = String(data.birth.month).padStart(2, '0');
@@ -409,7 +411,8 @@ const SignUpPage = ({ isPastAnnouncement }: SignUpProps) => {
                   </Button>
                 </div>
                 <Input
-                  {...formMethods.register('certificationNumber')}
+                  {...certificationNumberField}
+                  onChange={handleCertificationNumberChange}
                   disabled={!isSentCertificationNumber || timeLeft === 0}
                   placeholder="인증번호 6자리 입력"
                   successMessage={isSuccess === true ? '번호 인증이 완료되었습니다' : undefined}
