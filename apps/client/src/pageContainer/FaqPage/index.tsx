@@ -1,6 +1,5 @@
 'use client';
 
-import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { useState } from 'react';
 
 import { FaqItem } from '@repo/types';
@@ -33,10 +32,6 @@ const FaqPage = ({ data, openIndex }: FaqPageProps) => {
   );
   const [isPageChanging, setIsPageChanging] = useState<boolean>(false);
 
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const pathname = usePathname();
-
   const totalItems = data.filter((item) => item.title?.toLowerCase().includes(keyword));
   const totalPages = Math.ceil(totalItems.length / ITEMS_PER_PAGE);
 
@@ -59,22 +54,8 @@ const FaqPage = ({ data, openIndex }: FaqPageProps) => {
     currentPage * ITEMS_PER_PAGE,
   );
 
-  const toggleFaqContent = (index: number, updateUrl = false) => {
-    setFaqStates((prevStates) => {
-      const isOpen = !prevStates[index];
-      const newFaqStates = { [index]: isOpen };
-
-      if (updateUrl) {
-        const newSearchParams = new URLSearchParams(searchParams.toString());
-        if (isOpen) {
-          newSearchParams.set('openIndex', String(index));
-        } else {
-          newSearchParams.delete('openIndex');
-        }
-        router.replace(`${pathname}?${newSearchParams.toString()}`, { scroll: false });
-      }
-      return newFaqStates;
-    });
+  const toggleFaqContent = (index: number) => {
+    setFaqStates((prevStates) => ({ [index]: !prevStates[index] }));
   };
 
   return (
