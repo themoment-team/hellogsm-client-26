@@ -2,6 +2,7 @@
   "name": "@repo/types",
   "version": "0.0.0",
   "private": true,
+  "sideEffects": false,
   "exports": {
     ".": "./src/index.ts"
   },
