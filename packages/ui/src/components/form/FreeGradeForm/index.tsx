@@ -72,19 +72,17 @@ const FreeGradeForm = ({
   // 훅은 map 안에서 호출할 수 없으므로 학기별 배열 전체를 한 번 구독하고 인덱싱한다
   const achievements = useWatch({ control, name: ACHIEVEMENT_FIELD_LIST });
 
+  // 이 표에 없는 학기 열은 비우고(null), 있는 학기 열은 배열로 맞춘다. 저장된 추가 과목
+  // 행은 첫 렌더부터 그려지므로 다음 틱까지 기다릴 필요가 없다.
   useEffect(() => {
-    setTimeout(
-      () =>
-        ACHIEVEMENT_FIELD_LIST.forEach((field) => {
-          const hasField = achievementList.some((freeGrade) => freeGrade.field === field);
-          if (hasField) {
-            setValue(field, getValues(field) || []);
-          } else {
-            setValue(field, null);
-          }
-        }),
-      0,
-    );
+    ACHIEVEMENT_FIELD_LIST.forEach((field) => {
+      const hasField = achievementList.some((freeGrade) => freeGrade.field === field);
+      if (hasField) {
+        setValue(field, getValues(field) || []);
+      } else {
+        setValue(field, null);
+      }
+    });
   }, []);
 
   return (

@@ -159,8 +159,15 @@ const Step4Register = ({
   showError,
   clearStepError,
 }: Step4RegisterProps) => {
-  const [subjectArray, setSubjectArray] = useState<string[]>([...GENERAL_SUBJECTS]);
   const defaultSubjectLength = GENERAL_SUBJECTS.length;
+  // 저장된 추가 과목(newSubjects)은 첫 렌더부터 행으로 그린다. 이름이 빈 과목은
+  // "과목 추가하기"로 만든 행과 같은 이름(추가과목 N)으로 표시한다.
+  const [subjectArray, setSubjectArray] = useState<string[]>(() => [
+    ...GENERAL_SUBJECTS,
+    ...(getValues('newSubjects') ?? []).map((subjectName, index) =>
+      subjectName ? subjectName : `추가과목 ${index}`,
+    ),
+  ]);
 
   // 행을 그릴 때 React key로 과목 "이름"(중복 가능)이나 배열 "위치"(삭제/재정렬 시 뒤 행이
   // 앞으로 당겨오며 값이 안 바뀐 것처럼 보이는 input 재사용 버그)를 쓰면 둘 다 문제가
@@ -169,10 +176,13 @@ const Step4Register = ({
   // 같은 방식이다.
   const subjectKeyCounterRef = useRef(0);
   const nextSubjectKey = () => `subject-${(subjectKeyCounterRef.current += 1)}`;
-  // 렌더 중에는 ref를 읽거나 쓰면 안 되므로, 처음 9개(일반교과 고정 과목)는 ref 없이
-  // 정해진 이름으로 초기화한다 — 이후 추가되는 행만 nextSubjectKey()로 발급한다.
+  // 렌더 중에는 ref를 읽거나 쓰면 안 되므로, 첫 렌더에 그리는 행(일반교과 고정 과목과
+  // 저장된 추가 과목)은 ref 없이 정해진 이름으로 초기화한다 — 이후 추가되는 행만
+  // nextSubjectKey()로 발급한다.
   const [subjectKeys, setSubjectKeys] = useState<string[]>(() =>
-    GENERAL_SUBJECTS.map((_, index) => `general-${index}`),
+    subjectArray.map((_, index) =>
+      index < defaultSubjectLength ? `general-${index}` : `saved-${index - defaultSubjectLength}`,
+    ),
   );
 
   // formState를 props로 받으면 부모의 {...step4UseForm} 스프레드가 메모이즈되어 첫 렌더
@@ -229,29 +239,32 @@ const Step4Register = ({
     setValue('achievement3_2', score3_2 && score3_2.filter((_, i) => i !== idx)); // score3_2 배열에서 인덱스가 기본과목.length + index인 값 제거 (삭제 버튼 클릭한 인덱스 제거)
   };
 
-  const handleAddSubjectClick = (subjectName?: string) => {
+  // 새 과목 행(newIndex)의 칸을 이번 전형에서 쓰는 학기 배열마다 만들어 둔다 — 값이 없던
+  // 학기 배열은 이 인덱스까지 늘어난다. 자유학기제의 자유학기 열은 건드리지 않는다.
+  const fillSubjectAchievementCells = (newIndex: number) => {
+    if (getValues('liberalSystem') === LiberalSystemValueEnum.FREE_GRADE) {
+      achievementList.forEach(({ field }) =>
+        setValue(`${field}.${newIndex}`, getValues(`${field}.${newIndex}`)),
+      );
+    } else {
+      achievementList.forEach(
+        ({ field, value }) =>
+          value !== getValues('freeSemester') &&
+          setValue(`${field}.${newIndex}`, getValues(`${field}.${newIndex}`)),
+      );
+    }
+  };
+
+  const handleAddSubjectClick = () => {
     // subjectArray.length를 클로저에서 그대로 읽으면, 버튼을 연달아 눌러 리렌더가 아직
     // 안 끝난 사이에 두 번째 클릭이 들어왔을 때 똑같은 길이를 두 번 읽어버린다 — 그러면
     // "추가과목 N" 이름이 겹치는 것은 물론, achievement 배열에 값을 채워 넣는 인덱스도
     // 겹쳐서 두 번째 클릭이 첫 번째 클릭의 자리를 덮어써 버린다. setSubjectArray의
     // 함수형 업데이트 안에서 prev.length를 써야 매번 실제 최신 길이를 본다.
     setSubjectArray((prev) => {
-      const newSubject = subjectName
-        ? subjectName
-        : `추가과목 ${prev.length - defaultSubjectLength}`;
-      const newIndex = prev.length;
+      const newSubject = `추가과목 ${prev.length - defaultSubjectLength}`;
 
-      if (getValues('liberalSystem') === LiberalSystemValueEnum.FREE_GRADE) {
-        achievementList.forEach(({ field }) =>
-          setValue(`${field}.${newIndex}`, getValues(`${field}.${newIndex}`)),
-        );
-      } else {
-        achievementList.forEach(
-          ({ field, value }) =>
-            value !== getValues('freeSemester') &&
-            setValue(`${field}.${newIndex}`, getValues(`${field}.${newIndex}`)),
-        );
-      }
+      fillSubjectAchievementCells(prev.length);
 
       return [...prev, newSubject];
     });
@@ -427,10 +440,12 @@ const Step4Register = ({
       setValue('liberalSystem', getValues('liberalSystem') || LiberalSystemValueEnum.FREE_GRADE);
     }
 
-    const newSubject = getValues('newSubjects');
+    // 저장된 추가 과목의 행은 subjectArray 초기값으로 이미 그렸다. 그 행들의 성적 칸만
+    // "과목 추가하기"와 같은 방식으로 만들어 둔다 — 전형(liberalSystem)을 위에서 정한 뒤여야 한다.
+    const savedSubjectCount = getValues('newSubjects')?.length ?? 0;
 
-    if (newSubject && newSubject.length) {
-      newSubject.forEach((subjectName) => handleAddSubjectClick(subjectName));
+    for (let index = 0; index < savedSubjectCount; index += 1) {
+      fillSubjectAchievementCells(defaultSubjectLength + index);
     }
   }, []);
 
@@ -568,7 +583,7 @@ const Step4Register = ({
                     )}
                     <button
                       type="button"
-                      onClick={() => handleAddSubjectClick()}
+                      onClick={handleAddSubjectClick}
                       className={cn(
                         'text-sm',
                         'font-semibold',

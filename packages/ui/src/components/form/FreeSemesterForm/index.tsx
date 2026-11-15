@@ -105,21 +105,19 @@ const FreeSemesterForm = ({
   // 학기 열은 37.5rem을 학기 수로 나눈 값이다 (졸업자 6학기, 재학생 5학기)
   const columnWidth = isGraduate ? 'w-[6.25rem]' : 'w-[7.5rem]';
 
+  // 이 표에 없는 학기 열과 자유학기 열은 비우고(null), 나머지 학기 열은 배열로 맞춘다.
+  // 저장된 추가 과목 행은 첫 렌더부터 그려지므로 다음 틱까지 기다릴 필요가 없다.
   useEffect(() => {
-    setTimeout(
-      () =>
-        ACHIEVEMENT_FIELD_LIST.forEach((field) => {
-          if (
-            achievementList.some((freeGrade) => freeGrade.field === field) &&
-            !(freeSemester && field === freeSemesterToAchievementField[freeSemester])
-          ) {
-            setValue(field, getValues(field) || []);
-          } else {
-            setValue(field, null);
-          }
-        }),
-      0,
-    );
+    ACHIEVEMENT_FIELD_LIST.forEach((field) => {
+      if (
+        achievementList.some((freeGrade) => freeGrade.field === field) &&
+        !(freeSemester && field === freeSemesterToAchievementField[freeSemester])
+      ) {
+        setValue(field, getValues(field) || []);
+      } else {
+        setValue(field, null);
+      }
+    });
   }, []);
 
   return (
