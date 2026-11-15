@@ -75,6 +75,23 @@ const majorIntroductions = [
   },
 ] as const;
 
+const FIXED_GRADE = 3;
+
+/**
+ * 반·번호로 5자리 학번(학년 1 + 반 2 + 번호 2)을 만든다. 둘 중 하나라도 비었거나 선택지
+ * 범위(1~12반, 1~30번)를 벗어나면 null — 이때는 기존 학번을 건드리지 않는다.
+ */
+const toStudentNumber = (classroom: string | undefined, number: string | undefined) => {
+  if (!classroom || !number) return null;
+
+  const classroomNum = parseInt(classroom);
+  const numberNum = parseInt(number);
+
+  if (!(classroomNum >= 1 && classroomNum <= 12 && numberNum >= 1 && numberNum <= 30)) return null;
+
+  return `${FIXED_GRADE}${classroomNum.toString().padStart(2, '0')}${numberNum.toString().padStart(2, '0')}`;
+};
+
 const Step2Register = ({ setValue, control, getValues, reset, showError }: Step2RegisterProps) => {
   // formState를 props로 받으면 부모의 {...step2UseForm} 스프레드가 메모이즈되어 첫 렌더
   // 값에 고정된다 — 컴포넌트 안에서 직접 구독한다 (React Compiler 호환)
@@ -115,19 +132,27 @@ const Step2Register = ({ setValue, control, getValues, reset, showError }: Step2
   const START_YEAR = isCandidate ? NEXT_YEAR : CURRENT_YEAR;
   const PERMIT_YEAR = isCandidate ? 1 : 5;
 
-  const FIXED_GRADE = 3;
+  // 학번은 반·번호에서 만들어지므로 반·번호를 고를 때 같이 갱신한다
+  const updateStudentNumber = (nextClassroom?: string, nextNumber?: string) => {
+    if (isGED) return;
 
-  useEffect(() => {
-    if (!isGED && classroom && number) {
-      const classroomNum = parseInt(classroom);
-      const numberNum = parseInt(number);
+    const studentNumber = toStudentNumber(nextClassroom, nextNumber);
+    if (studentNumber) setValue('studentNumber', studentNumber);
+  };
 
-      if (classroomNum >= 1 && classroomNum <= 12 && numberNum >= 1 && numberNum <= 30) {
-        const newStudentNumber = `${FIXED_GRADE}${classroomNum.toString().padStart(2, '0')}${numberNum.toString().padStart(2, '0')}`;
-        setValue('studentNumber', newStudentNumber);
-      }
-    }
-  }, [classroom, number, isGED, setValue]);
+  const handleClassroomChange = (value: string) => {
+    const isChanged = value !== getValues('classroom');
+
+    setValue('classroom', value);
+    if (isChanged) updateStudentNumber(value, getValues('number'));
+  };
+
+  const handleNumberChange = (value: string) => {
+    const isChanged = value !== getValues('number');
+
+    setValue('number', value);
+    if (isChanged) updateStudentNumber(getValues('classroom'), value);
+  };
 
   const handleGraduationTypeOptionClick = (value: GraduationTypeValueEnum) => {
     setValue('graduationType', value);
@@ -144,6 +169,12 @@ const Step2Register = ({ setValue, control, getValues, reset, showError }: Step2
       setValue('studentNumber', '');
       setValue('classroom', '');
       setValue('number', '');
+    }
+
+    // 검정고시에서 다른 전형으로 바꾸면 남아 있는 반·번호로 학번을 다시 만든다 (이전 effect가 isGED 변화에 반응하던 동작)
+    if (isGED && value !== GraduationTypeValueEnum.GED) {
+      const studentNumber = toStudentNumber(getValues('classroom'), getValues('number'));
+      if (studentNumber) setValue('studentNumber', studentNumber);
     }
 
     setValue('graduationDate', '0000-00');
@@ -207,6 +238,9 @@ const Step2Register = ({ setValue, control, getValues, reset, showError }: Step2
     (thirdDesiredMajor === undefined || thirdDesiredMajor === null);
 
   useEffect(() => {
+    // 저장된 학번을 반·번호 기준으로 맞춘다 — 학년 자리는 항상 FIXED_GRADE로 다시 쓴다
+    updateStudentNumber(getValues('classroom'), getValues('number'));
+
     if (!isGED && getValues('schoolName') === null) {
       setValue('schoolName', '');
       setValue('schoolAddress', '');
@@ -310,10 +344,7 @@ const Step2Register = ({ setValue, control, getValues, reset, showError }: Step2
                       <SelectValue placeholder={`${FIXED_GRADE}학년`} />
                     </SelectTrigger>
                   </Select>
-                  <Select
-                    value={classroom || ''}
-                    onValueChange={(value) => setValue('classroom', value)}
-                  >
+                  <Select value={classroom || ''} onValueChange={handleClassroomChange}>
                     <SelectTrigger
                       className={cn('w-[9.3785rem]', {
                         '!border-red-600': hasClassroomError,
@@ -333,7 +364,7 @@ const Step2Register = ({ setValue, control, getValues, reset, showError }: Step2
                     </SelectContent>
                   </Select>
 
-                  <Select value={number || ''} onValueChange={(value) => setValue('number', value)}>
+                  <Select value={number || ''} onValueChange={handleNumberChange}>
                     <SelectTrigger
                       className={cn('w-[9.3785rem]', {
                         '!border-red-600': hasNumberError,
