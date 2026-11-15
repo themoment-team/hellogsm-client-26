@@ -4,7 +4,11 @@ import { cn } from '@repo/utils';
 
 const Circle = () => <div className={cn('w-1.5', 'h-1.5', 'bg-sky-300', 'rounded-full')} />;
 
-const LoginPage = () => (
+interface LoginPageProps {
+  loginHref: string;
+}
+
+const LoginPage = ({ loginHref }: LoginPageProps) => (
   <main className={cn('flex', 'justify-center', 'w-dvw', 'h-dvh', 'bg-white', 'items-center')}>
     <div className={cn('flex', 'flex-col', 'gap-10', 'items-center')}>
       <div className={cn('flex', 'flex-col', 'gap-3', 'items-center', 'relative')}>
@@ -22,7 +26,7 @@ const LoginPage = () => (
         </p>
       </div>
 
-      <LoginButton variant="google" isAdmin={true}>
+      <LoginButton variant="google" href={loginHref}>
         Google 계정으로 로그인
       </LoginButton>
     </div>

@@ -19,8 +19,17 @@
         "SENTRY_DSN",
         "SENTRY_ORG",
         "SENTRY_PROJECT",
-        "SENTRY_AUTH_TOKEN"
+        "SENTRY_AUTH_TOKEN",
+        "MOCK_SCORE_URL",
+        "MOCK_SCORE_API_KEY",
+        "NOTION_SECRET_API_KEY"
       ]
+    },
+    "admin#build": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"],
+      "env": ["MOCK_SCORE_URL", "MOCK_SCORE_API_KEY"]
     },
     "@repo/ocr-lambda#build": {
       "dependsOn": ["^build"],
