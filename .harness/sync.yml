@@ -1,6 +1,7 @@
 enabled: true
 groups: []
 language: ko
+base_branch: develop
 overrides:
   claude/agents/contradiction-finder: true
   claude/agents/doc-polisher: true
