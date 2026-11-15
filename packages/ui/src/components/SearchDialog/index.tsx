@@ -2,6 +2,7 @@
 
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
+import { preconnect } from 'react-dom';
 import { UseFormSetValue } from 'react-hook-form';
 
 import { useDebounce } from '@repo/hooks';
@@ -46,6 +47,9 @@ const getSchools = async (keyword: string): Promise<SchoolType[]> => {
 };
 
 const SearchDialog = ({ setValue }: SearchDialogProps) => {
+  // 첫 학교 검색 요청 전에 학교 정보 API 서버와 연결을 미리 맺어 둠 (fetch가 CORS 요청이라 anonymous 연결로 맞춤)
+  preconnect('https://open.neis.go.kr', { crossOrigin: 'anonymous' });
+
   const [keyword, setKeyword] = useState<string>('');
   // 학교를 고른 직후에는 그 이름으로 다시 검색하지 않도록 선택한 학교명을 기억
   const [selectedSchoolName, setSelectedSchoolName] = useState<string | null>(null);
