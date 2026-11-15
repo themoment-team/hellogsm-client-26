@@ -6,7 +6,6 @@ import {
   UseFormGetValues,
   UseFormReset,
   UseFormSetValue,
-  UseFormTrigger,
   useFormState,
   useWatch,
 } from 'react-hook-form';
@@ -37,7 +36,6 @@ interface Step2RegisterProps {
   control: Control<Step2FormType>;
   getValues: UseFormGetValues<Step2FormType>;
   reset: UseFormReset<Step2FormType>;
-  trigger: UseFormTrigger<Step2FormType>;
   showError: boolean;
 }
 
@@ -77,14 +75,7 @@ const majorIntroductions = [
   },
 ] as const;
 
-const Step2Register = ({
-  setValue,
-  control,
-  getValues,
-  reset,
-  trigger,
-  showError,
-}: Step2RegisterProps) => {
+const Step2Register = ({ setValue, control, getValues, reset, showError }: Step2RegisterProps) => {
   // formState를 props로 받으면 부모의 {...step2UseForm} 스프레드가 메모이즈되어 첫 렌더
   // 값에 고정된다 — 컴포넌트 안에서 직접 구독한다 (React Compiler 호환)
   const { errors } = useFormState({ control });
@@ -221,16 +212,6 @@ const Step2Register = ({
       setValue('schoolAddress', '');
     }
   }, []);
-
-  useEffect(() => {
-    if (!showError) return;
-
-    const validateForm = async () => {
-      await trigger();
-    };
-
-    validateForm();
-  }, [showError]);
 
   return (
     <div className={cn('flex', 'w-full', 'flex-col', 'items-start', 'gap-10')}>

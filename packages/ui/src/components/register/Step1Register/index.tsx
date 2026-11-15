@@ -1,15 +1,7 @@
 'use client';
 
-import { useEffect } from 'react';
 import { Address, useDaumPostcodePopup } from 'react-daum-postcode';
-import {
-  Control,
-  UseFormRegister,
-  UseFormSetValue,
-  UseFormTrigger,
-  useFormState,
-  useWatch,
-} from 'react-hook-form';
+import { Control, UseFormRegister, UseFormSetValue, useFormState, useWatch } from 'react-hook-form';
 
 import { SexValueEnum, Step1FormType } from '@repo/types';
 import { cn } from '@repo/utils';
@@ -32,7 +24,6 @@ interface Step1RegisterProps {
   register: UseFormRegister<Step1FormType>;
   setValue: UseFormSetValue<Step1FormType>;
   control: Control<Step1FormType>;
-  trigger: UseFormTrigger<Step1FormType>;
   showError: boolean;
 }
 
@@ -45,7 +36,6 @@ const Step1Register = ({
   register,
   setValue,
   control,
-  trigger,
   showError,
 }: Step1RegisterProps) => {
   // formState를 props로 받으면 부모의 {...step1UseForm} 스프레드가 메모이즈되어 첫 렌더
@@ -122,16 +112,6 @@ const Step1Register = ({
     });
   };
 
-  useEffect(() => {
-    if (!showError) return;
-
-    const validateForm = async () => {
-      await trigger();
-    };
-
-    validateForm();
-  }, [showError]);
-
   return (
     <div
       className={cn('flex', 'w-full', 'h-[28.75rem]', 'flex-col', 'items-start', 'justify-between')}
@@ -147,7 +127,12 @@ const Step1Register = ({
 
       <div className={cn('flex', 'items-end', 'gap-[3rem]')}>
         <div className={cn('flex', 'w-[29.75rem]', 'flex-col', 'items-start', 'gap-[2rem]')}>
-          <UploadPhoto setValue={setValue} control={control} errors={errors} showError={showError} />
+          <UploadPhoto
+            setValue={setValue}
+            control={control}
+            errors={errors}
+            showError={showError}
+          />
           <CustomFormItem text={'이름'} className={cn('gap-1')} required={true} fullWidth={true}>
             <Input
               {...register('name')}
@@ -255,10 +240,7 @@ const Step1Register = ({
                   variant={showError && errors.address ? 'error' : null}
                 />
 
-                <Button
-                  variant="next"
-                  onClick={handleZipCodeButtonClick}
-                >
+                <Button variant="next" onClick={handleZipCodeButtonClick}>
                   주소 찾기
                 </Button>
               </div>

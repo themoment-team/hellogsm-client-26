@@ -389,12 +389,6 @@ const Step4Register = ({
     await trigger();
   };
 
-  useEffect(() => {
-    if (!showError) return;
-
-    validateForm();
-  }, [showError]);
-
   return (
     <>
       <div className={cn(['w-[66.5rem]', 'flex', 'flex-col', type === 'admin' && 'pb-20'])}>
@@ -508,7 +502,6 @@ const Step4Register = ({
                         isGraduate={isGraduate}
                         showError={showError}
                         getValues={getValues}
-                        validateForm={validateForm}
                       />
                     )}
                     {isFreeSemester && (
@@ -585,7 +578,6 @@ const Step4Register = ({
                       trigger={trigger}
                       errors={errors}
                       showError={showError}
-                      validateForm={validateForm}
                     />
                   </div>
                 </div>

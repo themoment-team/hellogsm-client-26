@@ -32,7 +32,6 @@ interface FreeGradeFormProps {
   isGraduate: boolean;
   showError: boolean;
   getValues: UseFormGetValues<Step4FormType>;
-  validateForm: () => void;
 }
 
 const itemStyle = [
@@ -68,7 +67,6 @@ const FreeGradeForm = ({
   isGraduate,
   showError,
   getValues,
-  validateForm,
 }: FreeGradeFormProps) => {
   // 렌더 중 구독은 watch() 대신 useWatch 사용 (React Compiler 호환)
   // 훅은 map 안에서 호출할 수 없으므로 학기별 배열 전체를 한 번 구독하고 인덱싱한다
@@ -88,12 +86,6 @@ const FreeGradeForm = ({
       0,
     );
   }, []);
-
-  useEffect(() => {
-    if (!showError) return;
-
-    validateForm();
-  }, [showError]);
 
   return (
     <div className={cn('flex', 'flex-col')}>

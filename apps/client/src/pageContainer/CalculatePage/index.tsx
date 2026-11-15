@@ -102,8 +102,10 @@ const CalculatePage = () => {
     postMockScore(body);
   };
 
+  // 오류 표시는 버튼을 누를 때마다 지금 입력값으로 다시 검증한다
   const handleCalculateStepError = () => {
     setErrorStep(StepEnum.FOUR);
+    step4UseForm.trigger();
   };
 
   const clearStepError = () => {

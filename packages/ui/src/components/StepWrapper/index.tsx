@@ -222,14 +222,28 @@ const StepWrapper = ({ data, step, info, memberId, type, isModifyApproved }: Ste
 
   const isScoreComplete = Object.values(isStepSuccess).every((value) => value === true);
 
-  const handleStepError = (step: StepEnum) => {
-    setErrorStep((prev) => {
-      if (prev === step) {
-        setTimeout(() => setErrorStep(step), 0);
-        return null;
-      }
-      return step;
-    });
+  const triggerStepValidation = (targetStep: StepEnum) => {
+    switch (targetStep) {
+      case StepEnum.ONE:
+        return step1UseForm.trigger();
+      case StepEnum.TWO:
+        return step2UseForm.trigger();
+      case StepEnum.THREE:
+        return step3UseForm.trigger();
+      case StepEnum.FOUR:
+        return step4UseForm.trigger();
+    }
+  };
+
+  // 미완료 단계에서 다음/제출 버튼을 누르면 그 단계 폼을 검증하고 오류를 표시한다.
+  // 같은 단계를 다시 눌러도 이 핸들러가 그때의 입력값으로 다시 검증한다.
+  const handleStepError = (targetStep: StepEnum) => {
+    // 오류는 지금 보이는 단계에만 표시된다 — 다른 단계(예: 1~3단계에서 누른 최종 제출)는
+    // 표시할 곳이 없으므로 검증하지 않는다
+    if (targetStep !== step) return;
+
+    setErrorStep(targetStep);
+    triggerStepValidation(targetStep);
   };
 
   const clearStepError = () => {

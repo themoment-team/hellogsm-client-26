@@ -1,6 +1,6 @@
 'use client';
 
-import { KeyboardEvent, useEffect } from 'react';
+import { KeyboardEvent } from 'react';
 import { FieldErrors, UseFormRegister, UseFormTrigger, get, Path } from 'react-hook-form';
 
 import { Step4FormType } from '@repo/types';
@@ -11,7 +11,6 @@ interface NonSubjectFormProps {
   trigger: UseFormTrigger<Step4FormType>;
   errors: FieldErrors<Step4FormType>;
   showError: boolean;
-  validateForm: () => void;
 }
 
 const nonSubjectArray = [
@@ -62,13 +61,7 @@ const rowStyle = [
   'items-center',
 ];
 
-const NonSubjectForm = ({ register, errors, showError, validateForm }: NonSubjectFormProps) => {
-  useEffect(() => {
-    if (!showError) return;
-
-    validateForm();
-  }, [showError]);
-
+const NonSubjectForm = ({ register, errors, showError }: NonSubjectFormProps) => {
   return (
     <div className={cn('flex', 'flex-col', 'w-full')}>
       <div

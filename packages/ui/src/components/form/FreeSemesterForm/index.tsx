@@ -132,11 +132,6 @@ const FreeSemesterForm = ({
     });
   }, [freeSemester]);
 
-  useEffect(() => {
-    if (!showError) return;
-    validateForm();
-  }, [showError]);
-
   return (
     <div className={cn('flex', 'flex-col')}>
       <div
