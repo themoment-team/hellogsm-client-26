@@ -41,7 +41,7 @@ export default async function CheckResult() {
   return (
     <>
       <CheckResultPage
-        memberInfo={memberInfo}
+        userName={memberInfo?.name}
         resultInfo={resultInfo}
         isCheckFirstResult={isCheckFirstResult}
         isCheckFinalResult={isCheckFinalResult}

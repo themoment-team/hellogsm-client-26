@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-import { MyMemberInfoType, MyTotalTestResultType } from '@repo/types';
+import { MyTotalTestResultType } from '@repo/types';
 
 import {
   Footer,
@@ -21,12 +21,12 @@ import {
 import DevNoticeDialog from './DevNoticeDialog';
 
 interface MainPageProps {
-  memberInfo: MyMemberInfoType | undefined;
+  userName: string | undefined;
   resultInfo: MyTotalTestResultType | undefined;
   isServerHealthy: boolean;
 }
 
-const MainPage = ({ memberInfo, resultInfo, isServerHealthy }: MainPageProps) => {
+const MainPage = ({ userName, resultInfo, isServerHealthy }: MainPageProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isPassOpen, setIsPassOpen] = useState<boolean>(false);
 
@@ -44,7 +44,7 @@ const MainPage = ({ memberInfo, resultInfo, isServerHealthy }: MainPageProps) =>
 
   return (
     <>
-      <LoginNoticeDialog userName={memberInfo?.name} usedPath={'main'} />
+      <LoginNoticeDialog userName={userName} usedPath={'main'} />
       <Section1 isServerCurrentActive={isServerHealthy} />
       <Section2 />
       <Section3 isServerHealthy={isServerHealthy} />
@@ -64,7 +64,7 @@ const MainPage = ({ memberInfo, resultInfo, isServerHealthy }: MainPageProps) =>
         setIsPassOpen={setIsPassOpen}
         resultInfo={resultInfo}
         isFinishFirstTest={isFinishFirstTest}
-        memberInfo={memberInfo}
+        userName={userName}
       />
 
       <DevNoticeDialog />

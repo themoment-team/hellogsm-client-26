@@ -46,6 +46,10 @@ export default async function Home(props: { searchParams?: Promise<{ isAdmin?: s
   };
 
   return (
-    <MainPage memberInfo={memberInfo} resultInfo={resultInfo} isServerHealthy={isServerHealthy} />
+    <MainPage
+      userName={memberInfo?.name}
+      resultInfo={resultInfo}
+      isServerHealthy={isServerHealthy}
+    />
   );
 }

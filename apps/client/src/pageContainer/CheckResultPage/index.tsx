@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 import { useModalStore } from '@repo/store';
-import { MyMemberInfoType, MyTotalTestResultType } from '@repo/types';
+import { MyTotalTestResultType } from '@repo/types';
 import { cn } from '@repo/utils';
 
 import { PassResultDialog } from '@/components';
@@ -30,7 +30,7 @@ const containerStyle = ['flex', 'flex-col', 'gap-10', 'items-center'] as const;
 const h1Style = ['text-gray-900', 'text-[1.5rem]/[2rem]', 'font-semibold'] as const;
 
 interface CheckResultPageProps {
-  memberInfo: MyMemberInfoType | undefined;
+  userName: string | undefined;
   resultInfo: MyTotalTestResultType | undefined;
   isCheckFirstResult: boolean;
   isCheckFinalResult: boolean;
@@ -38,7 +38,7 @@ interface CheckResultPageProps {
 }
 
 const CheckResultPage = ({
-  memberInfo,
+  userName,
   resultInfo,
   isCheckFirstResult,
   isCheckFinalResult,
@@ -110,7 +110,7 @@ const CheckResultPage = ({
               } as MyTotalTestResultType)
             : resultInfo
         }
-        memberInfo={{ name: memberInfo?.name } as MyMemberInfoType}
+        userName={userName}
         onClick={handleDialogClick}
       />
     </>
