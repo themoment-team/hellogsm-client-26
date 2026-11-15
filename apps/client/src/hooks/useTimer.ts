@@ -1,4 +1,27 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
+type IntervalRef = React.RefObject<ReturnType<typeof setInterval> | undefined>;
+
+const stopCountdown = (intervalRef: IntervalRef) => {
+  clearInterval(intervalRef.current);
+  intervalRef.current = undefined;
+};
+
+// 이전 interval을 정리한 뒤 from부터 1초마다 줄이고, 0 이하가 되면 멈춤
+const startCountdown = (
+  intervalRef: IntervalRef,
+  setCount: React.Dispatch<React.SetStateAction<number>>,
+  from: number,
+) => {
+  stopCountdown(intervalRef);
+
+  let remaining = from;
+  intervalRef.current = setInterval(() => {
+    remaining -= 1;
+    setCount(remaining);
+    if (remaining <= 0) stopCountdown(intervalRef);
+  }, 1000);
+};
 
 const useTimer = ({
   sec,
@@ -10,24 +33,21 @@ const useTimer = ({
   keepAfterRefresh: boolean;
 }) => {
   const [count, setCount] = useState<number>(0);
-  const [intervalId, setIntervalId] = useState<NodeJS.Timeout>();
+  // interval id는 화면에 쓰이지 않으므로 state 대신 ref에 보관해 불필요한 렌더를 막음
+  const intervalRef = useRef<ReturnType<typeof setInterval>>(undefined);
 
   const startTimer = () => {
     const endTime = new Date().getTime() + sec * 1000;
     if (keepAfterRefresh) document.cookie = `endTime=${endTime}; max-age=${sec}`;
 
     setCount(sec);
-
-    const intervalId = setInterval(() => {
-      setCount((prev) => prev - 1);
-    }, 1000);
-
-    setIntervalId(intervalId);
+    startCountdown(intervalRef, setCount, sec);
     setIsFirst(false);
   };
 
   const stopTimer = () => {
     document.cookie = 'endTime=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    stopCountdown(intervalRef);
     setCount(0);
   };
 
@@ -41,20 +61,12 @@ const useTimer = ({
 
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setCount(count);
-
-      const intervalId = setInterval(() => {
-        setCount((prev) => prev - 1);
-      }, 1000);
-
-      setIntervalId(intervalId);
+      if (count > 0) startCountdown(intervalRef, setCount, count);
     }
+
+    // 언마운트 시 남은 interval 정리
+    return () => stopCountdown(intervalRef);
   }, []);
-
-  useEffect(() => {
-    if (intervalId && count <= 0) {
-      clearInterval(intervalId);
-    }
-  }, [intervalId, count]);
 
   return { count, startTimer, stopTimer };
 };
