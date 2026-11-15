@@ -52,14 +52,14 @@ const SignUpPage = ({ isPastAnnouncement }: SignUpProps) => {
   const [isSuccess, setIsSuccess] = useState<boolean | undefined>(undefined);
   const [isVerifyClicked, setIsVerifyClicked] = useState(false);
 
-  const {
-    setVerificationCodeSendErrorModal,
-    setSignupSuccessModal,
-    setSignupErrorModal,
-    setPhoneNumberDuplicateModal,
-    setApplicationPeriodModal,
-    setTestPeriodNoticeModal,
-  } = useModalStore();
+  const setVerificationCodeSendErrorModal = useModalStore(
+    (state) => state.setVerificationCodeSendErrorModal,
+  );
+  const setSignupSuccessModal = useModalStore((state) => state.setSignupSuccessModal);
+  const setSignupErrorModal = useModalStore((state) => state.setSignupErrorModal);
+  const setPhoneNumberDuplicateModal = useModalStore((state) => state.setPhoneNumberDuplicateModal);
+  const setApplicationPeriodModal = useModalStore((state) => state.setApplicationPeriodModal);
+  const setTestPeriodNoticeModal = useModalStore((state) => state.setTestPeriodNoticeModal);
 
   // 로그인 후 클라이언트 라우팅으로 진입하는 경우에도 안내하기 위해 마운트 시 노출
   useEffect(() => {

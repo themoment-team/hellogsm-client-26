@@ -67,11 +67,15 @@ const ApplicantTR = ({
   oneseoEditStatus,
   testResultTag,
 }: ApplicationTRProps) => {
-  const {
-    setDocumentSubmissionChangeModal,
-    setAdmissionAgreementChangeModal,
-    setApplicationModificationNotPossibleModal,
-  } = useModalStore();
+  const setDocumentSubmissionChangeModal = useModalStore(
+    (state) => state.setDocumentSubmissionChangeModal,
+  );
+  const setAdmissionAgreementChangeModal = useModalStore(
+    (state) => state.setAdmissionAgreementChangeModal,
+  );
+  const setApplicationModificationNotPossibleModal = useModalStore(
+    (state) => state.setApplicationModificationNotPossibleModal,
+  );
 
   const { push } = useRouter();
 

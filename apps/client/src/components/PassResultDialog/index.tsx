@@ -31,7 +31,9 @@ const PassResultDialog = ({
   userName,
   onClick = () => setIsPassOpen(false),
 }: PassResultProps) => {
-  const { setInterviewQuestionNotReadyModal } = useModalStore();
+  const setInterviewQuestionNotReadyModal = useModalStore(
+    (state) => state.setInterviewQuestionNotReadyModal,
+  );
 
   const firstTestPass = isFinishFirstTest && resultInfo?.firstTestPassYn === 'YES';
   const secondTestPass = !isFinishFirstTest && resultInfo?.secondTestPassYn === 'YES';

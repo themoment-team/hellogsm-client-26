@@ -84,7 +84,10 @@ interface StepWrapperProps {
 }
 
 const StepWrapper = ({ data, step, info, memberId, type, isModifyApproved }: StepWrapperProps) => {
-  const { setScoreCalculationCompleteModal, setApplicationSubmitModal } = useModalStore();
+  const setScoreCalculationCompleteModal = useModalStore(
+    (state) => state.setScoreCalculationCompleteModal,
+  );
+  const setApplicationSubmitModal = useModalStore((state) => state.setApplicationSubmitModal);
   const queryClient = useQueryClient();
 
   const step1UseForm = useForm<Step1FormType>({

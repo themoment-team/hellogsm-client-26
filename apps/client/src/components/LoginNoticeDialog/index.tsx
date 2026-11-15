@@ -11,7 +11,7 @@ interface LoginNoticeDialogProps {
 }
 
 const LoginNoticeDialog = ({ userName, usedPath }: LoginNoticeDialogProps) => {
-  const { setLoginRequiredModal } = useModalStore();
+  const setLoginRequiredModal = useModalStore((state) => state.setLoginRequiredModal);
   const { data: authInfo, isLoading } = useGetMyAuthInfo();
 
   const isMain = usedPath === 'main' ? true : false;

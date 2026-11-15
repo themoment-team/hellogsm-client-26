@@ -28,7 +28,9 @@ const graduationArray = [
 ];
 
 const CalculatePage = () => {
-  const { setScoreCalculationCompleteModal } = useModalStore();
+  const setScoreCalculationCompleteModal = useModalStore(
+    (state) => state.setScoreCalculationCompleteModal,
+  );
 
   const [graduationType, setGraduationType] = useState<GraduationTypeValueEnum | null>(null);
   // 예체능 성적의 기대 길이가 졸업 유형에 따라 달라지므로 스키마는 graduationType으로 만든다

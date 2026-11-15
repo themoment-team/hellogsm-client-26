@@ -44,11 +44,11 @@ const CheckResultPage = ({
   isCheckFinalResult,
   isOneseoWrite,
 }: CheckResultPageProps) => {
-  const {
-    setResultAnnouncementPeriodModal,
-    setOneseoNotSubmittedModal,
-    setResultNotAnnouncedModal,
-  } = useModalStore();
+  const setResultAnnouncementPeriodModal = useModalStore(
+    (state) => state.setResultAnnouncementPeriodModal,
+  );
+  const setOneseoNotSubmittedModal = useModalStore((state) => state.setOneseoNotSubmittedModal);
+  const setResultNotAnnouncedModal = useModalStore((state) => state.setResultNotAnnouncedModal);
   const [isFirstTest, setIsFirstTest] = useState<boolean>(true);
   const [isDialog, setIsDialog] = useState(false);
 

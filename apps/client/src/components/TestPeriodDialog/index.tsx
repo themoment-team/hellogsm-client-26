@@ -7,7 +7,7 @@ import { useModalStore } from '@repo/store';
 import { isTestPeriod } from '@/utils';
 
 const TestPeriodDialog = () => {
-  const { setTestPeriodNoticeModal } = useModalStore();
+  const setTestPeriodNoticeModal = useModalStore((state) => state.setTestPeriodNoticeModal);
 
   useEffect(() => {
     if (isTestPeriod) {
