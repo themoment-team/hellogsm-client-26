@@ -2,7 +2,7 @@
 
 import { QueryObserverResult, RefetchOptions } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm, useWatch, Controller } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
@@ -13,7 +13,6 @@ import {
   usePatchInterviewScore,
   usePatchOneseoApproval,
 } from '@repo/api/hooks';
-import { useDebounce } from '@repo/hooks';
 import { useModalStore } from '@repo/store';
 import { EditabilityType, OneseoListType, OneseoType, ScreeningEnum } from '@repo/types';
 import { CheckIcon } from '@repo/ui/icons';
@@ -23,6 +22,16 @@ import { cn, formatScore } from '@repo/utils';
 import { SideBarType } from '@/schemas';
 
 import TextField from '../TextField';
+
+const SCORE_FORMAT_DEBOUNCE_MS = 1000;
+
+type ScoreFieldName = '역량검사점수' | '심층면접점수';
+
+// 입력한 점수를 소수 둘째 자리 형식으로 맞추고, 숫자가 없으면 빈 칸으로 둠
+const toScoreFieldValue = (score: string) => {
+  const formattedScore = formatScore(score);
+  return formattedScore !== 'NaN' ? formattedScore : '';
+};
 
 interface ApplicationTRProps extends OneseoType {
   editableData: EditabilityType | undefined;
@@ -125,8 +134,8 @@ const ApplicantTR = ({
 
   const { control, setValue, getValues } = useForm({
     defaultValues: {
-      역량검사점수: formatted역량검사점수,
-      심층면접점수: formatted심층면접점수,
+      역량검사점수: toScoreFieldValue(String(competencyEvaluationScore ?? '')),
+      심층면접점수: toScoreFieldValue(String(interviewScore ?? '')),
     },
   });
 
@@ -136,18 +145,30 @@ const ApplicantTR = ({
     name: ['역량검사점수', '심층면접점수'],
   });
 
-  const debounced역량검사점수 = useDebounce(입력중역량검사점수, 1000);
-  const debounced심층면접점수 = useDebounce(입력중심층면접점수, 1000);
+  const scoreFormatTimersRef = useRef<
+    Record<ScoreFieldName, ReturnType<typeof setTimeout> | undefined>
+  >({
+    역량검사점수: undefined,
+    심층면접점수: undefined,
+  });
 
+  // 화면을 떠난 뒤 남은 타이머가 점수 칸을 바꾸지 않도록 정리
   useEffect(() => {
-    const formatAndSetScore = (score: string, fieldName: '역량검사점수' | '심층면접점수') => {
-      const formattedScore = formatScore(score);
-      setValue(fieldName, formattedScore !== 'NaN' ? formattedScore : '');
+    const timers = scoreFormatTimersRef.current;
+    return () => {
+      clearTimeout(timers.역량검사점수);
+      clearTimeout(timers.심층면접점수);
     };
+  }, []);
 
-    formatAndSetScore(debounced역량검사점수, '역량검사점수');
-    formatAndSetScore(debounced심층면접점수, '심층면접점수');
-  }, [debounced역량검사점수, debounced심층면접점수, setValue]);
+  // 입력이 1초 동안 멈추면 해당 칸의 점수를 형식에 맞게 정리
+  const handleScoreChange = (fieldName: ScoreFieldName, score: string) => {
+    const timers = scoreFormatTimersRef.current;
+    clearTimeout(timers[fieldName]);
+    timers[fieldName] = setTimeout(() => {
+      setValue(fieldName, toScoreFieldValue(score));
+    }, SCORE_FORMAT_DEBOUNCE_MS);
+  };
 
   const handleRealOneseoArrived = () => {
     setDocumentSubmissionChangeModal(false);
@@ -230,7 +251,16 @@ const ApplicantTR = ({
             <Controller
               name="역량검사점수"
               control={control}
-              render={({ field }) => <TextField {...field} disabled={!!secondTestPassYn} />}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  onChange={(e) => {
+                    field.onChange(e);
+                    handleScoreChange('역량검사점수', e.target.value);
+                  }}
+                  disabled={!!secondTestPassYn}
+                />
+              )}
             />
             <Button
               variant={
@@ -254,7 +284,16 @@ const ApplicantTR = ({
             <Controller
               name="심층면접점수"
               control={control}
-              render={({ field }) => <TextField {...field} disabled={!!secondTestPassYn} />}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  onChange={(e) => {
+                    field.onChange(e);
+                    handleScoreChange('심층면접점수', e.target.value);
+                  }}
+                  disabled={!!secondTestPassYn}
+                />
+              )}
             />
             <Button
               variant={
