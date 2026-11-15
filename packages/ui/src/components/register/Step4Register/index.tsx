@@ -17,6 +17,7 @@ import {
   ACHIEVEMENT_FIELD_LIST,
   clearFreeSemesterArtsPhysical,
   GENERAL_SUBJECTS,
+  getFreeSemesterArtsPhysicalIndices,
 } from '@repo/constants';
 import {
   AchievementType,
@@ -257,19 +258,67 @@ const Step4Register = ({
     setSubjectKeys((prev) => [...prev, nextSubjectKey()]);
   };
 
+  const validateForm = async () => {
+    await trigger();
+  };
+
+  // 예체능의 자유학기 칸(과목 3개)은 화면에 '자유학기제'로만 보이므로 0으로 맞춘다
+  const clearFreeSemesterArtsPhysicalCells = (nextFreeSemester: FreeSemesterValueEnum | null) => {
+    getFreeSemesterArtsPhysicalIndices(nextFreeSemester).forEach((index) => {
+      setValue(`artsPhysicalAchievement.${index}`, 0);
+    });
+  };
+
+  // 자유학기 지정이 바뀌면 그 학기의 성적 열은 비우고(null), 나머지 학기 열은 비어 있던(null)
+  // 값을 입력 전 상태(undefined)로 되돌린 뒤 예체능 자유학기 칸을 맞춘다. 자유학기 지정이
+  // 바뀌는 이벤트(자유학기 on/off 버튼, OCR 적용)에서 호출한다.
+  const applyFreeSemesterSelection = (nextFreeSemester: FreeSemesterValueEnum | null) => {
+    const freeSemesterAchievementList = isCandidate
+      ? freeSemesterCandidateArray
+      : freeSemesterGraduateArray;
+
+    freeSemesterAchievementList.forEach(({ field, value }) => {
+      if (value === nextFreeSemester) {
+        setValue(field, null);
+      } else {
+        setValue(field, getValues(field) || undefined!);
+      }
+    });
+
+    clearFreeSemesterArtsPhysicalCells(nextFreeSemester);
+  };
+
+  const handleFreeSemesterChange = (nextFreeSemester: FreeSemesterValueEnum | null) => {
+    const prevFreeSemester = getValues('freeSemester');
+
+    setValue('freeSemester', nextFreeSemester);
+    if (prevFreeSemester !== nextFreeSemester) applyFreeSemesterSelection(nextFreeSemester);
+
+    validateForm();
+  };
+
+  // 자유학년제/자유학기제 전환 — 두 모드는 예체능 성적의 칸 배치가 달라 이전 모드의 값을 지운다.
+  // 학기 열 초기화는 새로 나타나는 FreeGradeForm/FreeSemesterForm이 mount 시 한다.
+  const handleLiberalSystemChange = (nextLiberalSystem: LiberalSystemValueEnum) => {
+    const isLiberalSystemChanged = getValues('liberalSystem') !== nextLiberalSystem;
+
+    setValue('liberalSystem', nextLiberalSystem);
+    if (nextLiberalSystem === LiberalSystemValueEnum.FREE_GRADE) setValue('freeSemester', null);
+
+    if (!isLiberalSystemChanged) return;
+
+    setValue('artsPhysicalAchievement', null);
+    clearStepError();
+  };
+
   const handleApplyOcrAchievement = (achievement: SchoolRecordExtractionAchievementType) => {
+    const prevLiberalSystem = getValues('liberalSystem');
+    const prevFreeSemester = getValues('freeSemester');
+
+    // OCR이 liberalSystem을 바꿔도 예체능 성적은 새 모드에 맞게 같이 내려오므로,
+    // LiberalSystemSwitch를 눌렀을 때(handleLiberalSystemChange)와 달리 지우지 않는다
     if (achievement.liberalSystem) {
       setValue('liberalSystem', achievement.liberalSystem);
-      // 아래 "전형(자유학기제/자유학년제) 변경 시 예체능 성적 초기화" effect는 사용자가
-      // LiberalSystemSwitch를 직접 눌러 모드를 바꿨을 때 이전 모드의 값을 지우기 위한
-      // 것이다. 그런데 OCR이 liberalSystem을 바꾸는 경우엔 artsPhysicalAchievement도
-      // 이미 새 모드에 맞게 같이 내려오는데, 다음 렌더에서 그 effect가 "모드가 바뀌었다"고
-      // 보고 이 값을 다시 null로 덮어써 자동 입력값이 사라지는 문제가 있었다. ref를
-      // 새 모드 기준으로 미리 맞춰 두면 그 effect가 "모드가 안 바뀌었다"고 보고 초기화를
-      // 건너뛴다 — 실제 사용자 조작으로 인한 모드 변경만 초기화 대상이 된다.
-      prevIsFreeSemesterRef.current =
-        achievement.liberalSystem === LiberalSystemValueEnum.FREE_SEMESTER;
-      prevIsFreeGradeRef.current = achievement.liberalSystem === LiberalSystemValueEnum.FREE_GRADE;
     }
     if (achievement.freeSemester) {
       setValue('freeSemester', achievement.freeSemester);
@@ -316,9 +365,9 @@ const Step4Register = ({
       setValue(field, mappedAchievementFields[field] as Step4FormType[typeof field]);
     });
     // 예체능의 자유학기 칸은 화면에 '자유학기제'로만 보이므로 0이어야 한다. 이 칸을 0으로
-    // 맞추는 effect(ArtPhysicalForm)는 자유학기를 지정할 때만 돌아, 자유학기를 정한 뒤 OCR을
-    // 적용하면 OCR 값이 보이지 않는 채로 남는다. 제출 직전 정규화와 별개로 폼 상태도 화면과
-    // 맞춰 둔다.
+    // 맞추는 처리(clearFreeSemesterArtsPhysicalCells)는 자유학기 지정이 바뀔 때만 돌아,
+    // 자유학기를 정한 뒤 OCR을 적용하면 OCR 값이 보이지 않는 채로 남는다. 제출 직전 정규화와
+    // 별개로 폼 상태도 화면과 맞춰 둔다.
     setValue(
       'artsPhysicalAchievement',
       (achievement.artsPhysicalAchievement
@@ -335,6 +384,22 @@ const Step4Register = ({
       reorderAttendanceDaysForForm(achievement.attendanceDays) as Step4FormType['attendanceDays'],
     );
     setValue('volunteerTime', achievement.volunteerTime as Step4FormType['volunteerTime']);
+
+    // 자유학기 지정이 바뀌었으면 자유학기 열과 예체능 칸을 맞춘다. 모드가 자유학기제로 바뀐
+    // 경우의 학기 열 초기화는 새로 나타나는 FreeSemesterForm이 mount 시 하므로 예체능 칸만 맞춘다.
+    const nextLiberalSystem = getValues('liberalSystem');
+    const nextFreeSemester = getValues('freeSemester');
+    const isLiberalSystemChanged = nextLiberalSystem !== prevLiberalSystem;
+
+    if (nextLiberalSystem === LiberalSystemValueEnum.FREE_SEMESTER) {
+      if (isLiberalSystemChanged) {
+        clearFreeSemesterArtsPhysicalCells(nextFreeSemester);
+      } else if (nextFreeSemester !== prevFreeSemester) {
+        applyFreeSemesterSelection(nextFreeSemester);
+      }
+    }
+
+    if (isLiberalSystemChanged) clearStepError();
 
     trigger();
   };
@@ -355,6 +420,10 @@ const Step4Register = ({
       setValue('freeSemester', null);
     } else {
       setValue('gedAvgScore', null);
+      // 저장된 값의 예체능 자유학기 칸이 0이 아닐 수 있어 진입 시 한 번 맞춘다
+      if (getValues('liberalSystem') === LiberalSystemValueEnum.FREE_SEMESTER) {
+        clearFreeSemesterArtsPhysicalCells(getValues('freeSemester'));
+      }
       setValue('liberalSystem', getValues('liberalSystem') || LiberalSystemValueEnum.FREE_GRADE);
     }
 
@@ -364,30 +433,6 @@ const Step4Register = ({
       newSubject.forEach((subjectName) => handleAddSubjectClick(subjectName));
     }
   }, []);
-
-  const prevIsFreeSemesterRef = useRef(isFreeSemester);
-  const prevIsFreeGradeRef = useRef(isFreeGrade);
-
-  useEffect(() => {
-    const modeChanged =
-      prevIsFreeSemesterRef.current !== isFreeSemester ||
-      prevIsFreeGradeRef.current !== isFreeGrade;
-
-    prevIsFreeSemesterRef.current = isFreeSemester;
-    prevIsFreeGradeRef.current = isFreeGrade;
-
-    if (!modeChanged || isGED) return;
-
-    setValue('artsPhysicalAchievement', null);
-  }, [isFreeSemester, isFreeGrade, isGED, setValue]);
-
-  useEffect(() => {
-    if (clearStepError) clearStepError();
-  }, [isFreeGrade, isFreeSemester]);
-
-  const validateForm = async () => {
-    await trigger();
-  };
 
   return (
     <>
@@ -473,7 +518,7 @@ const Step4Register = ({
                 <LiberalSystemSwitch
                   isFreeGrade={isFreeGrade}
                   isFreeSemester={isFreeSemester}
-                  setValue={setValue}
+                  onLiberalSystemChange={handleLiberalSystemChange}
                   className={cn('mb-[3rem]')}
                 />
                 <div
@@ -518,7 +563,7 @@ const Step4Register = ({
                         isGraduate={isGraduate}
                         showError={showError}
                         getValues={getValues}
-                        validateForm={validateForm}
+                        onFreeSemesterChange={handleFreeSemesterChange}
                       />
                     )}
                     <button

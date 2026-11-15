@@ -34,7 +34,7 @@ interface FreeSemesterFormProps {
   showError: boolean;
   errors: FieldErrors<Step4FormType>;
   getValues: UseFormGetValues<Step4FormType>;
-  validateForm: () => void;
+  onFreeSemesterChange: (freeSemester: FreeSemesterValueEnum | null) => void;
 }
 
 const itemStyle = [
@@ -95,7 +95,7 @@ const FreeSemesterForm = ({
   errors,
   showError,
   getValues,
-  validateForm,
+  onFreeSemesterChange,
 }: FreeSemesterFormProps) => {
   // 렌더 중 구독은 watch() 대신 useWatch 사용 (React Compiler 호환)
   // 훅은 map 안에서 호출할 수 없으므로 학기별 배열 전체를 한 번 구독하고 인덱싱한다
@@ -121,16 +121,6 @@ const FreeSemesterForm = ({
       0,
     );
   }, []);
-
-  useEffect(() => {
-    achievementList.forEach(({ field }) => {
-      if (freeSemester && field === freeSemesterToAchievementField[freeSemester]) {
-        setValue(field, null);
-      } else {
-        setValue(field, getValues(field) || undefined!);
-      }
-    });
-  }, [freeSemester]);
 
   return (
     <div className={cn('flex', 'flex-col')}>
@@ -167,10 +157,7 @@ const FreeSemesterForm = ({
                     'text-emerald-500',
                   ])}
                   type="button"
-                  onClick={() => {
-                    setValue('freeSemester', null);
-                    validateForm();
-                  }}
+                  onClick={() => onFreeSemesterChange(null)}
                 >
                   <PinIcon type="ON" />
                   on
@@ -182,10 +169,7 @@ const FreeSemesterForm = ({
                     showError && !freeSemester && '!border-red-600',
                   ])}
                   type="button"
-                  onClick={() => {
-                    setValue('freeSemester', value!);
-                    validateForm();
-                  }}
+                  onClick={() => onFreeSemesterChange(value!)}
                 >
                   <PinIcon type="OFF" />
                   off
