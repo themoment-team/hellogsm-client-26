@@ -171,12 +171,6 @@ const Step2Register = ({ setValue, control, getValues, reset, showError }: Step2
       setValue('number', '');
     }
 
-    // 검정고시에서 다른 전형으로 바꾸면 남아 있는 반·번호로 학번을 다시 만든다 (이전 effect가 isGED 변화에 반응하던 동작)
-    if (isGED && value !== GraduationTypeValueEnum.GED) {
-      const studentNumber = toStudentNumber(getValues('classroom'), getValues('number'));
-      if (studentNumber) setValue('studentNumber', studentNumber);
-    }
-
     setValue('graduationDate', '0000-00');
   };
 
