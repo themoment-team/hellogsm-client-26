@@ -22,6 +22,11 @@ export const pretendardFont = localFont({
       weight: '700',
       style: 'normal',
     },
+    {
+      path: '../../public/fonts/Pretendard-Black.woff2',
+      weight: '900',
+      style: 'normal',
+    },
   ],
   display: 'swap',
 });
