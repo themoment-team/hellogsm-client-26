@@ -32,9 +32,10 @@ const getFaqData = async (): Promise<FaqItem[]> => {
   );
 
   // 클라이언트 컴포넌트로 넘어가는 RSC payload를 줄이기 위해 화면에서 쓰는 텍스트만 남깁니다.
+  // Notion은 굵게·링크 등 서식이 바뀔 때마다 텍스트를 여러 조각으로 나누므로 모든 조각을 이어 붙입니다.
   return sortedResults.map((result) => ({
-    title: result.properties.title.title[0]?.plain_text,
-    content: result.properties.content.rich_text[0]?.plain_text || '',
+    title: result.properties.title.title.map((text) => text.plain_text).join('') || undefined,
+    content: result.properties.content.rich_text.map((text) => text.plain_text).join(''),
   }));
 };
 
