@@ -28,11 +28,12 @@ const SCORE_FORMAT_DEBOUNCE_MS = 1000;
 
 type ScoreFieldName = '역량검사점수' | '심층면접점수';
 
+// formatScore 결과가 숫자가 아니면('NaN') 입력 칸에는 빈 값으로 둠
+const toScoreFieldValueFromFormatted = (formattedScore: string) =>
+  formattedScore !== 'NaN' ? formattedScore : '';
+
 // 입력한 점수를 소수 둘째 자리 형식으로 맞추고, 숫자가 없으면 빈 칸으로 둠
-const toScoreFieldValue = (score: string) => {
-  const formattedScore = formatScore(score);
-  return formattedScore !== 'NaN' ? formattedScore : '';
-};
+const toScoreFieldValue = (score: string) => toScoreFieldValueFromFormatted(formatScore(score));
 
 interface ApplicationTRProps extends OneseoType {
   editableData: EditabilityType | undefined;
@@ -139,8 +140,8 @@ const ApplicantTR = ({
 
   const { control, setValue, getValues } = useForm({
     defaultValues: {
-      역량검사점수: toScoreFieldValue(String(competencyEvaluationScore ?? '')),
-      심층면접점수: toScoreFieldValue(String(interviewScore ?? '')),
+      역량검사점수: toScoreFieldValueFromFormatted(formatted역량검사점수),
+      심층면접점수: toScoreFieldValueFromFormatted(formatted심층면접점수),
     },
   });
 
