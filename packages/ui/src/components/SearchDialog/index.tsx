@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { preconnect } from 'react-dom';
 import { UseFormSetValue } from 'react-hook-form';
 
-import { useDebounce } from '@repo/hooks';
+import { useDebouncedCallback } from '@repo/hooks';
 import { Step2FormType } from '@repo/types';
 import { cn } from '@repo/utils';
 
@@ -51,19 +51,18 @@ const SearchDialog = ({ setValue }: SearchDialogProps) => {
   preconnect('https://open.neis.go.kr', { crossOrigin: 'anonymous' });
 
   const [keyword, setKeyword] = useState<string>('');
-  // 학교를 고른 직후에는 그 이름으로 다시 검색하지 않도록 선택한 학교명을 기억
-  const [selectedSchoolName, setSelectedSchoolName] = useState<string | null>(null);
+  // 실제로 검색할 검색어. 입력이 400ms 멈추면 반영하고, 학교를 고르면 비워서 목록을 닫음
+  const [searchKeyword, setSearchKeyword] = useState<string>('');
+  // 학교를 고를 때 보이던 목록. 다음 검색 결과가 오기 전까지 이 목록이 다시 보이지 않게 기억
+  const [listAtSelection, setListAtSelection] = useState<SchoolType[] | undefined>(undefined);
 
-  const debouncedKeyword = useDebounce(keyword, 400);
+  const searchKeywordDebounce = useDebouncedCallback(setSearchKeyword, 400);
 
-  const isSearchEnabled =
-    debouncedKeyword.trim() !== '' &&
-    keyword !== selectedSchoolName &&
-    debouncedKeyword !== selectedSchoolName;
+  const isSearchEnabled = searchKeyword.trim() !== '';
 
-  const { data } = useQuery({
-    queryKey: ['schoolInfo', debouncedKeyword],
-    queryFn: () => getSchools(debouncedKeyword),
+  const { data, isPlaceholderData } = useQuery({
+    queryKey: ['schoolInfo', searchKeyword],
+    queryFn: () => getSchools(searchKeyword),
     enabled: isSearchEnabled,
     staleTime: Infinity,
     // 새 검색어 결과가 올 때까지 이전 목록을 유지 (기존 동작과 동일)
@@ -71,15 +70,19 @@ const SearchDialog = ({ setValue }: SearchDialogProps) => {
     retry: false,
   });
 
-  const schools = isSearchEnabled ? (data ?? []) : [];
+  const isListFromBeforeSelection = isPlaceholderData && data === listAtSelection;
+  const schools = isSearchEnabled && !isListFromBeforeSelection ? (data ?? []) : [];
 
   const handleKeywordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setKeyword(e.target.value);
+    searchKeywordDebounce.run(e.target.value);
   };
 
   const handleSchoolSelect = (school: SchoolType) => {
+    searchKeywordDebounce.cancel();
     setKeyword(school.SCHUL_NM);
-    setSelectedSchoolName(school.SCHUL_NM);
+    setSearchKeyword('');
+    setListAtSelection(data);
     setValue('schoolName', school.SCHUL_NM, { shouldValidate: true, shouldDirty: true });
     // eslint-disable-next-line @cspell/spellchecker
     setValue('schoolAddress', school.ORG_RDNMA, { shouldValidate: true, shouldDirty: true });
