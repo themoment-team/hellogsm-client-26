@@ -100,7 +100,7 @@ const ApplicantTR = ({
       editableRefetch();
     },
     onError: () => {
-      setEntranceIntention((prev) => (prev === 'YES' ? 'NO' : 'YES'));
+      setEntranceIntention(entranceIntention === 'YES' ? 'NO' : 'YES');
     },
   });
 
