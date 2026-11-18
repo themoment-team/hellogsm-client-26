@@ -4,7 +4,7 @@ import type { AxiosError } from 'axios';
 import { toast } from 'react-toastify';
 
 import { useGetOperation, usePostFirstResult, usePostSecondResult } from '@repo/api/hooks';
-import { useModalStore } from '@repo/store';
+import { useModalStore, useShallow } from '@repo/store';
 import { cn } from '@repo/utils';
 
 import {
@@ -19,6 +19,7 @@ import {
 } from '../../../shadcn';
 
 const AdminModals = () => {
+  // 이 묶음이 쓰는 모달 상태만 구독해 다른 모달이 열리고 닫힐 때 다시 렌더되지 않게 함
   const {
     documentSubmissionChangeModal,
     setDocumentSubmissionChangeModal,
@@ -30,7 +31,20 @@ const AdminModals = () => {
     setFirstResultAnnouncementModal,
     secondResultAnnouncementModal,
     setSecondResultAnnouncementModal,
-  } = useModalStore();
+  } = useModalStore(
+    useShallow((state) => ({
+      documentSubmissionChangeModal: state.documentSubmissionChangeModal,
+      setDocumentSubmissionChangeModal: state.setDocumentSubmissionChangeModal,
+      admissionAgreementChangeModal: state.admissionAgreementChangeModal,
+      setAdmissionAgreementChangeModal: state.setAdmissionAgreementChangeModal,
+      applicationModificationNotPossibleModal: state.applicationModificationNotPossibleModal,
+      setApplicationModificationNotPossibleModal: state.setApplicationModificationNotPossibleModal,
+      firstResultAnnouncementModal: state.firstResultAnnouncementModal,
+      setFirstResultAnnouncementModal: state.setFirstResultAnnouncementModal,
+      secondResultAnnouncementModal: state.secondResultAnnouncementModal,
+      setSecondResultAnnouncementModal: state.setSecondResultAnnouncementModal,
+    })),
+  );
 
   const { refetch: operationRefetch } = useGetOperation();
 

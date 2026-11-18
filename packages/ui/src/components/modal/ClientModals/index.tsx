@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 
-import { useModalStore } from '@repo/store';
+import { useModalStore, useShallow } from '@repo/store';
 import { cn } from '@repo/utils';
 
 import {
@@ -19,6 +19,7 @@ import {
 import LoginDialog from '../../LoginDialog';
 
 const ClientModals = () => {
+  // 이 묶음이 쓰는 모달 상태만 구독해 다른 모달이 열리고 닫힐 때 다시 렌더되지 않게 함
   const {
     loginRequiredModal,
     setLoginRequiredModal,
@@ -46,7 +47,36 @@ const ClientModals = () => {
     setOneseoModifyRequestModal,
     interviewQuestionNotReadyModal,
     setInterviewQuestionNotReadyModal,
-  } = useModalStore();
+  } = useModalStore(
+    useShallow((state) => ({
+      loginRequiredModal: state.loginRequiredModal,
+      setLoginRequiredModal: state.setLoginRequiredModal,
+      resultAnnouncementPeriodModal: state.resultAnnouncementPeriodModal,
+      setResultAnnouncementPeriodModal: state.setResultAnnouncementPeriodModal,
+      devServerNoticeModal: state.devServerNoticeModal,
+      setDevServerNoticeModal: state.setDevServerNoticeModal,
+      testPeriodNoticeModal: state.testPeriodNoticeModal,
+      setTestPeriodNoticeModal: state.setTestPeriodNoticeModal,
+      verificationCodeSendErrorModal: state.verificationCodeSendErrorModal,
+      setVerificationCodeSendErrorModal: state.setVerificationCodeSendErrorModal,
+      signupSuccessModal: state.signupSuccessModal,
+      setSignupSuccessModal: state.setSignupSuccessModal,
+      signupErrorModal: state.signupErrorModal,
+      setSignupErrorModal: state.setSignupErrorModal,
+      phoneNumberDuplicateModal: state.phoneNumberDuplicateModal,
+      setPhoneNumberDuplicateModal: state.setPhoneNumberDuplicateModal,
+      applicationPeriodModal: state.applicationPeriodModal,
+      setApplicationPeriodModal: state.setApplicationPeriodModal,
+      oneseoNotSubmittedModal: state.oneseoNotSubmittedModal,
+      setOneseoNotSubmittedModal: state.setOneseoNotSubmittedModal,
+      resultNotAnnouncedModal: state.resultNotAnnouncedModal,
+      setResultNotAnnouncedModal: state.setResultNotAnnouncedModal,
+      oneseoModifyRequestModal: state.oneseoModifyRequestModal,
+      setOneseoModifyRequestModal: state.setOneseoModifyRequestModal,
+      interviewQuestionNotReadyModal: state.interviewQuestionNotReadyModal,
+      setInterviewQuestionNotReadyModal: state.setInterviewQuestionNotReadyModal,
+    })),
+  );
 
   const { back } = useRouter();
   const isSignupPage = usePathname() === '/signup';

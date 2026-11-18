@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 
-import { useModalStore } from '@repo/store';
+import { useModalStore, useShallow } from '@repo/store';
 import { cn } from '@repo/utils';
 
 import { InspectionIcon } from '../../../icons';
@@ -20,6 +20,7 @@ const SUBJECT: string[] = ['교과', '일반교과'] as const;
 const TOTAL = '총합';
 
 const SharedModals = () => {
+  // 이 묶음이 쓰는 모달 상태만 구독해 다른 모달이 열리고 닫힐 때 다시 렌더되지 않게 함
   const {
     systemInspectionModal,
     applicationSubmitModal,
@@ -28,7 +29,17 @@ const SharedModals = () => {
     setImageUploadSizeLimitModal,
     scoreCalculationCompleteModal,
     setScoreCalculationCompleteModal,
-  } = useModalStore();
+  } = useModalStore(
+    useShallow((state) => ({
+      systemInspectionModal: state.systemInspectionModal,
+      applicationSubmitModal: state.applicationSubmitModal,
+      setApplicationSubmitModal: state.setApplicationSubmitModal,
+      imageUploadSizeLimitModal: state.imageUploadSizeLimitModal,
+      setImageUploadSizeLimitModal: state.setImageUploadSizeLimitModal,
+      scoreCalculationCompleteModal: state.scoreCalculationCompleteModal,
+      setScoreCalculationCompleteModal: state.setScoreCalculationCompleteModal,
+    })),
+  );
 
   const { push } = useRouter();
 
