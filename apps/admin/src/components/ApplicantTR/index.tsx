@@ -2,7 +2,7 @@
 
 import { QueryObserverResult, RefetchOptions } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { useForm, useWatch, Controller } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
@@ -13,6 +13,7 @@ import {
   usePatchInterviewScore,
   usePatchOneseoApproval,
 } from '@repo/api/hooks';
+import { useDebouncedCallback } from '@repo/hooks';
 import { useModalStore } from '@repo/store';
 import { EditabilityType, OneseoListType, OneseoType, ScreeningEnum } from '@repo/types';
 import { CheckIcon } from '@repo/ui/icons';
@@ -149,29 +150,19 @@ const ApplicantTR = ({
     name: ['역량검사점수', '심층면접점수'],
   });
 
-  const scoreFormatTimersRef = useRef<
-    Record<ScoreFieldName, ReturnType<typeof setTimeout> | undefined>
-  >({
-    역량검사점수: undefined,
-    심층면접점수: undefined,
-  });
+  // 입력이 1초 동안 멈추면 해당 칸의 점수를 형식에 맞게 정리 (칸마다 따로 대기)
+  const 역량검사점수Format = useDebouncedCallback(
+    (score: string) => setValue('역량검사점수', toScoreFieldValue(score)),
+    SCORE_FORMAT_DEBOUNCE_MS,
+  );
+  const 심층면접점수Format = useDebouncedCallback(
+    (score: string) => setValue('심층면접점수', toScoreFieldValue(score)),
+    SCORE_FORMAT_DEBOUNCE_MS,
+  );
 
-  // 화면을 떠난 뒤 남은 타이머가 점수 칸을 바꾸지 않도록 정리
-  useEffect(() => {
-    const timers = scoreFormatTimersRef.current;
-    return () => {
-      clearTimeout(timers.역량검사점수);
-      clearTimeout(timers.심층면접점수);
-    };
-  }, []);
-
-  // 입력이 1초 동안 멈추면 해당 칸의 점수를 형식에 맞게 정리
   const handleScoreChange = (fieldName: ScoreFieldName, score: string) => {
-    const timers = scoreFormatTimersRef.current;
-    clearTimeout(timers[fieldName]);
-    timers[fieldName] = setTimeout(() => {
-      setValue(fieldName, toScoreFieldValue(score));
-    }, SCORE_FORMAT_DEBOUNCE_MS);
+    if (fieldName === '역량검사점수') 역량검사점수Format.run(score);
+    else 심층면접점수Format.run(score);
   };
 
   const handleRealOneseoArrived = () => {
