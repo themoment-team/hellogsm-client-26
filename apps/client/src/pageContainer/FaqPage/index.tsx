@@ -1,9 +1,8 @@
 'use client';
 
-import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { useState } from 'react';
 
-import { FaqPageData } from '@repo/types';
+import { FaqItem } from '@repo/types';
 import { SearchIcon } from '@repo/ui/icons';
 import {
   Pagination,
@@ -20,7 +19,7 @@ import { FaqElement, Footer } from '@/components';
 const ITEMS_PER_PAGE = 10;
 
 interface FaqPageProps {
-  data: FaqPageData[];
+  data: FaqItem[];
   openIndex?: number;
 }
 
@@ -33,13 +32,7 @@ const FaqPage = ({ data, openIndex }: FaqPageProps) => {
   );
   const [isPageChanging, setIsPageChanging] = useState<boolean>(false);
 
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const pathname = usePathname();
-
-  const totalItems = data.filter((item) =>
-    item.properties.title.title[0]?.plain_text?.toLowerCase().includes(keyword),
-  );
+  const totalItems = data.filter((item) => item.title?.toLowerCase().includes(keyword));
   const totalPages = Math.ceil(totalItems.length / ITEMS_PER_PAGE);
 
   const handlePageChange = (pageNumber: number) => {
@@ -61,22 +54,8 @@ const FaqPage = ({ data, openIndex }: FaqPageProps) => {
     currentPage * ITEMS_PER_PAGE,
   );
 
-  const toggleFaqContent = (index: number, updateUrl = false) => {
-    setFaqStates((prevStates) => {
-      const isOpen = !prevStates[index];
-      const newFaqStates = { [index]: isOpen };
-
-      if (updateUrl) {
-        const newSearchParams = new URLSearchParams(searchParams.toString());
-        if (isOpen) {
-          newSearchParams.set('openIndex', String(index));
-        } else {
-          newSearchParams.delete('openIndex');
-        }
-        router.replace(`${pathname}?${newSearchParams.toString()}`, { scroll: false });
-      }
-      return newFaqStates;
-    });
+  const toggleFaqContent = (index: number) => {
+    setFaqStates((prevStates) => ({ [index]: !prevStates[index] }));
   };
 
   return (
@@ -136,15 +115,17 @@ const FaqPage = ({ data, openIndex }: FaqPageProps) => {
                 <SearchIcon color={keyword ? '#292b2f' : '#94a3b8'} />
               </div>
             </div>
-            <div className={cn('w-full', 'h-[0.0625rem]', keyword ? 'bg-[#292b2f]' : 'bg-slate-400')} />
+            <div
+              className={cn('w-full', 'h-[0.0625rem]', keyword ? 'bg-[#292b2f]' : 'bg-slate-400')}
+            />
             <div className={cn('flex', 'flex-col', 'gap-4', 'pt-8')}>
               {currentItems.map((faq, index) => {
                 const globalIndex = (currentPage - 1) * ITEMS_PER_PAGE + index;
                 return (
                   <FaqElement
                     key={globalIndex}
-                    title={faq.properties.title.title[0]?.plain_text || ''}
-                    content={faq.properties.content.rich_text[0]?.plain_text || ''}
+                    title={faq.title || ''}
+                    content={faq.content}
                     keyword={keyword}
                     showContent={!!faqStates[globalIndex]}
                     onToggle={() => toggleFaqContent(globalIndex)}

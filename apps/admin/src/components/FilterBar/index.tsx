@@ -60,7 +60,12 @@ const FilterBar = ({
 }: FilterBarProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const { setFirstResultAnnouncementModal, setSecondResultAnnouncementModal } = useModalStore();
+  const setFirstResultAnnouncementModal = useModalStore(
+    (state) => state.setFirstResultAnnouncementModal,
+  );
+  const setSecondResultAnnouncementModal = useModalStore(
+    (state) => state.setSecondResultAnnouncementModal,
+  );
 
   const { data: operationData, refetch: operationRefetch } = useGetOperation();
 

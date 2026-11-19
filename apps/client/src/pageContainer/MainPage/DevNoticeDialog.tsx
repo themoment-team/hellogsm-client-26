@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useModalStore } from '@repo/store';
 
 const DevNoticeDialog = () => {
-  const { setDevServerNoticeModal } = useModalStore();
+  const setDevServerNoticeModal = useModalStore((state) => state.setDevServerNoticeModal);
 
   useEffect(() => {
     if (process.env.NEXT_PUBLIC_STAGE === 'stage') {

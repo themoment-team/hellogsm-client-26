@@ -2,7 +2,7 @@
 
 import { ADMISSION_SCHEDULE } from '@repo/constants';
 import { useModalStore } from '@repo/store';
-import { Majors, MyMemberInfoType, MyTotalTestResultType } from '@repo/types';
+import { Majors, MyTotalTestResultType } from '@repo/types';
 import { Button, Dialog, DialogContent, DialogTitle } from '@repo/ui/shadcn';
 import { cn } from '@repo/utils';
 
@@ -19,7 +19,7 @@ interface PassResultProps {
   setIsPassOpen: React.Dispatch<React.SetStateAction<boolean>>;
   resultInfo: MyTotalTestResultType | undefined;
   isFinishFirstTest: boolean;
-  memberInfo: MyMemberInfoType | undefined;
+  userName: string | undefined;
   onClick?: () => void;
 }
 
@@ -28,10 +28,12 @@ const PassResultDialog = ({
   setIsPassOpen,
   resultInfo,
   isFinishFirstTest,
-  memberInfo,
+  userName,
   onClick = () => setIsPassOpen(false),
 }: PassResultProps) => {
-  const { setInterviewQuestionNotReadyModal } = useModalStore();
+  const setInterviewQuestionNotReadyModal = useModalStore(
+    (state) => state.setInterviewQuestionNotReadyModal,
+  );
 
   const firstTestPass = isFinishFirstTest && resultInfo?.firstTestPassYn === 'YES';
   const secondTestPass = !isFinishFirstTest && resultInfo?.secondTestPassYn === 'YES';
@@ -42,7 +44,6 @@ const PassResultDialog = ({
     AI: '인공지능(AI)과',
   };
   const majorLabel = major ? MAJOR_LABELS[major] : null;
-  const userName = memberInfo?.name;
   const resultMessages = {
     firstTestPassYes: {
       title: (

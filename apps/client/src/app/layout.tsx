@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import { ModalContainer } from '@repo/ui/components';
+import { ClientModals, SharedModals } from '@repo/ui/components';
 import '@repo/ui/styles.css';
 
 import '@/styles/globals.css';
@@ -67,7 +67,8 @@ export default async function RootLayout({
         <Provider>
           <Header isServerHealthy={isServerHealthy} />
           {children}
-          <ModalContainer modal="client" />
+          <ClientModals />
+          <SharedModals />
           <TestPeriodDialog />
         </Provider>
       </body>

@@ -84,7 +84,10 @@ interface StepWrapperProps {
 }
 
 const StepWrapper = ({ data, step, info, memberId, type, isModifyApproved }: StepWrapperProps) => {
-  const { setScoreCalculationCompleteModal, setApplicationSubmitModal } = useModalStore();
+  const setScoreCalculationCompleteModal = useModalStore(
+    (state) => state.setScoreCalculationCompleteModal,
+  );
+  const setApplicationSubmitModal = useModalStore((state) => state.setApplicationSubmitModal);
   const queryClient = useQueryClient();
 
   const step1UseForm = useForm<Step1FormType>({
@@ -195,28 +198,55 @@ const StepWrapper = ({ data, step, info, memberId, type, isModifyApproved }: Ste
 
   const phoneNumber = isClient ? info!.phoneNumber : data!.privacyDetail.phoneNumber;
 
-  const step1Values = useWatch({ control: step1UseForm.control });
-  const step2Values = useWatch({ control: step2UseForm.control });
-  const step3Values = useWatch({ control: step3UseForm.control });
+  // step 1~3은 통과 여부만 쓰므로 값 전체 대신 검증 결과(boolean)를 구독한다 — 입력할
+  // 때마다가 아니라 통과 여부가 바뀔 때만 StepWrapper가 다시 렌더된다
+  const isStep1Success = useWatch({
+    control: step1UseForm.control,
+    compute: (values) => step1Schema.safeParse(values).success,
+  });
+  const isStep2Success = useWatch({
+    control: step2UseForm.control,
+    compute: (values) => step2Schema.safeParse(values).success,
+  });
+  const isStep3Success = useWatch({
+    control: step3UseForm.control,
+    compute: (values) => step3Schema.safeParse(values).success,
+  });
+  // step 4는 값 전체를 구독한다 — 아래 유휴 자동저장 effect가 입력 변화를 감지하는 데 쓰고,
+  // 스키마가 step 2의 graduationType에 따라 바뀌어 compute로 결과를 고정해 둘 수도 없다
   const step4Values = useWatch({ control: step4UseForm.control });
 
   const isStepSuccess = {
-    '1': step1Schema.safeParse(step1Values).success,
-    '2': step2Schema.safeParse(step2Values).success,
-    '3': step3Schema.safeParse(step3Values).success,
+    '1': isStep1Success,
+    '2': isStep2Success,
+    '3': isStep3Success,
     '4': step4Schema.safeParse(step4Values).success,
   };
 
   const isScoreComplete = Object.values(isStepSuccess).every((value) => value === true);
 
-  const handleStepError = (step: StepEnum) => {
-    setErrorStep((prev) => {
-      if (prev === step) {
-        setTimeout(() => setErrorStep(step), 0);
-        return null;
-      }
-      return step;
-    });
+  const triggerStepValidation = (targetStep: StepEnum) => {
+    switch (targetStep) {
+      case StepEnum.ONE:
+        return step1UseForm.trigger();
+      case StepEnum.TWO:
+        return step2UseForm.trigger();
+      case StepEnum.THREE:
+        return step3UseForm.trigger();
+      case StepEnum.FOUR:
+        return step4UseForm.trigger();
+    }
+  };
+
+  // 미완료 단계에서 다음/제출 버튼을 누르면 그 단계 폼을 검증하고 오류를 표시한다.
+  // 같은 단계를 다시 눌러도 이 핸들러가 그때의 입력값으로 다시 검증한다.
+  const handleStepError = (targetStep: StepEnum) => {
+    // 오류는 지금 보이는 단계에만 표시된다 — 다른 단계(예: 1~3단계에서 누른 최종 제출)는
+    // 표시할 곳이 없으므로 검증하지 않는다
+    if (targetStep !== step) return;
+
+    setErrorStep(targetStep);
+    triggerStepValidation(targetStep);
   };
 
   const clearStepError = () => {
@@ -724,16 +754,19 @@ const StepWrapper = ({ data, step, info, memberId, type, isModifyApproved }: Ste
     // 스텝 전환(URL 라우팅) 시 이전 스텝의 에러 표시 초기화 — 전환 진입점이
     // 라우터 경유라 이벤트 핸들러로 일원화 불가, effect 유지가 정당
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (errorStep !== step) clearStepError();
+    setErrorStep(null);
+  }, [step]);
 
-    if (step === StepEnum.TWO && !isStepSuccess[1]) push(`${BASE_URL}?step=1`);
+  // 앞 단계가 완료되지 않았으면 그 단계로 돌려보낸다. 입력마다 새로 만들어지는 isStepSuccess
+  // 객체 대신 단계별 boolean에만 반응해야 키 입력마다 다시 돌지 않는다.
+  useEffect(() => {
+    if (step === StepEnum.TWO && !isStep1Success) push(`${BASE_URL}?step=1`);
 
-    if (step === StepEnum.THREE && (!isStepSuccess[1] || !isStepSuccess[2]))
-      push(`${BASE_URL}?step=2`);
+    if (step === StepEnum.THREE && (!isStep1Success || !isStep2Success)) push(`${BASE_URL}?step=2`);
 
-    if (step === StepEnum.FOUR && (!isStepSuccess[1] || !isStepSuccess[2] || !isStepSuccess[3]))
+    if (step === StepEnum.FOUR && (!isStep1Success || !isStep2Success || !isStep3Success))
       push(`${BASE_URL}?step=3`);
-  }, [step, isStepSuccess, push, BASE_URL]);
+  }, [step, isStep1Success, isStep2Success, isStep3Success, push, BASE_URL]);
 
   return (
     <>

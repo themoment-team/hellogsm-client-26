@@ -215,8 +215,9 @@ interface GuideProps {
 }
 
 const GuidePage = ({ initialData, isOneseoWrite, initialEditability }: GuideProps) => {
-  const { setLoginRequiredModal, setOneseoModifyRequestModal, setTestPeriodNoticeModal } =
-    useModalStore();
+  const setLoginRequiredModal = useModalStore((state) => state.setLoginRequiredModal);
+  const setOneseoModifyRequestModal = useModalStore((state) => state.setOneseoModifyRequestModal);
+  const setTestPeriodNoticeModal = useModalStore((state) => state.setTestPeriodNoticeModal);
   const { data: authInfo } = useGetMyAuthInfo();
   const { data: memberInfo } = useGetMyMemberInfo();
   const queryClient = useQueryClient();

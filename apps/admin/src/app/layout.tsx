@@ -4,7 +4,7 @@ import '@/styles/globals.css';
 
 import type { Metadata } from 'next';
 
-import { ModalContainer } from '@repo/ui/components';
+import { AdminModals, SharedModals } from '@repo/ui/components';
 
 import { pretendardFont } from '@/styles/pretendard';
 
@@ -25,7 +25,8 @@ export default function RootLayout({
       <body className={pretendardFont.className}>
         <Provider>
           {children}
-          <ModalContainer modal="admin" />
+          <AdminModals />
+          <SharedModals />
         </Provider>
       </body>
     </html>

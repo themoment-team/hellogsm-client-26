@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react';
 import { Button, Dialog, DialogContent, DialogDescription, DialogTitle } from '@repo/ui/shadcn';
 import { cn } from '@repo/utils';
 
+import { safeStorage } from '@/utils';
+
 const HIDE_KEY = 'hideTuberculosisTestNoticeDialog';
 
 interface TuberculosisTestNoticeDialogProps {
@@ -24,7 +26,7 @@ const TuberculosisTestNoticeDialog = ({
   useEffect(() => {
     // localStorage는 클라이언트 전용 값 — hydration 불일치를 막기 위해 마운트 후 반영
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setIsHiddenToday(localStorage.getItem(HIDE_KEY) === new Date().toDateString());
+    setIsHiddenToday(safeStorage.getItem('localStorage', HIDE_KEY) === new Date().toDateString());
   }, []);
 
   // 내 정보 페이지는 합격 결과를 클라이언트에서 받아오므로, 결과가 도착하면 그때 열린다
@@ -63,7 +65,7 @@ const TuberculosisTestNoticeDialog = ({
             variant="reverseFill"
             className={cn([...buttonStyle])}
             onClick={() => {
-              localStorage.setItem(HIDE_KEY, new Date().toDateString());
+              safeStorage.setItem('localStorage', HIDE_KEY, new Date().toDateString());
               close();
             }}
           >

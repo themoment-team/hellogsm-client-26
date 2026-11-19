@@ -18,7 +18,7 @@ interface UploadPhotoProps {
 }
 
 const UploadPhoto = ({ setValue, control, errors, showError }: UploadPhotoProps) => {
-  const { setImageUploadSizeLimitModal } = useModalStore();
+  const setImageUploadSizeLimitModal = useModalStore((state) => state.setImageUploadSizeLimitModal);
   // 렌더 중 구독은 watch() 대신 useWatch 사용 (React Compiler 호환)
   const profileImg = useWatch({ control, name: 'profileImg' });
 

@@ -6,7 +6,6 @@ import {
   UseFormGetValues,
   UseFormRegister,
   UseFormSetValue,
-  UseFormTrigger,
   useFormState,
   useWatch,
 } from 'react-hook-form';
@@ -22,7 +21,6 @@ interface Step3RegisterProps {
   setValue: UseFormSetValue<Step3FormType>;
   control: Control<Step3FormType>;
   getValues: UseFormGetValues<Step3FormType>;
-  trigger: UseFormTrigger<Step3FormType>;
   isCandidate: boolean;
   showError: boolean;
 }
@@ -37,7 +35,6 @@ const Step3Register = ({
   setValue,
   control,
   getValues,
-  trigger,
   isCandidate,
   showError,
 }: Step3RegisterProps) => {
@@ -71,16 +68,6 @@ const Step3Register = ({
       setValue('schoolTeacherPhoneNumber', null);
     }
   }, []);
-
-  useEffect(() => {
-    if (!showError) return;
-
-    const validateForm = async () => {
-      await trigger();
-    };
-
-    validateForm();
-  }, [showError]);
 
   return (
     <div className={cn('flex', 'w-full', 'flex-col', 'items-start', 'gap-10')}>

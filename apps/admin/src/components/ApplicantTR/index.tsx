@@ -2,7 +2,7 @@
 
 import { QueryObserverResult, RefetchOptions } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useForm, useWatch, Controller } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
@@ -13,7 +13,7 @@ import {
   usePatchInterviewScore,
   usePatchOneseoApproval,
 } from '@repo/api/hooks';
-import { useDebounce } from '@repo/hooks';
+import { useDebouncedCallback } from '@repo/hooks';
 import { useModalStore } from '@repo/store';
 import { EditabilityType, OneseoListType, OneseoType, ScreeningEnum } from '@repo/types';
 import { CheckIcon } from '@repo/ui/icons';
@@ -23,6 +23,17 @@ import { cn, formatScore } from '@repo/utils';
 import { SideBarType } from '@/schemas';
 
 import TextField from '../TextField';
+
+const SCORE_FORMAT_DEBOUNCE_MS = 1000;
+
+type ScoreFieldName = '역량검사점수' | '심층면접점수';
+
+// formatScore 결과가 숫자가 아니면('NaN') 입력 칸에는 빈 값으로 둠
+const toScoreFieldValueFromFormatted = (formattedScore: string) =>
+  formattedScore !== 'NaN' ? formattedScore : '';
+
+// 입력한 점수를 소수 둘째 자리 형식으로 맞추고, 숫자가 없으면 빈 칸으로 둠
+const toScoreFieldValue = (score: string) => toScoreFieldValueFromFormatted(formatScore(score));
 
 interface ApplicationTRProps extends OneseoType {
   editableData: EditabilityType | undefined;
@@ -58,11 +69,15 @@ const ApplicantTR = ({
   oneseoEditStatus,
   testResultTag,
 }: ApplicationTRProps) => {
-  const {
-    setDocumentSubmissionChangeModal,
-    setAdmissionAgreementChangeModal,
-    setApplicationModificationNotPossibleModal,
-  } = useModalStore();
+  const setDocumentSubmissionChangeModal = useModalStore(
+    (state) => state.setDocumentSubmissionChangeModal,
+  );
+  const setAdmissionAgreementChangeModal = useModalStore(
+    (state) => state.setAdmissionAgreementChangeModal,
+  );
+  const setApplicationModificationNotPossibleModal = useModalStore(
+    (state) => state.setApplicationModificationNotPossibleModal,
+  );
 
   const { push } = useRouter();
 
@@ -125,8 +140,8 @@ const ApplicantTR = ({
 
   const { control, setValue, getValues } = useForm({
     defaultValues: {
-      역량검사점수: formatted역량검사점수,
-      심층면접점수: formatted심층면접점수,
+      역량검사점수: toScoreFieldValueFromFormatted(formatted역량검사점수),
+      심층면접점수: toScoreFieldValueFromFormatted(formatted심층면접점수),
     },
   });
 
@@ -136,18 +151,20 @@ const ApplicantTR = ({
     name: ['역량검사점수', '심층면접점수'],
   });
 
-  const debounced역량검사점수 = useDebounce(입력중역량검사점수, 1000);
-  const debounced심층면접점수 = useDebounce(입력중심층면접점수, 1000);
+  // 입력이 1초 동안 멈추면 해당 칸의 점수를 형식에 맞게 정리 (칸마다 따로 대기)
+  const 역량검사점수Format = useDebouncedCallback(
+    (score: string) => setValue('역량검사점수', toScoreFieldValue(score)),
+    SCORE_FORMAT_DEBOUNCE_MS,
+  );
+  const 심층면접점수Format = useDebouncedCallback(
+    (score: string) => setValue('심층면접점수', toScoreFieldValue(score)),
+    SCORE_FORMAT_DEBOUNCE_MS,
+  );
 
-  useEffect(() => {
-    const formatAndSetScore = (score: string, fieldName: '역량검사점수' | '심층면접점수') => {
-      const formattedScore = formatScore(score);
-      setValue(fieldName, formattedScore !== 'NaN' ? formattedScore : '');
-    };
-
-    formatAndSetScore(debounced역량검사점수, '역량검사점수');
-    formatAndSetScore(debounced심층면접점수, '심층면접점수');
-  }, [debounced역량검사점수, debounced심층면접점수, setValue]);
+  const handleScoreChange = (fieldName: ScoreFieldName, score: string) => {
+    if (fieldName === '역량검사점수') 역량검사점수Format.run(score);
+    else 심층면접점수Format.run(score);
+  };
 
   const handleRealOneseoArrived = () => {
     setDocumentSubmissionChangeModal(false);
@@ -230,7 +247,16 @@ const ApplicantTR = ({
             <Controller
               name="역량검사점수"
               control={control}
-              render={({ field }) => <TextField {...field} disabled={!!secondTestPassYn} />}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  onChange={(e) => {
+                    field.onChange(e);
+                    handleScoreChange('역량검사점수', e.target.value);
+                  }}
+                  disabled={!!secondTestPassYn}
+                />
+              )}
             />
             <Button
               variant={
@@ -254,7 +280,16 @@ const ApplicantTR = ({
             <Controller
               name="심층면접점수"
               control={control}
-              render={({ field }) => <TextField {...field} disabled={!!secondTestPassYn} />}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  onChange={(e) => {
+                    field.onChange(e);
+                    handleScoreChange('심층면접점수', e.target.value);
+                  }}
+                  disabled={!!secondTestPassYn}
+                />
+              )}
             />
             <Button
               variant={

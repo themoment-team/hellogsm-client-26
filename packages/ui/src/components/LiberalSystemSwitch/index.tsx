@@ -1,12 +1,10 @@
-import { UseFormSetValue } from 'react-hook-form';
-
-import { LiberalSystemValueEnum, Step4FormType } from '@repo/types';
+import { LiberalSystemValueEnum } from '@repo/types';
 import { cn } from '@repo/utils';
 
 interface LiberalSystemSwitchProps {
   isFreeGrade: boolean;
   isFreeSemester: boolean;
-  setValue: UseFormSetValue<Step4FormType>;
+  onLiberalSystemChange: (liberalSystem: LiberalSystemValueEnum) => void;
   className?: string;
 }
 
@@ -23,7 +21,7 @@ const buttonStyle = (isMyLiberalSystem: boolean) => [
 const LiberalSystemSwitch = ({
   isFreeGrade,
   isFreeSemester,
-  setValue,
+  onLiberalSystemChange,
   className,
 }: LiberalSystemSwitchProps) => (
   <div
@@ -40,17 +38,14 @@ const LiberalSystemSwitch = ({
   >
     <button
       type="button"
-      onClick={() => {
-        setValue('liberalSystem', LiberalSystemValueEnum.FREE_GRADE);
-        setValue('freeSemester', null);
-      }}
+      onClick={() => onLiberalSystemChange(LiberalSystemValueEnum.FREE_GRADE)}
       className={cn(...buttonStyle(isFreeGrade))}
     >
       자유학년제
     </button>
     <button
       type="button"
-      onClick={() => setValue('liberalSystem', LiberalSystemValueEnum.FREE_SEMESTER)}
+      onClick={() => onLiberalSystemChange(LiberalSystemValueEnum.FREE_SEMESTER)}
       className={cn(...buttonStyle(isFreeSemester))}
     >
       자유학기제

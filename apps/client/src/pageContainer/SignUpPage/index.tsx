@@ -9,7 +9,7 @@ import { z } from 'zod';
 import { useGetDuplicateMember } from '@repo/api/hooks';
 import { memberQueryKeys } from '@repo/api/lib';
 import { CURRENT_YEAR } from '@repo/constants';
-import { useDebounce } from '@repo/hooks';
+import { useDebouncedCallback } from '@repo/hooks';
 import { useModalStore } from '@repo/store';
 import { MemberRegisterType, SendCodeType, SexType } from '@repo/types';
 import { CustomFormItem, LoginDialogContent } from '@repo/ui/components';
@@ -35,10 +35,11 @@ import { ChevronIcon } from '@/assets';
 import { Footer, SexToggle } from '@/components';
 import { usePostMemberRegister, useSendCode, useVerifyCode } from '@/hooks';
 import { signupFormSchema } from '@/schemas';
-import { isTestPeriod } from '@/utils';
+import { isTestPeriod, safeStorage } from '@/utils';
 
 const PERMIT_YEAR = 50;
 const VERIFICATION_CODE_TIMEOUT = 180;
+const VERIFICATION_CODE_DEBOUNCE_MS = 500;
 
 interface SignUpProps {
   isPastAnnouncement: boolean;
@@ -51,14 +52,14 @@ const SignUpPage = ({ isPastAnnouncement }: SignUpProps) => {
   const [isSuccess, setIsSuccess] = useState<boolean | undefined>(undefined);
   const [isVerifyClicked, setIsVerifyClicked] = useState(false);
 
-  const {
-    setVerificationCodeSendErrorModal,
-    setSignupSuccessModal,
-    setSignupErrorModal,
-    setPhoneNumberDuplicateModal,
-    setApplicationPeriodModal,
-    setTestPeriodNoticeModal,
-  } = useModalStore();
+  const setVerificationCodeSendErrorModal = useModalStore(
+    (state) => state.setVerificationCodeSendErrorModal,
+  );
+  const setSignupSuccessModal = useModalStore((state) => state.setSignupSuccessModal);
+  const setSignupErrorModal = useModalStore((state) => state.setSignupErrorModal);
+  const setPhoneNumberDuplicateModal = useModalStore((state) => state.setPhoneNumberDuplicateModal);
+  const setApplicationPeriodModal = useModalStore((state) => state.setApplicationPeriodModal);
+  const setTestPeriodNoticeModal = useModalStore((state) => state.setTestPeriodNoticeModal);
 
   // 로그인 후 클라이언트 라우팅으로 진입하는 경우에도 안내하기 위해 마운트 시 노출
   useEffect(() => {
@@ -91,7 +92,7 @@ const SignUpPage = ({ isPastAnnouncement }: SignUpProps) => {
     const initialTime = VERIFICATION_CODE_TIMEOUT;
     // sessionStorage는 클라이언트 전용 외부 저장소 — hydration 불일치 방지를 위해
     // 마운트 후 effect에서 타이머를 복원해야 함
-    const savedTime = sessionStorage.getItem('timerStart');
+    const savedTime = safeStorage.getItem('sessionStorage', 'timerStart');
 
     if (savedTime) {
       const elapsedTime = Math.floor((Date.now() - parseInt(savedTime, 10)) / 1000);
@@ -104,7 +105,7 @@ const SignUpPage = ({ isPastAnnouncement }: SignUpProps) => {
       } else {
         // 저장된 시작 시간보다 현재 시간이 더 많이 지난 경우 (3분 초과)
         // 타이머를 초기화하고 sessionStorage를 정리
-        sessionStorage.removeItem('timerStart');
+        safeStorage.removeItem('sessionStorage', 'timerStart');
         setTimeLeft(0);
       }
     }
@@ -113,7 +114,7 @@ const SignUpPage = ({ isPastAnnouncement }: SignUpProps) => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
           // 타이머 카운트다운이 완료되면 sessionStorage를 정리하고 타이머 종료
-          sessionStorage.removeItem('timerStart');
+          safeStorage.removeItem('sessionStorage', 'timerStart');
           return 0;
         }
         return prev - 1;
@@ -130,28 +131,19 @@ const SignUpPage = ({ isPastAnnouncement }: SignUpProps) => {
   };
 
   // 렌더 중 구독은 watch() 대신 useWatch 사용 (React Compiler 호환 — Compilation Skipped 해소)
-  const [
-    phoneNumber,
-    certificationNumber,
-    isAgreed,
-    isSentCertificationNumber,
-    sex,
-    birthYear,
-    birthMonth,
-    birthDay,
-  ] = useWatch({
-    control: formMethods.control,
-    name: [
-      'phoneNumber',
-      'certificationNumber',
-      'isAgreed',
-      'isSentCertificationNumber',
-      'sex',
-      'birth.year',
-      'birth.month',
-      'birth.day',
-    ],
-  });
+  const [phoneNumber, isAgreed, isSentCertificationNumber, sex, birthYear, birthMonth, birthDay] =
+    useWatch({
+      control: formMethods.control,
+      name: [
+        'phoneNumber',
+        'isAgreed',
+        'isSentCertificationNumber',
+        'sex',
+        'birth.year',
+        'birth.month',
+        'birth.day',
+      ],
+    });
 
   const isCertificationButtonDisabled =
     !signupFormSchema.shape.phoneNumber.safeParse(phoneNumber).success;
@@ -178,7 +170,7 @@ const SignUpPage = ({ isPastAnnouncement }: SignUpProps) => {
       setIsVerifyClicked(true);
       formMethods.setValue('isSentCertificationNumber', true);
       setTimeLeft(VERIFICATION_CODE_TIMEOUT);
-      sessionStorage.setItem('timerStart', Date.now().toString());
+      safeStorage.setItem('sessionStorage', 'timerStart', Date.now().toString());
     },
     onError: () => setVerificationCodeSendErrorModal(true),
   });
@@ -188,19 +180,25 @@ const SignUpPage = ({ isPastAnnouncement }: SignUpProps) => {
     onError: () => setIsSuccess(false),
   });
 
-  const codeDebounce = useDebounce(certificationNumber ?? '', 500);
+  const certificationNumberField = formMethods.register('certificationNumber');
 
-  useEffect(() => {
-    if (codeDebounce.length === 6 && codeDebounce !== lastSubmittedCodeRef.current) {
+  // 입력이 멈추고 500ms 뒤 6자리이면서 직전에 보낸 번호가 아닐 때만 인증번호 확인 요청
+  const verifyCodeDebounce = useDebouncedCallback((code: string) => {
+    if (code.length === 6 && code !== lastSubmittedCodeRef.current) {
       const payload = {
-        code: codeDebounce,
+        code,
       };
 
       mutateVerifyCode(payload);
 
-      lastSubmittedCodeRef.current = codeDebounce;
+      lastSubmittedCodeRef.current = code;
     }
-  }, [codeDebounce, mutateVerifyCode]);
+  }, VERIFICATION_CODE_DEBOUNCE_MS);
+
+  const handleCertificationNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    void certificationNumberField.onChange(e);
+    verifyCodeDebounce.run(e.target.value);
+  };
 
   const onSubmit = (data: z.infer<typeof signupFormSchema>) => {
     const month = String(data.birth.month).padStart(2, '0');
@@ -409,7 +407,8 @@ const SignUpPage = ({ isPastAnnouncement }: SignUpProps) => {
                   </Button>
                 </div>
                 <Input
-                  {...formMethods.register('certificationNumber')}
+                  {...certificationNumberField}
+                  onChange={handleCertificationNumberChange}
                   disabled={!isSentCertificationNumber || timeLeft === 0}
                   placeholder="인증번호 6자리 입력"
                   successMessage={isSuccess === true ? '번호 인증이 완료되었습니다' : undefined}

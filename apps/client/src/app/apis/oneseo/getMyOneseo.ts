@@ -1,25 +1,14 @@
-import { cookies } from 'next/headers';
-
 import { oneseoUrl } from '@repo/api/lib';
 import { GetMyOneseoType, PreviewOneseoType } from '@repo/types';
 
+import { fetchWithSession } from '../fetchWithSession';
+
 const fetchOneseo = async <T>(preview: boolean): Promise<T | undefined> => {
-  const session = (await cookies()).get('SESSION')?.value;
+  const response = await fetchWithSession(oneseoUrl.getMyOneseo(preview));
+
+  if (!response || response.status === 404 || !response.ok) return undefined;
+
   try {
-    const response = await fetch(
-      new URL(oneseoUrl.getMyOneseo(preview), process.env.NEXT_PUBLIC_API_BASE_URL),
-      {
-        method: 'GET',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          Cookie: `SESSION=${session}`,
-        },
-      },
-    );
-
-    if (response.status === 404 || !response.ok) return undefined;
-
     const myOneseo = await response.json();
 
     return myOneseo.data;

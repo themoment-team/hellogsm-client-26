@@ -34,7 +34,7 @@ interface FreeSemesterFormProps {
   showError: boolean;
   errors: FieldErrors<Step4FormType>;
   getValues: UseFormGetValues<Step4FormType>;
-  validateForm: () => void;
+  onFreeSemesterChange: (freeSemester: FreeSemesterValueEnum | null) => void;
 }
 
 const itemStyle = [
@@ -95,7 +95,7 @@ const FreeSemesterForm = ({
   errors,
   showError,
   getValues,
-  validateForm,
+  onFreeSemesterChange,
 }: FreeSemesterFormProps) => {
   // 렌더 중 구독은 watch() 대신 useWatch 사용 (React Compiler 호환)
   // 훅은 map 안에서 호출할 수 없으므로 학기별 배열 전체를 한 번 구독하고 인덱싱한다
@@ -105,37 +105,20 @@ const FreeSemesterForm = ({
   // 학기 열은 37.5rem을 학기 수로 나눈 값이다 (졸업자 6학기, 재학생 5학기)
   const columnWidth = isGraduate ? 'w-[6.25rem]' : 'w-[7.5rem]';
 
+  // 이 표에 없는 학기 열과 자유학기 열은 비우고(null), 나머지 학기 열은 배열로 맞춘다.
+  // 저장된 추가 과목 행은 첫 렌더부터 그려지므로 다음 틱까지 기다릴 필요가 없다.
   useEffect(() => {
-    setTimeout(
-      () =>
-        ACHIEVEMENT_FIELD_LIST.forEach((field) => {
-          if (
-            achievementList.some((freeGrade) => freeGrade.field === field) &&
-            !(freeSemester && field === freeSemesterToAchievementField[freeSemester])
-          ) {
-            setValue(field, getValues(field) || []);
-          } else {
-            setValue(field, null);
-          }
-        }),
-      0,
-    );
-  }, []);
-
-  useEffect(() => {
-    achievementList.forEach(({ field }) => {
-      if (freeSemester && field === freeSemesterToAchievementField[freeSemester]) {
-        setValue(field, null);
+    ACHIEVEMENT_FIELD_LIST.forEach((field) => {
+      if (
+        achievementList.some((freeGrade) => freeGrade.field === field) &&
+        !(freeSemester && field === freeSemesterToAchievementField[freeSemester])
+      ) {
+        setValue(field, getValues(field) || []);
       } else {
-        setValue(field, getValues(field) || undefined!);
+        setValue(field, null);
       }
     });
-  }, [freeSemester]);
-
-  useEffect(() => {
-    if (!showError) return;
-    validateForm();
-  }, [showError]);
+  }, []);
 
   return (
     <div className={cn('flex', 'flex-col')}>
@@ -172,10 +155,7 @@ const FreeSemesterForm = ({
                     'text-emerald-500',
                   ])}
                   type="button"
-                  onClick={() => {
-                    setValue('freeSemester', null);
-                    validateForm();
-                  }}
+                  onClick={() => onFreeSemesterChange(null)}
                 >
                   <PinIcon type="ON" />
                   on
@@ -187,10 +167,7 @@ const FreeSemesterForm = ({
                     showError && !freeSemester && '!border-red-600',
                   ])}
                   type="button"
-                  onClick={() => {
-                    setValue('freeSemester', value!);
-                    validateForm();
-                  }}
+                  onClick={() => onFreeSemesterChange(value!)}
                 >
                   <PinIcon type="OFF" />
                   off

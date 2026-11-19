@@ -28,7 +28,9 @@ const graduationArray = [
 ];
 
 const CalculatePage = () => {
-  const { setScoreCalculationCompleteModal } = useModalStore();
+  const setScoreCalculationCompleteModal = useModalStore(
+    (state) => state.setScoreCalculationCompleteModal,
+  );
 
   const [graduationType, setGraduationType] = useState<GraduationTypeValueEnum | null>(null);
   // 예체능 성적의 기대 길이가 졸업 유형에 따라 달라지므로 스키마는 graduationType으로 만든다
@@ -102,8 +104,10 @@ const CalculatePage = () => {
     postMockScore(body);
   };
 
+  // 오류 표시는 버튼을 누를 때마다 지금 입력값으로 다시 검증한다
   const handleCalculateStepError = () => {
     setErrorStep(StepEnum.FOUR);
+    step4UseForm.trigger();
   };
 
   const clearStepError = () => {

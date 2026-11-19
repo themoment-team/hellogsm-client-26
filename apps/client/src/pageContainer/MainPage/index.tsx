@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-import { MyMemberInfoType, MyTotalTestResultType } from '@repo/types';
+import { MyTotalTestResultType } from '@repo/types';
 
 import {
   Footer,
@@ -17,16 +17,17 @@ import {
   TestResultDialog,
   TuberculosisTestNoticeDialog,
 } from '@/components';
+import { safeStorage } from '@/utils';
 
 import DevNoticeDialog from './DevNoticeDialog';
 
 interface MainPageProps {
-  memberInfo: MyMemberInfoType | undefined;
+  userName: string | undefined;
   resultInfo: MyTotalTestResultType | undefined;
   isServerHealthy: boolean;
 }
 
-const MainPage = ({ memberInfo, resultInfo, isServerHealthy }: MainPageProps) => {
+const MainPage = ({ userName, resultInfo, isServerHealthy }: MainPageProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isPassOpen, setIsPassOpen] = useState<boolean>(false);
 
@@ -34,7 +35,7 @@ const MainPage = ({ memberInfo, resultInfo, isServerHealthy }: MainPageProps) =>
     const today = new Date().toDateString();
     // localStorage는 클라이언트 전용 값 — 서버 렌더와의 hydration 불일치를 막기 위해
     // 마운트 후 effect에서 반영해야 함 (렌더 중 계산 불가)
-    const hideDialog = localStorage.getItem('hideTestResultDialog');
+    const hideDialog = safeStorage.getItem('localStorage', 'hideTestResultDialog');
 
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsOpen(hideDialog !== today && !!resultInfo && resultInfo.firstTestPassYn !== null);
@@ -44,7 +45,7 @@ const MainPage = ({ memberInfo, resultInfo, isServerHealthy }: MainPageProps) =>
 
   return (
     <>
-      <LoginNoticeDialog userName={memberInfo?.name} usedPath={'main'} />
+      <LoginNoticeDialog userName={userName} usedPath={'main'} />
       <Section1 isServerCurrentActive={isServerHealthy} />
       <Section2 />
       <Section3 isServerHealthy={isServerHealthy} />
@@ -64,7 +65,7 @@ const MainPage = ({ memberInfo, resultInfo, isServerHealthy }: MainPageProps) =>
         setIsPassOpen={setIsPassOpen}
         resultInfo={resultInfo}
         isFinishFirstTest={isFinishFirstTest}
-        memberInfo={memberInfo}
+        userName={userName}
       />
 
       <DevNoticeDialog />
