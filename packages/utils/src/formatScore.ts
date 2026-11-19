@@ -1,6 +1,7 @@
-// 입력받은 점수에서 숫자만 추출합니다. 점수가 maxScore보다 클 경우, 뒷 자리를 제거합니다.
+// 입력받은 점수에서 숫자만 추출해 소수 둘째 자리 형식으로 맞춥니다.
+// 숫자가 없거나 0~maxScore 범위를 벗어나면 잘못된 입력으로 보고 null을 반환합니다.
 
-export const formatScore = (score: string, maxScore: number = 100): string => {
+export const formatScore = (score: string, maxScore: number = 100): string | null => {
   // 점수에서 숫자와 소숫점만 추출
   const onlyNumberScore = parseFloat(
     score
@@ -9,8 +10,7 @@ export const formatScore = (score: string, maxScore: number = 100): string => {
       .join(''),
   );
 
-  // 소숫점 2자리로 자르고 maxScore와 비교
-  const scoreResult = Math.min(onlyNumberScore, maxScore).toFixed(2);
+  if (isNaN(onlyNumberScore) || onlyNumberScore < 0 || onlyNumberScore > maxScore) return null;
 
-  return scoreResult;
+  return onlyNumberScore.toFixed(2);
 };
