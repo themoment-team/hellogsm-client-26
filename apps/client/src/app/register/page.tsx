@@ -2,9 +2,10 @@ import { redirect } from 'next/navigation';
 
 import { getDate } from '@repo/api/apis';
 import { StepEnum } from '@repo/types';
-import { getKoreanDate, isTimeAfter, isTimeBefore } from '@repo/utils';
+import { getKoreanDate } from '@repo/utils';
 
 import { RegisterStepsPage } from '@/pageContainer';
+import { isOneseoSubmissionPeriod } from '@/utils';
 
 import { getEditability, getMyMemberInfo, getMyOneseo } from '../apis';
 
@@ -23,15 +24,7 @@ export default async function Register(props: RegisterProps) {
     getEditability(),
   ]);
 
-  const currentTime = getKoreanDate();
-  const isOneseoWrite =
-    !!dateList?.oneseoSubmissionStart &&
-    !!dateList?.oneseoSubmissionEnd &&
-    isTimeAfter({
-      baseTime: new Date(dateList.oneseoSubmissionStart),
-      compareTime: currentTime,
-    }) &&
-    isTimeBefore({ baseTime: new Date(dateList.oneseoSubmissionEnd), compareTime: currentTime });
+  const isOneseoWrite = isOneseoSubmissionPeriod(dateList, getKoreanDate());
 
   const isModifyApproved = editability?.oneseoEditStatus === 'APPROVED';
 

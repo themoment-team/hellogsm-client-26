@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 
 import { getDate } from '@repo/api/apis';
-import { getKoreanDate, isTimeAfter, isTimeBefore } from '@repo/utils';
+import { getKoreanDate } from '@repo/utils';
 
 import { GuidePage } from '@/pageContainer';
+import { isOneseoSubmissionPeriod } from '@/utils';
 
 import { getEditability, getMyOneseo } from '../apis';
 
@@ -18,16 +19,7 @@ export default async function Guide() {
     getEditability(),
   ]);
 
-  const currentTime = getKoreanDate();
-
-  const isOneseoWrite =
-    !!dateList?.oneseoSubmissionStart &&
-    !!dateList?.oneseoSubmissionEnd &&
-    isTimeAfter({
-      baseTime: new Date(dateList.oneseoSubmissionStart),
-      compareTime: currentTime,
-    }) &&
-    isTimeBefore({ baseTime: new Date(dateList.oneseoSubmissionEnd), compareTime: currentTime });
+  const isOneseoWrite = isOneseoSubmissionPeriod(dateList, getKoreanDate());
 
   return (
     <GuidePage initialData={data} isOneseoWrite={isOneseoWrite} initialEditability={editability} />
