@@ -111,11 +111,17 @@ const ApplicantTR = ({
       oneseoRefetch();
       editableRefetch();
     },
+    onError: () => {
+      toast.error('역량검사 점수 저장에 실패했습니다.');
+    },
   });
   const { mutate: patchInterviewScore } = usePatchInterviewScore(memberId, {
     onSuccess: () => {
       oneseoRefetch();
       editableRefetch();
+    },
+    onError: () => {
+      toast.error('심층면접 점수 저장에 실패했습니다.');
     },
   });
 
