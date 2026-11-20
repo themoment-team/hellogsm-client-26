@@ -30,7 +30,7 @@ const INVALID_SCORE_MESSAGE = '점수는 0 이상 100 이하의 숫자로 입력
 
 type ScoreFieldName = '역량검사점수' | '심층면접점수';
 
-// 입력한 점수를 소수 둘째 자리 형식으로 맞추고, 잘못된 입력(숫자 없음·범위 밖)은 그대로 둬 저장 시 안내
+// 입력한 점수를 소수 둘째 자리 형식으로 맞추고, 잘못된 입력(숫자 외 문자·범위 밖)은 그대로 둬 저장 시 안내
 const toScoreFieldValue = (score: string) => formatScore(score) ?? score;
 
 interface ApplicationTRProps extends OneseoType {
