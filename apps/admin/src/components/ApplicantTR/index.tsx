@@ -143,10 +143,11 @@ const ApplicantTR = ({
   const formatted역량검사점수 = formatScore(String(competencyEvaluationScore ?? ''), MAX_SCORE);
   const formatted심층면접점수 = formatScore(String(interviewScore ?? ''), MAX_SCORE);
 
+  // 서버 점수가 형식에 맞지 않으면(범위 밖 등) 빈칸으로 숨기지 않고 원본 값을 그대로 보여줌
   const { control, setValue, getValues } = useForm({
     defaultValues: {
-      역량검사점수: formatted역량검사점수 ?? '',
-      심층면접점수: formatted심층면접점수 ?? '',
+      역량검사점수: formatted역량검사점수 ?? String(competencyEvaluationScore ?? ''),
+      심층면접점수: formatted심층면접점수 ?? String(interviewScore ?? ''),
     },
   });
 
