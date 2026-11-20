@@ -26,12 +26,13 @@ import TextField from '../TextField';
 
 const SCORE_FORMAT_DEBOUNCE_MS = 1000;
 
-const INVALID_SCORE_MESSAGE = '점수는 0 이상 100 이하의 숫자로 입력해주세요.';
+const MAX_SCORE = 100;
+const INVALID_SCORE_MESSAGE = `점수는 0 이상 ${MAX_SCORE} 이하의 숫자로 입력해주세요.`;
 
 type ScoreFieldName = '역량검사점수' | '심층면접점수';
 
 // 입력한 점수를 소수 둘째 자리 형식으로 맞추고, 잘못된 입력(숫자 외 문자·범위 밖)은 그대로 둬 저장 시 안내
-const toScoreFieldValue = (score: string) => formatScore(score) ?? score;
+const toScoreFieldValue = (score: string) => formatScore(score, MAX_SCORE) ?? score;
 
 interface ApplicationTRProps extends OneseoType {
   editableData: EditabilityType | undefined;
@@ -139,8 +140,8 @@ const ApplicantTR = ({
   const secondTestResult =
     secondTestPassYn === 'YES' ? '합격' : secondTestPassYn === 'NO' ? '불합격' : '미정';
 
-  const formatted역량검사점수 = formatScore(String(competencyEvaluationScore ?? ''));
-  const formatted심층면접점수 = formatScore(String(interviewScore ?? ''));
+  const formatted역량검사점수 = formatScore(String(competencyEvaluationScore ?? ''), MAX_SCORE);
+  const formatted심층면접점수 = formatScore(String(interviewScore ?? ''), MAX_SCORE);
 
   const { control, setValue, getValues } = useForm({
     defaultValues: {
@@ -187,7 +188,7 @@ const ApplicantTR = ({
   // 잘못된 입력이면 저장하지 않고 안내를 띄움
   const getScoreToSave = (fieldName: ScoreFieldName) => {
     // 이벤트 핸들러에서는 구독이 불필요 — getValues() 사용
-    const formattedScore = formatScore(getValues(fieldName));
+    const formattedScore = formatScore(getValues(fieldName), MAX_SCORE);
 
     if (formattedScore === null) {
       toast.error(INVALID_SCORE_MESSAGE);
