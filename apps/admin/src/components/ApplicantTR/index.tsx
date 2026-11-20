@@ -105,13 +105,16 @@ const ApplicantTR = ({
     },
   });
 
+  // 저장 실패 토스트는 요청이 끝난 뒤 늦게 뜨므로, 여러 행을 연달아 저장해도 어느 지원자인지 알 수 있게 표시
+  const 지원자표시 = name ?? (submitCode ? `접수번호 ${submitCode}` : `회원 ID ${memberId}`);
+
   const { mutate: patchCompetencyScore } = usePatchCompetencyScore(memberId, {
     onSuccess: () => {
       oneseoRefetch();
       editableRefetch();
     },
     onError: () => {
-      toast.error('역량검사 점수 저장에 실패했습니다.');
+      toast.error(`${지원자표시} 지원자의 역량검사 점수 저장에 실패했습니다.`);
     },
   });
   const { mutate: patchInterviewScore } = usePatchInterviewScore(memberId, {
@@ -120,7 +123,7 @@ const ApplicantTR = ({
       editableRefetch();
     },
     onError: () => {
-      toast.error('심층면접 점수 저장에 실패했습니다.');
+      toast.error(`${지원자표시} 지원자의 심층면접 점수 저장에 실패했습니다.`);
     },
   });
 
