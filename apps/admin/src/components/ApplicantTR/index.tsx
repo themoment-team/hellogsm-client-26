@@ -211,6 +211,11 @@ const ApplicantTR = ({
     else 심층면접점수Format.cancel();
     setValue(fieldName, formattedScore);
 
+    // 서버 점수를 형식에 맞춘 값과 같으면 바뀐 게 없으므로 저장하지 않음
+    // (그대로 저장하면 85.555 같은 서버 점수가 반올림된 85.56으로 덮어써짐)
+    const savedScore = fieldName === '역량검사점수' ? formatted역량검사점수 : formatted심층면접점수;
+    if (formattedScore === savedScore) return null;
+
     return Number(formattedScore);
   };
 
