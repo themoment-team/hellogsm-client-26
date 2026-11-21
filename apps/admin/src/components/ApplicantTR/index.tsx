@@ -27,6 +27,7 @@ import TextField from '../TextField';
 const SCORE_FORMAT_DEBOUNCE_MS = 1000;
 
 const MAX_SCORE = 100;
+const EMPTY_SCORE_MESSAGE = '점수를 입력해주세요.';
 const INVALID_SCORE_MESSAGE = `점수는 0 이상 ${MAX_SCORE} 이하의 숫자로 입력해주세요.`;
 
 type ScoreFieldName = '역량검사점수' | '심층면접점수';
@@ -189,10 +190,17 @@ const ApplicantTR = ({
   };
 
   // 저장 직전에 형식을 확정해, 화면에 보이는 값과 서버에 저장되는 값을 맞춤
-  // 잘못된 입력이면 저장하지 않고 안내를 띄움
+  // 빈 칸이거나 잘못된 입력이면 저장하지 않고 각각에 맞는 안내를 띄움
   const getScoreToSave = (fieldName: ScoreFieldName) => {
     // 이벤트 핸들러에서는 구독이 불필요 — getValues() 사용
-    const formattedScore = formatScore(getValues(fieldName), MAX_SCORE);
+    const score = getValues(fieldName);
+
+    if (score.trim() === '') {
+      toast.error(EMPTY_SCORE_MESSAGE);
+      return null;
+    }
+
+    const formattedScore = formatScore(score, MAX_SCORE);
 
     if (formattedScore === null) {
       toast.error(INVALID_SCORE_MESSAGE);
