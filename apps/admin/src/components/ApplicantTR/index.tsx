@@ -26,14 +26,14 @@ import TextField from '../TextField';
 
 const SCORE_FORMAT_DEBOUNCE_MS = 1000;
 
+const MAX_SCORE = 100;
+const EMPTY_SCORE_MESSAGE = '점수를 입력해주세요.';
+const INVALID_SCORE_MESSAGE = `점수는 0 이상 ${MAX_SCORE} 이하의 숫자로 입력해주세요.`;
+
 type ScoreFieldName = '역량검사점수' | '심층면접점수';
 
-// formatScore 결과가 숫자가 아니면('NaN') 입력 칸에는 빈 값으로 둠
-const toScoreFieldValueFromFormatted = (formattedScore: string) =>
-  formattedScore !== 'NaN' ? formattedScore : '';
-
-// 입력한 점수를 소수 둘째 자리 형식으로 맞추고, 숫자가 없으면 빈 칸으로 둠
-const toScoreFieldValue = (score: string) => toScoreFieldValueFromFormatted(formatScore(score));
+// 입력한 점수를 소수 둘째 자리 형식으로 맞추고, 잘못된 입력(숫자 외 문자·범위 밖)은 그대로 둬 저장 시 안내
+const toScoreFieldValue = (score: string) => formatScore(score, MAX_SCORE) ?? score;
 
 interface ApplicationTRProps extends OneseoType {
   editableData: EditabilityType | undefined;
@@ -106,16 +106,25 @@ const ApplicantTR = ({
     },
   });
 
+  // 저장 실패 토스트는 요청이 끝난 뒤 늦게 뜨므로, 여러 행을 연달아 저장해도 어느 지원자인지 알 수 있게 표시
+  const 지원자표시 = name ?? (submitCode ? `접수번호 ${submitCode}` : `회원 ID ${memberId}`);
+
   const { mutate: patchCompetencyScore } = usePatchCompetencyScore(memberId, {
     onSuccess: () => {
       oneseoRefetch();
       editableRefetch();
+    },
+    onError: () => {
+      toast.error(`${지원자표시} 지원자의 역량검사 점수 저장에 실패했습니다.`);
     },
   });
   const { mutate: patchInterviewScore } = usePatchInterviewScore(memberId, {
     onSuccess: () => {
       oneseoRefetch();
       editableRefetch();
+    },
+    onError: () => {
+      toast.error(`${지원자표시} 지원자의 심층면접 점수 저장에 실패했습니다.`);
     },
   });
 
@@ -135,13 +144,14 @@ const ApplicantTR = ({
   const secondTestResult =
     secondTestPassYn === 'YES' ? '합격' : secondTestPassYn === 'NO' ? '불합격' : '미정';
 
-  const formatted역량검사점수 = formatScore(String(competencyEvaluationScore ?? ''));
-  const formatted심층면접점수 = formatScore(String(interviewScore ?? ''));
+  const formatted역량검사점수 = formatScore(String(competencyEvaluationScore ?? ''), MAX_SCORE);
+  const formatted심층면접점수 = formatScore(String(interviewScore ?? ''), MAX_SCORE);
 
+  // 서버 점수가 형식에 맞지 않으면(범위 밖 등) 빈칸으로 숨기지 않고 원본 값을 그대로 보여줌
   const { control, setValue, getValues } = useForm({
     defaultValues: {
-      역량검사점수: toScoreFieldValueFromFormatted(formatted역량검사점수),
-      심층면접점수: toScoreFieldValueFromFormatted(formatted심층면접점수),
+      역량검사점수: formatted역량검사점수 ?? String(competencyEvaluationScore ?? ''),
+      심층면접점수: formatted심층면접점수 ?? String(interviewScore ?? ''),
     },
   });
 
@@ -179,19 +189,46 @@ const ApplicantTR = ({
     patchAgreeDocStatus({ entranceIntentionYn: updatedIntention });
   };
 
-  const handleAptitudeScore = () => {
+  // 저장 직전에 형식을 확정해, 화면에 보이는 값과 서버에 저장되는 값을 맞춤
+  // 빈 칸이거나 잘못된 입력이면 저장하지 않고 각각에 맞는 안내를 띄움
+  const getScoreToSave = (fieldName: ScoreFieldName) => {
     // 이벤트 핸들러에서는 구독이 불필요 — getValues() 사용
-    const 역량검사점수 = parseFloat(getValues('역량검사점수'));
+    const score = getValues(fieldName);
 
-    if (역량검사점수 < 0 || 역량검사점수 > 100 || isNaN(역량검사점수)) return;
+    if (score.trim() === '') {
+      toast.error(EMPTY_SCORE_MESSAGE);
+      return null;
+    }
+
+    const formattedScore = formatScore(score, MAX_SCORE);
+
+    if (formattedScore === null) {
+      toast.error(INVALID_SCORE_MESSAGE);
+      return null;
+    }
+
+    if (fieldName === '역량검사점수') 역량검사점수Format.cancel();
+    else 심층면접점수Format.cancel();
+    setValue(fieldName, formattedScore);
+
+    // 서버 점수를 형식에 맞춘 값과 같으면 바뀐 게 없으므로 저장하지 않음
+    // (그대로 저장하면 85.555 같은 서버 점수가 반올림된 85.56으로 덮어써짐)
+    const savedScore = fieldName === '역량검사점수' ? formatted역량검사점수 : formatted심층면접점수;
+    if (formattedScore === savedScore) return null;
+
+    return Number(formattedScore);
+  };
+
+  const handleAptitudeScore = () => {
+    const 역량검사점수 = getScoreToSave('역량검사점수');
+    if (역량검사점수 === null) return;
 
     patchCompetencyScore({ competencyEvaluationScore: 역량검사점수 });
   };
 
   const handleInterviewScore = () => {
-    const 심층면접점수 = parseFloat(getValues('심층면접점수'));
-
-    if (심층면접점수 < 0 || 심층면접점수 > 100 || isNaN(심층면접점수)) return;
+    const 심층면접점수 = getScoreToSave('심층면접점수');
+    if (심층면접점수 === null) return;
 
     patchInterviewScore({ interviewScore: 심층면접점수 });
   };
