@@ -11,7 +11,7 @@
     "build": "tsc",
     "lint": "eslint src",
     "check-types": "tsc --noEmit",
-    "test": "tsx --test 'src/**/*.test.ts'"
+    "test": "tsx --test \"src/**/*.test.ts\""
   },
   "dependencies": {
     "@repo/constants": "workspace:*",
